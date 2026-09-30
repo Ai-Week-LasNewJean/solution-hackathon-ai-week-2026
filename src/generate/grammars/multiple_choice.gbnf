@@ -1,0 +1,19 @@
+# Gramatica GBNF para el formato multiple_choice (schema/submission.schema.json).
+# Fuerza las llaves exactas y el enum de respuesta_correcta de forma
+# deterministica, podando tokens invalidos en vez de confiar en prompting.
+#
+# NOTA: cada regla va en una sola linea. llama-cpp-python 0.3.35 reconstruye
+# el texto de la gramatica internamente cuando se pasa a Llama.__call__()
+# (no solo al parsear el archivo), y esa reconstruccion rompe con cuerpos de
+# regla partidos en varias lineas (confirmado con un smoke test end-to-end:
+# LlamaGrammar.from_file() valida bien un archivo multilinea, pero la
+# generacion real revienta con "error parsing grammar: expecting name at").
+root ::= "{" ws "\"respuesta_correcta\"" ws ":" ws letra ws "," ws "\"justificacion\"" ws ":" ws string ws "," ws "\"descarte_opciones\"" ws ":" ws descarte ws "}"
+letra ::= "\"A\"" | "\"B\"" | "\"C\"" | "\"D\""
+descarte ::= "{" ws "}" | "{" ws par (ws "," ws par)* ws "}"
+par ::= letra ws ":" ws string
+string ::= "\"" char* "\""
+char ::= [^"\\] | "\\" escapado
+escapado ::= ["\\/bfnrt] | "u" hex hex hex hex
+hex ::= [0-9a-fA-F]
+ws ::= [ \t\n]*
