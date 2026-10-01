@@ -1,30 +1,52 @@
 # Bitácora del corpus — Las NewJeans
 
-> Plantilla del paso 5 del enunciado, adaptada al estado actual: el corpus se
-> está construyendo en la carpeta compartida de OneDrive del equipo
-> (`src/config.RAW_CORPUS_DIR`); todavía no hay documentos procesados. Las
-> secciones 1, 2 y 4 se completan al correr `src/ingest/build_corpus.py` y
-> `scripts/evaluate.py` contra un corpus real. La sección 3 (método) ya
-> refleja el diseño implementado en `src/ingest/`.
+> Estado tras la primera pasada de `src/ingest/ingest_raw_sources.py` (2026-10-01)
+> sobre el volcado de `data/corpus/` (Scrapping de secretariasenado.gov.co +
+> Providencias de la Corte Constitucional + Providencias Corte Suprema, ~700MB
+> crudos, no versionados -- ver `.gitignore`). `data/corpus/` no viene del flujo
+> fetch+parse_html/parse_pdf de `build_corpus.py` (ya trae JSON pre-parseado o
+> pre-troceado por fuente); `ingest_raw_sources.py` es el script nuevo que lo
+> normaliza al mismo `corpus/<doc_id>.txt` + `corpus_manifest.json` +
+> `indice/chunks.jsonl` que el resto del pipeline espera. La sección 3 (método)
+> ya reflejaba el diseño implementado en `src/ingest/`; ahora documenta tambien
+> la ingesta de estas tres fuentes.
 
 ---
 
 ## 1. Inventario
 
-Un registro por documento incorporado. Debe coincidir con `corpus_manifest.json`.
-
-| doc_id                                                | Título | Fuente | URL | Fecha de consulta | Artículos | Áreas |
-|-------------------------------------------------------|--------|--------|-----|-------------------|----------:|-------|
-| _(pendiente — se completa al correr build_corpus.py)_ |        |        |     |                   |           |       |
+34 379 documentos -- demasiados para una tabla en Markdown. El inventario
+completo (doc_id, título, fuente, URL, fecha de consulta, artículos, áreas)
+vive en `corpus_manifest.json` (versionado, ~21MB); `manifest_check.py`
+verifica que cada fila tenga sha256 válido contra `corpus/<doc_id>.txt`.
 
 **Totales**
 
-| Métrica                     | Valor |
-|-----------------------------|------:|
-| Documentos incorporados     |     0 |
-| Artículos indexados         |     0 |
-| Fragmentos en el índice     |     0 |
-| Tamaño del corpus procesado |     — |
+| Métrica                               |  Valor |
+|----------------------------------------|-------:|
+| Documentos incorporados                | 34 379 |
+| Fragmentos en el índice (chunks.jsonl) | 99 043 |
+| — de Secretaría del Senado (scraping)  |  2 627 |
+| — de Corte Constitucional (relatoría)  | 31 413 |
+| — de Corte Suprema (ya troceados)      |    339 |
+| Trazabilidad (`traceability_check.py`) |  100% (umbral 98%) |
+| Tamaño del corpus procesado (`corpus/`)|  ~228MB |
+
+Nota sobre Corte Suprema: en `data/corpus/Providencias Corte Suprema/` cada
+sentencia trae `.txt` y `.docx` (y a veces `.pdf`) del mismo documento; la
+ingesta usa el `chunks_csj.jsonl` ya troceado por el equipo a partir de los
+`.txt`, nunca los `.docx`/`.pdf` duplicados.
+
+**Fragmentos descartados por no ser trazables a su norma de origen** (ver
+`is_traceable()` en `ingest_raw_sources.py` y sección 3): 17 030 providencias
+de la Corte Constitucional (en su mayoría Autos -- `citations.py` no
+reconoce la sala "A" sola, solo "au") + 347 fragmentos de Corte Suprema
+(sala "STP", tampoco reconocida) + un puñado de códigos sin alias en
+`citations.CODES` (Código Contencioso Administrativo pre-2011, Estatuto
+Orgánico del Sistema Financiero, Reglamento CNE, directivas presidenciales).
+`citations.py` es oficial y no se modifica, así que ese contenido
+simplemente no entra al índice: sin cita reconocible nunca puntuaría en
+respaldo de citas, y solo diluiría la recuperación.
 
 ## 2. Criterio de selección
 
@@ -54,7 +76,34 @@ Documentos descartados y el motivo del descarte:
 
 ## 3. Método de ingesta y limpieza
 
-Implementado en `src/ingest/`; `build_corpus.py` orquesta los pasos 1-6.
+Implementado en `src/ingest/`; `build_corpus.py` orquesta los pasos 1-6 para
+documentos descargados como HTML/PDF crudo.
+
+**`data/corpus/` (volcado del equipo, 2026-09-30/10-01) es otro caso:** ya
+viene como JSON pre-parseado o pre-troceado por fuente, así que
+`src/ingest/ingest_raw_sources.py` (`python -m src.ingest.ingest_raw_sources`)
+reemplaza los pasos 1-2 de arriba para esas tres fuentes y conecta con los
+pasos 3-6 igual:
+
+- *Scrapping de secretariasenado.gov.co* ya trae los documentos segmentados
+  por artículo (`articulos: [{etiqueta, texto, ...}]`); el script arma el
+  encabezado citable (`LEY N DE AAAA`, `Código Civil`, etc.) a partir de
+  `tipo`+`numero`+`anio` en vez de confiar en el campo `nombre` del scraper
+  (que a veces no calza con lo que `citations.py` reconoce -- p.ej.
+  `"DECRETO <LEY> 1088 DE 1993"` con corchetes, o `nombre="ACLARACION"` en
+  vez del nombre de la ley). `sentencias.json` se descarta: sus 5737
+  registros traen `"contenido": null` -- es un grafo de citas, no texto.
+- *Providencias de la Corte Constitucional* trae metadatos de relatoría
+  (tema/resumen/resuelve), no el texto íntegro de la providencia; un chunk
+  por providencia a partir de esos tres campos. Los 14 archivos por rango de
+  años se solapan en 1997-1998 -- se deduplica por "Número de la
+  providencia" global.
+- *Providencias Corte Suprema* ya viene troceada en `chunks_csj.jsonl` en el
+  esquema que `build_faiss.py`/`build_bm25.py` esperan; se usa tal cual.
+
+En los tres casos, `is_traceable()` descarta cualquier fragmento donde
+`citations.extract()` no reconozca una norma de origen en los primeros 200
+caracteres (ver sección 1 para el detalle de qué se perdió y por qué).
 
 1. **Descarga.** `fetch.fetch_url()` / `fetch_all()` contra las URL de
    `data/seed_targets.json`, con reintentos y backoff; o lectura directa de

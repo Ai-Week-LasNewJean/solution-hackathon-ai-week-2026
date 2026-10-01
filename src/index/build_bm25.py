@@ -10,37 +10,11 @@ from __future__ import annotations
 
 import json
 import pickle
-import re
-from dataclasses import dataclass
 from pathlib import Path
 
-import src  # noqa: F401  (registra scripts/ en sys.path)
-import citations
+from src.index.bm25_types import BM25Index, tokenize
 
-_TOKEN_RE = re.compile(r"[a-z0-9]+")
-
-
-def tokenize(text: str) -> list[str]:
-    return _TOKEN_RE.findall(citations.norm(text))
-
-
-@dataclass
-class BM25Index:
-    engine: str            # "bm25s" | "rank_bm25"
-    model: object
-    doc_ids: list[str]     # posicion i -> id del fragmento en chunks.jsonl (str(indice))
-
-    def search(self, query: str, k: int) -> list[tuple[int, float]]:
-        tokens = tokenize(query)
-        if self.engine == "bm25s":
-            import bm25s
-
-            results, scores = self.model.retrieve(bm25s.tokenize([" ".join(tokens)], show_progress=False),
-                                                   k=min(k, len(self.doc_ids)), show_progress=False)
-            return [(int(idx), float(sc)) for idx, sc in zip(results[0], scores[0])]
-        scores = self.model.get_scores(tokens)
-        ranked = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:k]
-        return [(i, float(scores[i])) for i in ranked]
+__all__ = ["BM25Index", "tokenize", "build", "save", "load"]
 
 
 def build(chunks_path: Path) -> BM25Index:

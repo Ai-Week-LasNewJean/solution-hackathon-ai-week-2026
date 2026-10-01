@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.pipeline.answer_one import answer  # noqa: E402
 
-PLACEHOLDER_COLORS = {"primary": "#0B3D91", "accent": "#FFB612"}
+PLACEHOLDER_COLORS = {"primary": "#61AAC2", "accent": "#E79844"}
 
 st.set_page_config(page_title="RAG Derecho Colombiano", page_icon="⚖️", layout="wide")
 

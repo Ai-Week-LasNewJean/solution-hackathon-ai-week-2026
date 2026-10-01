@@ -19,7 +19,14 @@ indice/
 models/
 out/
 
+# Corpus crudo descargado por el equipo (data/corpus/, ~700MB) y su zip de
+# entrega/intercambio: mismo criterio que arriba, no se versiona.
+data/corpus/
+data/corpus.zip
+data/*.zip
+
 # Claves y artefactos locales
 scripts/.env
 *.gguf
 
+.DS_Store
