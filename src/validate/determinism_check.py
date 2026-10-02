@@ -14,9 +14,10 @@ from src import config
 
 RUN_ONE_SNIPPET = """
 import json, sys
+from pathlib import Path
 from src.pipeline.answer_one import answer
 from common import read_jsonl
-item = [r for r in read_jsonl(sys.argv[1]) if r["id"] == int(sys.argv[2])][0]
+item = [r for r in read_jsonl(Path(sys.argv[1])) if r["id"] == int(sys.argv[2])][0]
 print(json.dumps(answer(item), ensure_ascii=False, sort_keys=True))
 """
 

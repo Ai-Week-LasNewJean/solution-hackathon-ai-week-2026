@@ -62,10 +62,10 @@ def _retrieve_ranked(query: str) -> list[Passage]:
     return rerank.rerank(expanded, candidates, top_k=config.FINAL_TOP_K)
 
 
-def _generate(item: dict, passages: list[Passage]) -> dict:
+def _generate(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
     formato = item["formato"]
     prompt = PROMPT_BUILDERS[formato](item, passages)
-    raw = get_llm().generate(
+    raw = get_llm(model_name).generate(
         prompt, max_tokens=config.MAX_TOKENS_BY_FORMAT[formato],
         grammar_path=GRAMMAR_PATHS[formato])
     data = formatter.parse(raw, formato)
@@ -85,9 +85,14 @@ def _answer_text_for_check(formato: str, data: dict) -> str:
                      for k in ("marco_normativo", "analisis", "jurisprudencia", "conclusion"))
 
 
-def answer(item: dict) -> dict:
+def answer(item: dict, model_name: str | None = None) -> dict:
     """item: una fila de sample_50.jsonl / test_992.jsonl (trae al menos id,
     formato, pregunta, y opciones si es multiple_choice).
+
+    `model_name` (llave de config.LLM_CANDIDATES) alterna el decoder --
+    SPEC.md 10.5, solo para comparar/demo en desarrollo. Sin argumento usa
+    el candidato activo (config.LLM_MODEL_NAME), el unico que debe producir
+    submissions.jsonl.
 
     Devuelve un dict listo para escribirse como linea de submissions.jsonl,
     validado por schema/submission.schema.json."""
@@ -113,7 +118,7 @@ def answer(item: dict) -> dict:
     }
 
     if decision != "abstain":
-        data = _generate(item, ranked)
+        data = _generate(item, ranked, model_name)
         answer_text = _answer_text_for_check(item["formato"], data)
         sin_respaldo = citation_check.unsupported_citations(answer_text, pasajes)
         if sin_respaldo:

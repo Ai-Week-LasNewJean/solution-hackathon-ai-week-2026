@@ -7,14 +7,25 @@ Sistema de respuesta a preguntas de derecho colombiano con un decoder abierto
 completa documentada en [`SPEC.md`](../ai-week-hackathon-2026/SPEC.md) del
 repositorio de la hackathon (no se versiona aqui).
 
-> **Estado (2026-10-01):** pipeline completo corriendo de punta a punta contra
+> **Estado (2026-10-02):** pipeline completo corriendo de punta a punta contra
 > el corpus real — 34 379 documentos / 99 067 fragmentos indexados, decoder
 > descargado, corrida completa de las 50 preguntas de muestra puntuada por el
 > evaluador oficial. Detalle de estado y próximos pasos en
 > [`SPEC.md` sección 10](../ai-week-hackathon-2026/SPEC.md#10-estado-actual-2026-10-01-y-próximos-pasos)
-> del repo de la hackathon. Todavía no corren `determinism_check.py` ni
-> `latency_check.py` en el Mac, ni nada en Turing — eso es lo más urgente
-> antes de congelar nada, no las mejoras de precisión de abajo.
+> del repo de la hackathon.
+>
+> `determinism_check.py` y `latency_check.py` **ya corrieron en el Mac y
+> ambos pasan**: 0 divergencias en 3 ítems re-ejecutados en procesos frescos
+> (`python -m src.validate.determinism_check` traía un bug — pasaba un
+> `str` donde `common.read_jsonl` espera un `Path`, nunca se había corrido
+> con éxito — corregido); latencia promedio 17.82 seg/ítem sobre las 50
+> muestras, extrapola a 4.91h para las 992 preguntas del sábado contra un
+> presupuesto de 6h (margen 1.09h). `leakage_check.py` sigue marcando
+> "hallazgos" contra `sample_50.jsonl` — confirmado a mano que son el patrón
+> esperado ya documentado en `SPEC.md` 10.3 (el corpus contiene la norma real
+> que sustenta `legal_basis`, no el banco de preguntas filtrado), no un
+> problema real. Pendiente: chequeo go/no-go Mac-vs-Turing (sin acceso a
+> Turing en esta sesión) y reconstructibilidad del índice desde cero.
 
 ## Corpus e índice
 
@@ -142,20 +153,31 @@ python -m src.validate.run_all --full   # + determinismo y latencia (requiere LL
 Lista completa y priorizada (bloqueantes de entrega primero, luego mejoras de precisión, cobertura
 de corpus, puntaje sin medir, e interfaz/entregables) en
 [`SPEC.md` sección 10.4](../ai-week-hackathon-2026/SPEC.md#10-estado-actual-2026-10-01-y-próximos-pasos).
-Los tres más urgentes ahora mismo:
+Los más urgentes ahora mismo:
 
-1. `determinism_check.py` y `latency_check.py` en el Mac — ninguno de los dos ha corrido todavía
-   contra el estado real (corpus + índice + decoder), y son requisitos duros, no mejoras.
-2. Reordenar el esquema JSON de generación (razonamiento antes de la respuesta final, no al revés) —
-   causa directa de 2 de los 4 fallos de opción múltiple diagnosticados esta corrida.
+1. Chequeo go/no-go Mac-vs-Turing (SPEC.md sección 2) — sigue sin probarse `llama-cpp-python` con
+   CUDA en Turing. Si el equipo no va a usar Turing para nada del pipeline final, vale la pena
+   decidirlo explícitamente.
+2. Reconstructibilidad del índice desde cero (sección 6, última fila): borrar `indice/`, reconstruir
+   con `build_bm25.py`/`build_faiss.py` desde `corpus/` + manifest, comparar hashes.
 3. Correr `evaluate.py --split sample --ragas` apenas haya `OPENROUTER_API_KEY`: 30 de los 50 puntos
    automáticos siguen sin medirse.
 
-También en evaluación (no implementado): poder cargar distintos decoders GGUF ≤8B intercambiables
-para compararlos empíricamente contra `evaluate.py --split sample`, sin perder la regla de "Mac
-canónico" ni el requisito de determinismo en la entrega final — propuesta y tradeoffs en
-[
-`SPEC.md` sección 10.5](../ai-week-hackathon-2026/SPEC.md#105-decoder-intercambiable--propuesta-en-evaluación-no-implementada).
+**Reordenar el esquema JSON de `multiple_choice`** (razonamiento antes de la respuesta final) se
+probó y **se revirtió** — midió 6/15 en cerradas contra el baseline de 10/15. Detalle y por qué en
+`CORPUS.md` sección 4; el límite de tokens de `multiple_choice` sí se subió (320→700, aislado del
+reorden) y queda vigente.
+
+**Decoder intercambiable (SPEC.md sección 10.5): implementado.** `config.LLM_CANDIDATES` registra
+los candidatos probados (`llama-3.1-8b-instruct`, el activo; `qwen3-8b`, más reciente que
+Llama-3.1); `get_llm(model_name)` cachea por ruta resuelta en vez de un singleton único, así que
+alternar entre candidatos ya descargados no recarga un GGUF de ~5GB de cero. `answer()`/`run_batch`/
+`src/main.py --model-name` y un selector en `interfaz/app.py` (bajo "Opciones de desarrollo") lo
+exponen. Sigue siendo solo para desarrollo/demo — la corrida que produce `submissions.jsonl` usa
+siempre el candidato fijo en `config.LLM_MODEL_NAME`, nunca alterna por pregunta, y
+`determinism_check.py` valida ese único candidato congelado antes de la entrega, exactamente como
+exige la sección 10.5 original. Comparación A/B contra Qwen3-8B corriendo contra
+`evaluate.py --split sample`; resultado en `CORPUS.md` sección 4 en cuanto termine.
 
 ## Limitaciones conocidas
 

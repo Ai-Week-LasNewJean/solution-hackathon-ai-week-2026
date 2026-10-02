@@ -27,6 +27,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--rebuild-index", action="store_true",
                      help="reconstruye index.faiss y bm25.pkl desde corpus/ + chunks.jsonl antes de correr")
     ap.add_argument("--no-resume", action="store_true")
+    ap.add_argument("--model-name", default=None, choices=list(config.LLM_CANDIDATES),
+                     help="candidato de config.LLM_CANDIDATES a usar en vez del activo (comparacion A/B, SPEC.md 10.5)")
     args = ap.parse_args(argv)
 
     if args.rebuild_index:
@@ -39,7 +41,7 @@ def main(argv: list[str] | None = None) -> int:
     from src.pipeline.run_batch import main as run_batch_main
 
     out_path = args.out or (config.ROOT / "out" / f"{args.split}.jsonl")
-    return run_batch_main(args.split, out_path, resume=not args.no_resume)
+    return run_batch_main(args.split, out_path, resume=not args.no_resume, model_name=args.model_name)
 
 
 if __name__ == "__main__":

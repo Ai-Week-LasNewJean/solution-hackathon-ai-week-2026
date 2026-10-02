@@ -15,6 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from src import config  # noqa: E402
 from src.generate import citation_check  # noqa: E402
 from src.pipeline.answer_one import _answer_text_for_check, answer  # noqa: E402
 
@@ -178,6 +179,16 @@ with st.container(key="question_card"):
         for letra, col in zip("ABCD", cols):
             opciones[letra] = col.text_input(f"Opcion {letra}")
 
+    with st.expander("Opciones de desarrollo (no usar en la entrega final)"):
+        st.caption(
+            "Decoder intercambiable solo para comparar/demo (SPEC.md 10.5). "
+            "La corrida que produce submissions.jsonl usa siempre el candidato "
+            f"congelado en config.LLM_MODEL_NAME (activo: **{config.LLM_MODEL_NAME}**)."
+        )
+        model_name = st.selectbox(
+            "Decoder", list(config.LLM_CANDIDATES), index=list(config.LLM_CANDIDATES).index(config.LLM_MODEL_NAME),
+        )
+
     responder = st.button("Responder", type="primary", disabled=not pregunta.strip())
 
 if responder:
@@ -185,9 +196,9 @@ if responder:
     if formato == "multiple_choice":
         item["opciones"] = {k: v for k, v in opciones.items() if v.strip()}
 
-    with st.spinner("Recuperando evidencia y generando respuesta..."):
+    with st.spinner(f"Recuperando evidencia y generando respuesta ({model_name})..."):
         try:
-            result = answer(item)
+            result = answer(item, model_name=model_name)
         except FileNotFoundError as exc:
             st.error(f"Falta un recurso local (modelo GGUF o indice): {exc}")
             st.stop()

@@ -89,9 +89,56 @@ SUFFICIENCY_SCORE_THRESHOLD = 0.014   # ~top-1 en al menos una de las dos listas
 RETRY_SCORE_THRESHOLD = 0.006          # ~top-5 en al menos una de las dos listas
 
 # --- Decoder / generacion --------------------------------------------------
+# Decoder intercambiable (SPEC.md 10.5): registro de candidatos <=8B probados
+# (nombre corto -> archivo GGUF en models/), para comparar A/B contra
+# evaluate.py --split sample con el mismo criterio empirico que el reranker
+# opcional. "Intercambiable" es comodidad de desarrollo/demo, NUNCA una
+# caracteristica de la corrida final: el candidato que termine en
+# submissions.jsonl se fija en LLM_MODEL_NAME (o LLM_MODEL_PATH) antes de
+# congelar, y debe ser el mismo en todas las 992 preguntas, validado por
+# determinism_check.py en el Mac exacto de la entrega.
+LLM_CANDIDATES: dict[str, dict] = {
+    # chat_template=None: prompt crudo tal cual (comportamiento original,
+    # validado -- nunca tocar para este candidato). "chatml": generate()
+    # envuelve el prompt con marcadores <|im_start|>/<|im_end|> antes de
+    # pasarlo al completion crudo de llama.cpp -- Qwen3-Instruct se entreno
+    # casi exclusivamente en ChatML y sin turno explicito sigue
+    # instrucciones peor. La gramatica GBNF por formato fuerza "{" como
+    # primer caracter en cualquier caso, asi que el modo "thinking" de Qwen3
+    # (bloque <think>...</think> antes de responder) no puede filtrarse al
+    # output -- el grammar lo prohibe desde el primer token.
+    "llama-3.1-8b-instruct": {"filename": "llama-3.1-8b-instruct-q4_k_m.gguf", "chat_template": None},
+    "qwen3-8b": {"filename": "Qwen3-8B-Q4_K_M.gguf", "chat_template": "chatml"},
+}
 
-LLM_MODEL_PATH = Path(os.environ.get(
-    "LLM_MODEL_PATH", str(ROOT / "models" / "llama-3.1-8b-instruct-q4_k_m.gguf")))
+LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "llama-3.1-8b-instruct")
+
+
+def llm_model_path(name: str | None = None) -> Path:
+    """Resuelve un nombre corto de LLM_CANDIDATES a su ruta GGUF en models/.
+    LLM_MODEL_PATH (env) tiene prioridad absoluta sobre el registro, para no
+    romper el uso anterior de apuntar a un GGUF arbitrario fuera del
+    registro."""
+    override = os.environ.get("LLM_MODEL_PATH")
+    if override:
+        return Path(override)
+    name = name or LLM_MODEL_NAME
+    if name not in LLM_CANDIDATES:
+        raise KeyError(f"modelo desconocido: {name!r}. candidatos: {sorted(LLM_CANDIDATES)}")
+    return ROOT / "models" / LLM_CANDIDATES[name]["filename"]
+
+
+def llm_chat_template(name: str | None = None) -> str | None:
+    """Plantilla de chat a aplicar antes de generar (ver LLM_CANDIDATES).
+    None (incl. cuando LLM_MODEL_PATH hace override fuera del registro) ->
+    prompt crudo sin envolver, el comportamiento original."""
+    if os.environ.get("LLM_MODEL_PATH"):
+        return None
+    name = name or LLM_MODEL_NAME
+    return LLM_CANDIDATES.get(name, {}).get("chat_template")
+
+
+LLM_MODEL_PATH = llm_model_path()  # ruta resuelta del candidato activo (compat con el uso previo)
 LLM_N_CTX = 8192
 LLM_N_GPU_LAYERS = -1      # todas las capas en GPU/Metal; 0 fuerza CPU
 LLM_TEMPERATURE = 0.0

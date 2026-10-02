@@ -147,8 +147,31 @@ Puntaje sobre las 50 preguntas de muestra, medido con
 |------------|-----------:|-----------:|-------------:|-------------:|---------------:|----------:|---------------------------------------------------------------------------------------------------------------|
 | 2026-10-01 |     34 379 |     99 067 |         13.33 |          7.35 |            5.93 |     26.61 | Corpus inicial, primera corrida de punta a punta, ningún umbral/prompt ajustado todavía.                     |
 | 2026-10-02 |     34 379 |     99 067 |         13.33 |          7.35 |            5.81 |     26.49 | `MAX_TOKENS_BY_FORMAT["multiple_choice"]` 320→700 (ítem 128 ya no trunca). Reorden de llaves del schema `multiple_choice` (SPEC.md 10.4 #5) probado y **revertido**: ver nota abajo. |
+| 2026-10-02 |     34 379 |     99 067 |         13.33 |         10.00 |            6.86 | **30.19** | Mismo corpus/índice/umbrales, **decoder Qwen3-8B-Q4_K_M en vez de Llama-3.1-8B-Instruct** (`--model-name qwen3-8b`, SPEC.md 10.5). Ver nota A/B abajo — no promovido a candidato activo todavía. |
 
 Lectura de la curva:
+
+- **Decoder intercambiable (SPEC.md 10.5) implementado y comparado A/B.** `config.LLM_CANDIDATES`
+  registra `llama-3.1-8b-instruct` (activo) y `qwen3-8b` (Qwen/Qwen3-8B-GGUF, Q4_K_M, más reciente
+  que Llama-3.1); `get_llm()` cachea por ruta resuelta en vez de singleton único.
+  Qwen3-Instruct se entrena casi exclusivamente en ChatML, así que `LLM.generate()` envuelve el
+  prompt en `<|im_start|>user ... <|im_end|> <|im_start|>assistant` solo para ese candidato
+  (no-op para Llama, cero riesgo sobre el camino ya validado); la gramática GBNF por formato fuerza
+  `{` como primer carácter en cualquier caso, así que el modo "thinking" de Qwen3 (bloque
+  `<think>...</think>`) no puede filtrarse al output aunque no se desactive explícitamente —
+  confirmado con un smoke test con y sin gramática.
+  **Resultado A/B sobre `sample_50.jsonl` (mismo corpus/índice/umbrales, único cambio el decoder):**
+  cerradas empatadas (10/15 ambos), pero Qwen3 mejora citación (índice 0.5 vs 0.367, 10.0 vs 7.35
+  pts) y calibración de abstención (6.86 vs 5.81 pts, además de la única abstención correcta medida
+  hasta ahora) — total automático **30.19 vs 26.49** (+3.7 pts, ~14% relativo). Determinismo: ambos
+  pasan `determinism_check.py` (0 divergencias, 3 ítems, procesos frescos). Latencia: Qwen3 es más
+  lento (19.97 vs 17.82 seg/ítem), extrapola a 5.50h sobre las 992 preguntas del sábado contra un
+  presupuesto de 6h — margen de **0.50h**, bastante más ajustado que el margen de Llama (1.09h). La
+  muestra de 50 ítems tampoco captura variación sostenida (throttling térmico, carga del sistema)
+  durante una corrida real de ~5-6h. **No se promovió a candidato activo (`LLM_MODEL_NAME`) en esta
+  sesión** — es una decisión del equipo con una compensación real (mejor puntaje medido vs. colchón
+  de latencia más delgado para la ejecución en vivo del sábado), documentada aquí para decidirla
+  conscientemente, no server-side por defecto.
 
 - **Reorden de llaves de `multiple_choice` (SPEC.md 10.2 #1 / 10.4 #5), probado y revertido.**
   La hipótesis del diagnóstico original (comprometerse con `respuesta_correcta` antes de razonar
