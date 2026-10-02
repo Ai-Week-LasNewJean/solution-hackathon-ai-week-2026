@@ -1,7 +1,6 @@
 """Reejecuta N items dos veces en procesos frescos y compara byte a byte
-(SPEC.md seccion 6). Solo tiene sentido en el Mac: ensaya literalmente la
-verificacion en vivo del sabado, donde CUDA vs Metal podria hacer divergir la
-generacion aunque temperatura=0.
+(SPEC.md seccion 6). Corre en Turing (maquina canonica desde el cambio de
+instrucciones del 2026-10-02). El Mac solo sirve como chequeo auxiliar cruzado.
 """
 from __future__ import annotations
 
@@ -34,7 +33,7 @@ def _run_fresh_process(items_path: Path, item_id: int) -> str:
 
 def check(items_path: Path, item_ids: list[int]) -> dict:
     if not config.IS_CANONICAL:
-        return {"ok": False, "motivo": "determinism_check solo corre en el Mac (config.BACKEND != 'mac')"}
+        return {"ok": False, "motivo": "determinism_check solo corre en Turing, la maquina canonica (config.BACKEND != 'turing')"}
 
     divergencias = []
     for item_id in item_ids:

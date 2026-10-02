@@ -3,9 +3,9 @@
 
 Riesgo central del reto: con temperatura=0 la decodificacion greedy es
 deterministica dado un binario y hardware fijos, pero CUDA y Metal usan
-kernels de punto flotante distintos. El Mac debe ser la fuente de verdad
-canonica para toda generacion que termine en submissions.jsonl desde el
-jueves (config.IS_CANONICAL). Este modulo no impone esa regla por si solo --
+kernels de punto flotante distintos. Turing (CUDA) es la fuente de verdad
+canonica para toda generacion que termine en submissions.jsonl
+(config.IS_CANONICAL); el Mac es solo auxiliar para pruebas de determinismo. Este modulo no impone esa regla por si solo --
 quien orqueste la corrida final (pipeline/run_batch.py) debe verificar
 config.IS_CANONICAL antes de escribir submissions.jsonl.
 """
@@ -50,6 +50,14 @@ class LLM:
             # modo "thinking" de Qwen3 no puede filtrarse al output aunque no
             # se envie enable_thinking=False explicitamente.
             return f"<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n"
+        if self.chat_template == "llama3":
+            return ("<|start_header_id|>user<|end_header_id|>\n\n"  # BOS lo antepone llama.cpp
+                    f"{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n")
+        if self.chat_template == "mistral":
+            return f"[INST] {prompt} [/INST]"  # llama.cpp antepone BOS
+        if self.chat_template == "aya":
+            return ("<|START_OF_TURN_TOKEN|><|USER_TOKEN|>"
+                    f"{prompt}<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>")
         return prompt
 
     def generate(self, prompt: str, max_tokens: int, grammar_path: Path | None = None) -> str:

@@ -35,8 +35,10 @@ RAW_CORPUS_DIR = Path(os.environ.get(
 ))
 
 # --- Backend mac|turing (SPEC.md seccion 2) -----------------------------
-# El Mac es la fuente de verdad canonica para toda generacion que termine en
-# submissions.jsonl desde el jueves. Turing solo se usa para iterar rapido.
+# CAMBIO DE INSTRUCCIONES (2026-10-02): Turing (GPU CUDA, RTX 4090) es la
+# maquina CANONICA -- toda generacion que termine en submissions.jsonl y todos
+# los chequeos oficiales (determinismo, latencia) corren aqui. El Mac pasa a
+# ser auxiliar: solo prueba de determinismo cruzado (RAG_BACKEND=mac), nada mas.
 
 
 def detect_backend() -> str:
@@ -44,11 +46,11 @@ def detect_backend() -> str:
     override = os.environ.get("RAG_BACKEND")
     if override:
         return override
-    return "mac" if platform.system() == "Darwin" else "turing"
+    return "mac" if platform.system() == "Darwin" else "turing"  # Linux+CUDA = Turing
 
 
 BACKEND = detect_backend()
-IS_CANONICAL = BACKEND == "mac"  # solo el Mac puede producir submissions.jsonl final
+IS_CANONICAL = BACKEND == "turing"  # solo Turing produce submissions.jsonl final; el Mac es auxiliar
 
 # --- Encoder de embeddings ----------------------------------------------
 # Mismo encoder que scripts/evaluate.py (JUEZ_ENCODER) para el componente de
@@ -69,8 +71,8 @@ SEGMENT_OVERLAP_SENTENCES = 2
 K_BM25 = 30
 K_DENSE = 30
 RRF_K = 60
-FUSED_TOP_K = 20           # candidatos tras fusion, antes de (opcional) rerank
-FINAL_TOP_K = 6            # pasajes que llegan al prompt de generacion
+FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 20))           # candidatos tras fusion, antes de (opcional) rerank
+FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
 
 USE_RERANKER = os.environ.get("USE_RERANKER", "0") == "1"
@@ -85,8 +87,8 @@ RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 # (el pasaje queda de primero en ambas listas); aparecer de primero en una
 # sola lista da 1/(RRF_K+1) = 0.0164. Los umbrales de abajo estan en esa
 # escala -- si RRF_K cambia, hay que recalibrarlos.
-SUFFICIENCY_SCORE_THRESHOLD = 0.014   # ~top-1 en al menos una de las dos listas
-RETRY_SCORE_THRESHOLD = 0.006          # ~top-5 en al menos una de las dos listas
+SUFFICIENCY_SCORE_THRESHOLD = float(os.environ.get("SUFFICIENCY_SCORE_THRESHOLD", 0.014))   # ~top-1 en al menos una de las dos listas
+RETRY_SCORE_THRESHOLD = float(os.environ.get("RETRY_SCORE_THRESHOLD", 0.006))          # ~top-5 en al menos una de las dos listas
 
 # --- Decoder / generacion --------------------------------------------------
 # Decoder intercambiable (SPEC.md 10.5): registro de candidatos <=8B probados
@@ -109,6 +111,13 @@ LLM_CANDIDATES: dict[str, dict] = {
     # output -- el grammar lo prohibe desde el primer token.
     "llama-3.1-8b-instruct": {"filename": "llama-3.1-8b-instruct-q4_k_m.gguf", "chat_template": None},
     "qwen3-8b": {"filename": "Qwen3-8B-Q4_K_M.gguf", "chat_template": "chatml"},
+    # Candidatos anadidos el 2026-10-02 al pasar Turing a maquina canonica (la
+    # latencia deja de ser el cuello de botella). Todos <=8B y abiertos.
+    # Aya-Expanse es CC-BY-NC: verificar con los organizadores antes de usarlo en la entrega.
+    "llama-3.1-8b-chat": {"filename": "llama-3.1-8b-instruct-q4_k_m.gguf", "chat_template": "llama3"},
+    "qwen2.5-7b": {"filename": "Qwen2.5-7B-Instruct-Q4_K_M.gguf", "chat_template": "chatml"},
+    "mistral-7b-v0.3": {"filename": "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf", "chat_template": "mistral"},
+    "aya-expanse-8b": {"filename": "aya-expanse-8b-Q4_K_M.gguf", "chat_template": "aya"},
 }
 
 # Candidato activo: llama-3.1-8b-instruct (NO qwen3-8b). Se promovio Qwen3 a
@@ -127,7 +136,7 @@ LLM_CANDIDATES: dict[str, dict] = {
 # MAX_TOKENS_BY_FORMAT) antes de reconsiderar promoverlo otra vez -- NO
 # volver a promoverlo sin remedir latency_check.py en el Mac exacto que se
 # usara el sabado, idealmente sobre una corrida mas sostenida que 50 items.
-LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "llama-3.1-8b-instruct")
+LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "qwen3-8b")
 
 
 def llm_model_path(name: str | None = None) -> Path:
