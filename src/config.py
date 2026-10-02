@@ -75,7 +75,7 @@ FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 20))           # candidatos tras
 FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
 
-USE_RERANKER = os.environ.get("USE_RERANKER", "0") == "1"
+USE_RERANKER = os.environ.get("USE_RERANKER", "1") == "1"  # default ON desde 2026-10-02 (SPEC.md 11.3)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 
 # Umbral de suficiencia: se ajusta empiricamente barriendo contra
@@ -87,8 +87,15 @@ RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 # (el pasaje queda de primero en ambas listas); aparecer de primero en una
 # sola lista da 1/(RRF_K+1) = 0.0164. Los umbrales de abajo estan en esa
 # escala -- si RRF_K cambia, hay que recalibrarlos.
-SUFFICIENCY_SCORE_THRESHOLD = float(os.environ.get("SUFFICIENCY_SCORE_THRESHOLD", 0.014))   # ~top-1 en al menos una de las dos listas
-RETRY_SCORE_THRESHOLD = float(os.environ.get("RETRY_SCORE_THRESHOLD", 0.006))          # ~top-5 en al menos una de las dos listas
+# Con el reranker activo el score es la probabilidad (sigmoide, 0-1) del
+# cross-encoder, no RRF: los umbrales se calibraron aparte (SPEC.md 11.3).
+# En el sample los dos unicos items con top-score < 0.1 fueron incorrectos.
+if USE_RERANKER:
+    _SUFF_DEFAULT, _RETRY_DEFAULT = 0.10, 0.02
+else:
+    _SUFF_DEFAULT, _RETRY_DEFAULT = 0.014, 0.006
+SUFFICIENCY_SCORE_THRESHOLD = float(os.environ.get("SUFFICIENCY_SCORE_THRESHOLD", _SUFF_DEFAULT))
+RETRY_SCORE_THRESHOLD = float(os.environ.get("RETRY_SCORE_THRESHOLD", _RETRY_DEFAULT))
 
 # --- Decoder / generacion --------------------------------------------------
 # Decoder intercambiable (SPEC.md 10.5): registro de candidatos <=8B probados
