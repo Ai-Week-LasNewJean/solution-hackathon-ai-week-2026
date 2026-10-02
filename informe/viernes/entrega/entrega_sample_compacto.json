@@ -1,0 +1,994 @@
+[
+ {
+  "id": 24,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Los elementos esenciales de validez de un contrato son los establecidos en el Código de Comercio, artículo 1045, que incluyen el interés asegurable, el riesgo asegurable, la prima o precio del seguro y la obligación condicional del asegurador. En el caso del contrato de trabajo, el Código Sustantivo del Trabajo, artículo 23, menciona la actividad personal, la continuada subordinación y el salario.",
+  "palabras_clave": [
+   "elementos esenciales",
+   "Código de Comercio",
+   "Código Sustantivo del Trabajo"
+  ],
+  "referencia_legal": "Código de Comercio, artículo 1045; Código Sustantivo del Trabajo, artículo 23",
+  "pasajes_recuperados": [
+   "codigo-comercio",
+   "codigo-sustantivo-trabajo",
+   "sentencia_sp321_2025",
+   "codigo-comercio",
+   "sentencia_sc1426_2024",
+   "sentencia_sc1426_2024"
+  ]
+ },
+ {
+  "id": 51,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "C",
+  "justificacion": "La acción judicial de grupo procede cuando un conjunto de personas resulta afectado por un mismo hecho que les causa perjuicios individuales derivados de una causa común, según el artículo 46 de la Ley 472 de 1998 y la jurisprudencia de la Corte Suprema de Justicia (Sentencia SC504-2023).",
+  "descarte_opciones": {
+   "A": "La opción A se refiere a la protección de derechos fundamentales individuales de aplicación inmediata, lo cual corresponde a la acción popular, no a la acción de grupo.",
+   "B": "La opción B menciona la defensa del interés colectivo ambiental o del espacio público, lo cual no se ajusta al concepto de acción de grupo descrito en la normativa.",
+   "D": "La opción D se refiere a la declaración de inconstitucionalidad de una norma, lo cual no es el objeto de la acción de grupo."
+  },
+  "pasajes_recuperados": [
+   "sentencia_sc504_2023",
+   "sentencia_cc_c_569_04",
+   "sentencia_sc504_2023",
+   "ley-472-1998",
+   "ley-472-1998",
+   "sentencia_cc_c_116_08"
+  ]
+ },
+ {
+  "id": 58,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "A",
+  "justificacion": "La Ley 1564 de 2012, artículo 106, establece que las actuaciones, audiencias y diligencias judiciales se adelantarán en días y horas hábiles, lo cual se aplica a las actuaciones jurisdiccionales adelantadas ante la SIC.",
+  "descarte_opciones": {
+   "B": "La Ley 270 de 1996 se refiere a procesos judiciales con uso de tecnologías de información, no a actuaciones jurisdiccionales adelantadas ante la SIC.",
+   "C": "La Ley 472 de 1998 regula acciones de protección al consumidor, no las actuaciones jurisdiccionales adelantadas ante la SIC.",
+   "D": "La Ley 906 de 2004 aborda temas relacionados con la movilidad de jueces y procedimientos penales, no las actuaciones jurisdiccionales adelantadas ante la SIC."
+  },
+  "pasajes_recuperados": [
+   "ley-1564-2012",
+   "ley-270-1996",
+   "ley-734-2002",
+   "ley-1480-2011",
+   "ley-906-2004",
+   "ley-906-2004"
+  ]
+ },
+ {
+  "id": 60,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "A",
+  "justificacion": "El principio del juez natural se establece en el artículo 228 de la Constitución Política de Colombia, que establece que la Administración de Justicia es función pública y sus decisiones son independientes, lo cual implica que toda persona debe ser juzgada por un juez o tribunal competente previamente establecido por la ley.",
+  "descarte_opciones": {
+   "B": "La jurisprudencia no establece que el juez natural sea designado discrecionalmente por el Consejo Superior de la Judicatura, sino que debe ser competente y establecido por la ley.",
+   "C": "El principio del juez natural no se refiere únicamente a la imparcialidad, sino también a la competencia del juez, según la jurisprudencia y la Constitución.",
+   "D": "La opción D contradice el principio del juez natural, ya que establece que cualquier autoridad con competencia general puede juzgar, lo cual no es correcto según la norma y la jurisprudencia."
+  },
+  "pasajes_recuperados": [
+   "sentencia_cc_t_738_07",
+   "constitucion",
+   "constitucion",
+   "constitucion",
+   "sentencia_cc_su_1184_01",
+   "sentencia_cc_c_328_15"
+  ]
+ },
+ {
+  "id": 79,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Sí, existe norma que regula el acoso laboral. La Ley 1010 de 2006, artículo 1, establece medidas para prevenir, corregir y sancionar el acoso laboral en el marco de las relaciones de trabajo.",
+  "palabras_clave": [
+   "acoso laboral",
+   "Ley 1010 de 2006",
+   "artículo 1"
+  ],
+  "referencia_legal": "Ley 1010 de 2006, artículo 1",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_960_07",
+   "sentencia_cc_t_239_18",
+   "sentencia_cc_c_282_07",
+   "sentencia_cc_t_007_19",
+   "sentencia_cc_c_738_06",
+   "sentencia_cc_t_141_24"
+  ]
+ },
+ {
+  "id": 128,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "B",
+  "justificacion": "El artículo 127-1 del Decreto 624 de 1989 establece que los contratos de arrendamiento financiero o leasing se someten a las reglas mencionadas, pero no especifica quiénes pueden otorgarlos. Sin embargo, el artículo 408 del mismo Decreto 624 de 1989 y la Ley 2010 de 2019 mencionan que los contratos de leasing se celebran directamente o a través de compañías de leasing, lo que sugiere que las compañías de financiamiento y los bancos comerciales son los que pueden otorgar estos contratos. Además, la Ley 37 de 1993 menciona que las entidades públicas pueden celebrar contratos de arrendamiento financiero, pero no se menciona en las opciones. Por lo tanto, la opción B es la correcta.",
+  "descarte_opciones": {
+   "A": "La opción A menciona Fintech, Cooperativas, Fundaciones y Asociaciones, pero ninguna de estas entidades se menciona explícitamente en la evidencia como facultadas para otorgar contratos de leasing financiero o arrendamiento financiero.",
+   "C": "La opción C menciona solo Cooperativas, Fundaciones y Asociaciones, lo cual es incorrecto ya que no se mencionan como facultadas para otorgar contratos de leasing financiero o arrendamiento financiero en la evidencia.",
+   "D": "La opción D menciona Fintech, pero esta entidad no se menciona explícitamente en la evidencia como facultada para otorgar contratos de leasing financiero o arrendamiento financiero."
+  },
+  "pasajes_recuperados": [
+   "decreto-624-1989",
+   "ley-37-1993",
+   "decreto-624-1989",
+   "ley-2010-2019",
+   "ley-1537-2012",
+   "ley-2274-2022"
+  ]
+ },
+ {
+  "id": 140,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La Corte Constitucional en la Sentencia C-145 de 2018 definió que las potestades del acreedor garantizado que ejecuta la garantía mobiliaria fuera o dentro de un proceso concursal deben respetar los derechos de los niños y trabajadores, solo procediendo si los bienes del deudor son suficientes para garantizar obligaciones alimentarias y salariales, según el artículo 50 de la Ley 1676 de 2013.",
+  "palabras_clave": [
+   "Corte Constitucional",
+   "acreedor garantizado",
+   "derechos niños trabajadores",
+   "Ley 1676 de 2013",
+   "artículo 50"
+  ],
+  "referencia_legal": "Sentencia C-145 de 2018, Ley 1676 de 2013, artículo 50",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_145_18",
+   "ley-1676-2013",
+   "ley-1676-2013",
+   "sentencia_cc_c_483_24",
+   "ley-1676-2013",
+   "ley-1676-2013"
+  ]
+ },
+ {
+  "id": 142,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El precedente jurisprudencial en materia de deducibilidad de gastos en el impuesto sobre la renta se encuentra en el Decreto 624 de 1989, artículo 105, que establece que los gastos devengados contablemente son deducibles si cumplen con los requisitos del estatuto.",
+  "palabras_clave": [
+   "deducibilidad gastos",
+   "impuesto sobre la renta",
+   "Decreto 624 de 1989"
+  ],
+  "referencia_legal": "Decreto 624 de 1989, artículo 105",
+  "pasajes_recuperados": [
+   "decreto-624-1989",
+   "decreto-624-1989",
+   "decreto-624-1989",
+   "decreto-624-1989",
+   "ley-488-1998",
+   "ley-2010-2019"
+  ]
+ },
+ {
+  "id": 168,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La declaración de lesión enorme en el contrato de compraventa de bien inmueble procede cuando el precio es inferior a la mitad del justo precio, según el artículo 1947 del Código Civil.",
+  "palabras_clave": [
+   "lesión enorme",
+   "compraventa",
+   "justo precio"
+  ],
+  "referencia_legal": "Código Civil, artículo 1947",
+  "pasajes_recuperados": [
+   "codigo-civil",
+   "codigo-civil",
+   "sentencia_cc_c_236_14",
+   "codigo-civil",
+   "sentencia_sc941_2025",
+   "sentencia_sc941_2025"
+  ]
+ },
+ {
+  "id": 190,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La sentencia T-256 de 2025 menciona antecedentes fácticos como la estrategia desleal de ExxonMobil contra Ludesa, la modificación sistemática de condiciones comerciales y la discriminación laboral de Nelson Andrés Osorio Giraldos por su estado de salud.",
+  "palabras_clave": [
+   "estrategia desleal",
+   "modificación comercial",
+   "discriminación laboral"
+  ],
+  "referencia_legal": "Sentencia T-256 de 2025, ANTECEDENTES",
+  "pasajes_recuperados": [
+   "sentencia_sc1644_2025",
+   "sentencia_sp125_2025",
+   "sentencia_sl1630_2025",
+   "sentencia_sp1148_2025",
+   "sentencia_sl1623_2025",
+   "sentencia_sp1202_2025"
+  ]
+ },
+ {
+  "id": 218,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El conflicto normativo se resuelve priorizando el artículo 313 numeral 7 de la Constitución Política sobre el artículo 32 de la Ley 2294 de 2023, ya que la Constitución establece que el uso del suelo es competencia exclusiva de los municipios.",
+  "palabras_clave": [
+   "conflicto normativo",
+   "artículo 313 numeral 7",
+   "uso del suelo"
+  ],
+  "referencia_legal": "Constitución Política, artículo 313 numeral 7",
+  "pasajes_recuperados": [
+   "ley-2294-2023",
+   "ley-2294-2023",
+   "sentencia_cc_c_358_24",
+   "sentencia_cc_c_145_15",
+   "sentencia_cc_c_096_19",
+   "sentencia_sc395_2023"
+  ]
+ },
+ {
+  "id": 239,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La Corte Suprema de Justicia, en la sentencia SC8453-2016, establece que la cesantía comercial es renunciable, según el inciso 1° del artículo 1324 del Código de Comercio, al reconocer su carácter contractual y dispositivo.",
+  "palabras_clave": [
+   "cesantía comercial",
+   "renuncia",
+   "artículo 1324",
+   "Código de Comercio"
+  ],
+  "referencia_legal": "Código de Comercio, artículo 1324; Sentencia SC8453-2016",
+  "pasajes_recuperados": [
+   "sentencia_sc1426_2024",
+   "sentencia_sc425_2024",
+   "sentencia_sc8453_2016",
+   "sentencia_sc1426_2024",
+   "sentencia_sc425_2024",
+   "sentencia_sc1426_2024"
+  ]
+ },
+ {
+  "id": 247,
+  "formato": "open_ended",
+  "abstencion": false,
+  "marco_normativo": "El artículo 2 de la Constitución Política de Colombia establece que los fines esenciales del Estado incluyen garantizar la efectividad de los principios, derechos y deberes consagrados en la Constitución, facilitar la participación de todos en las decisiones que los afectan, y proteger a todas las personas residentes en Colombia en su vida, honra, bienes, creencias y demás derechos y libertades. Además, la Constitución reconoce el derecho a la vida, la dignidad humana y el debido proceso.",
+  "analisis": "La ampliación de la Avenida 68, que afecta el Parque Simón Bolívar y su ecosistema, podría vulnerar los derechos fundamentales de la comunidad y los animales que allí habitan. La Constitución exige que las autoridades protejan los derechos de los ciudadanos y garantice la participación en decisiones que los afectan. La Sentencia T-514/14 establece que el Estado tiene la obligación de proteger a sujetos de especial protección constitucional, lo cual incluye a los animales en situaciones de vulnerabilidad. La Sentencia T-527/07 indica que la acción de tutela no es el único recurso para defender derechos cuando existen otros mecanismos legales. Por lo tanto, se debe analizar si la decisión de la Alcaldía se ajusta a los principios constitucionales de protección ambiental y bienestar animal.",
+  "jurisprudencia": "Sentencia T-514/14: El Estado tiene la obligación de proteger a sujetos de especial protección constitucional, incluyendo a quienes son afectados por decisiones administrativas. Sentencia T-527/07: La acción de tutela no es el único recurso para defender derechos cuando existen otros mecanismos legales. Sentencia T-095/16: La Corte reconoce el deber constitucional de protección animal derivado de la Constitución ecológica y la garantía del medio ambiente.",
+  "conclusion": "La decisión de la Alcaldía de Bogotá debe ser evaluada bajo el marco constitucional de protección ambiental y derechos fundamentales. La acción de tutela podría ser un recurso válido, pero también se deben considerar otros mecanismos legales. La protección del Parque Simón Bolívar y los animales que allí habitan requiere un análisis detallado de los impactos ambientales y sociales.",
+  "pasajes_recuperados": [
+   "constitucion",
+   "sentencia_cc_t_514_14",
+   "sentencia_cc_t_527_07",
+   "sentencia_cc_t_372_07",
+   "ley-446-1998",
+   "sentencia_cc_t_095_16"
+  ]
+ },
+ {
+  "id": 253,
+  "formato": "open_ended",
+  "abstencion": false,
+  "marco_normativo": "La Ley 1562 de 2012 define el accidente de trabajo como aquel que se produce durante el traslado de los trabajadores o contratistas desde su residencia a los lugares de trabajo o viceversa, cuando el transporte lo suministre el empleador. El Código Sustantivo del Trabajo establece que el empleador debe prestar los primeros auxilios al accidentado, incluso si el accidente es debido a provocación deliberada o culpa grave de la víctima. El Código Civil indica que el depositario no responde naturalmente de fuerza mayor o caso fortuito, salvo si recibe el precio de la cosa depositada.",
+  "analisis": "El accidente ocurrido durante el traslado del trabajador Rodolfo Gómez no se considera accidente de trabajo, ya que el transporte no fue suministrado por el empleador. Según la Ley 1562 de 2012, solo se considera accidente de trabajo si el transporte es proporcionado por la empresa. Además, el hecho no ocurrió con causa o ocasión del trabajo, ya que el trabajador no se encontraba en cumplimiento de funciones laborales en ese momento. Por lo tanto, el empleador no responde por las prestaciones económicas y asistenciales derivadas de un caso fortuito o fuerza mayor, ya que no se aplican las excepciones establecidas en la jurisprudencia.",
+  "jurisprudencia": "Sentencia SL1520-2025: La fuerza mayor o caso fortuito no se considera aplicable si el empleador ha podido planificarlo, contenerlo, eludirlo o resolver sus consecuencias. Sentencia SL3385-2022: El accidente de trabajo solo se considera cuando el transporte es suministrado por el empleador y el hecho ocurre con causa o ocasión del trabajo.",
+  "conclusion": "El accidente ocurrido durante el traslado del trabajador no se considera accidente de trabajo, por lo que el empleador no responde por las prestaciones económicas y asistenciales derivadas de un caso fortuito o fuerza mayor.",
+  "pasajes_recuperados": [
+   "sentencia_sl3385_2022",
+   "sentencia_sl1520_2025",
+   "sentencia_sl3385_2022",
+   "codigo-civil",
+   "sentencia_sl3385_2022",
+   "codigo-sustantivo-trabajo"
+  ]
+ },
+ {
+  "id": 272,
+  "formato": "open_ended",
+  "abstencion": false,
+  "marco_normativo": "La Ley 1116 de 2006 en su artículo 17 prohíbe a los administradores la constitución y ejecución de garantías sobre bienes propios del deudor, incluyendo fiducias mercantiles, durante el proceso de reorganización, salvo autorización judicial. El artículo 41 permite la modificación de la prelación de créditos bajo condiciones específicas. La Ley 1676 de 2013 en su artículo 50 establece que durante el proceso de reorganización, no se pueden iniciar demandas de ejecución contra bienes necesarios para la actividad del deudor. El Decreto 624 de 1989 regula el tratamiento fiscal de los contratos de fiducia mercantil.",
+  "analisis": "La Ley 1116 de 2006 establece que durante el proceso de reorganización, los administradores no pueden constituir garantías sobre bienes del deudor sin autorización judicial. En este caso, el juez ha determinado que el contrato no es garantía, sino una fuente de pago, lo que implica que no se aplica la prohibición de garantías. Sin embargo, el artículo 50 de la Ley 1676 de 2013 indica que los bienes necesarios para la actividad del deudor no pueden ser objeto de ejecución. Por lo tanto, los recursos en el patrimonio autónomo deben ser administrados con el fin de mantener la actividad del deudor. La jurisprudencia indica que la fiduciaria debe rendir cuentas a los beneficiarios y distribuir los remanentes, lo que sugiere que los recursos deben ser utilizados para el cumplimiento de las obligaciones del deudor.",
+  "jurisprudencia": "Sentencia SC1718-2025: la fiduciaria debe rendir cuentas a los beneficiarios y distribuir los remanentes según la participación en la Alianza Estratégica. Sentencia SC515-2024: la fiduciaria debe administrar los recursos del patrimonio autónomo según las instrucciones del fideicomitente, y en caso de dudas, acudir a los interesados o a la Superintendencia Financiera.",
+  "conclusion": "La fiduciaria debe administrar los recursos del patrimonio autónomo con el objetivo de mantener la actividad del deudor, respetando las restricciones legales. Los recursos no pueden ser utilizados para ejecuciones contra bienes necesarios, y deben ser distribuidos según la participación en la Alianza Estratégica. La jurisprudencia reafirma la obligación de la fiduciaria de rendir cuentas y distribuir los remanentes de manera justa.",
+  "pasajes_recuperados": [
+   "ley-1116-2006",
+   "ley-1676-2013",
+   "decreto-624-1989",
+   "ley-1116-2006",
+   "sentencia_sc1718_2025",
+   "sentencia_sc515_2024"
+  ]
+ },
+ {
+  "id": 280,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El artículo 64 del Código Penal colombiano, modificado por la Ley 2098 de 2021, establece que el juez debe valorar la conducta punible y verificar los requisitos para conceder la libertad condicional, incluyendo el cumplimiento de las tres quintas partes de la pena y el adecuado comportamiento durante el tratamiento penitenciario.",
+  "palabras_clave": [
+   "libertad condicional",
+   "artículo 64",
+   "Código Penal",
+   "Ley 2098 de 2021"
+  ],
+  "referencia_legal": "Ley 2098 de 2021, artículo 64 del Código Penal",
+  "pasajes_recuperados": [
+   "ley-2098-2021",
+   "sentencia_cc_c_757_14",
+   "ley-1820-2016",
+   "sentencia_cc_c_665_05",
+   "sentencia_cc_t_640_17",
+   "sentencia_cc_t_095_23"
+  ]
+ },
+ {
+  "id": 290,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "C",
+  "justificacion": "El artículo 11 de la Ley 1150 de 2007 establece que, en caso de no pactar un plazo para la liquidación bilateral de un contrato estatal, la liquidación se realizará dentro de los cuatro (4) meses siguientes a la expiración del término previsto para la ejecución del contrato o a la expedición del acto administrativo que ordene la terminación.",
+  "descarte_opciones": {
+   "A": "El plazo de 2 años se refiere a un caso específico donde la liquidación no se ha realizado dentro del plazo previsto, no es el plazo supletorio para la liquidación bilateral.",
+   "B": "Los 8 meses no están mencionados en la norma como plazo supletorio para la liquidación bilateral.",
+   "D": "El plazo de 2 meses se refiere al término para la liquidación unilateral en caso de no llegar a un acuerdo, no al plazo supletorio para la liquidación bilateral."
+  },
+  "pasajes_recuperados": [
+   "ley-1150-2007",
+   "decreto-624-1989",
+   "ley-6-1992",
+   "ley-1437-2011",
+   "decreto-624-1989",
+   "ley-1150-2007"
+  ]
+ },
+ {
+  "id": 308,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "D",
+  "justificacion": "El artículo 11 de la Ley 1150 de 2007 establece que en caso de que el contratista no se presente a la liquidación previa notificación o convocatoria que le haga la entidad, o las partes no lleguen a un acuerdo sobre su contenido, la entidad tendrá la facultad de liquidar en forma unilateral dentro de los dos (2) meses siguientes.",
+  "descarte_opciones": {
+   "A": "El plazo de 2 meses se refiere a la liquidación unilateral, no a la liquidación de manera unilateral en general.",
+   "B": "La evidencia indica que sí existe plazo para la liquidación unilateral.",
+   "C": "Dos años es el plazo para la liquidación si vencido el plazo anteriormente establecido no se ha realizado la liquidación, no es el plazo para la liquidación unilateral."
+  },
+  "pasajes_recuperados": [
+   "ley-1150-2007",
+   "ley-1437-2011",
+   "codigo-contencioso-administrativo",
+   "ley-446-1998",
+   "ley-104-1993",
+   "ley-418-1997"
+  ]
+ },
+ {
+  "id": 352,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "B",
+  "justificacion": "El articulo 49 del Decreto 2067 de 1991 establece que la nulidad de los procesos ante la Corte Constitucional solo puede alegarse antes de proferido el fallo y que solo las irregularidades que impliquen violación del debido proceso podrán servir de base para que el Pleno de la Corte anule el proceso.",
+  "descarte_opciones": {
+   "A": "No se menciona en la evidencia que la desacuerdo sobre la ponencia debatida sea una causa para la nulidad.",
+   "C": "No hay evidencia que indique que la falta de quórum sea una causa para la nulidad de los procesos.",
+   "D": "La evidencia no menciona que cualquier ciudadano pueda solicitar la nulidad."
+  },
+  "pasajes_recuperados": [
+   "sentencia_cc_a_002_01",
+   "sentencia_cc_a_058a_00",
+   "sentencia_cc_a_229_14",
+   "sentencia_cc_a_666_17",
+   "sentencia_cc_a_148_14",
+   "sentencia_cc_a_108_12"
+  ]
+ },
+ {
+  "id": 358,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "D",
+  "justificacion": "La acción reivindicatoria está prevista en el artículo 946 del Código Civil y es el mecanismo procesal para reclamar la restitución derivada de una usurpación o transferencia ilegal de bienes, según la jurisprudencia de la Corte Suprema de Justicia y la Corte Constitucional.",
+  "descarte_opciones": {
+   "A": "No se menciona que ninguna de las opciones sea correcta, ya que la acción reivindicatoria es explícitamente mencionada en la evidencia.",
+   "B": "La acción posesoria no es el mecanismo para reclamar la restitución de bienes usurpados, sino para proteger la posesión legítima.",
+   "C": "La acción resolutoria se refiere a la anulación de actos jurídicos, no a la restitución de bienes usurpados."
+  },
+  "pasajes_recuperados": [
+   "sentencia_sc200_2023",
+   "sentencia_cc_t_731_13",
+   "sentencia_sc515_2024",
+   "sentencia_sc217_2023",
+   "codigo-civil",
+   "sentencia_sc515_2024"
+  ]
+ },
+ {
+  "id": 442,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El artículo 60 del Código Sustantivo del Trabajo prohíbe al trabajador disminuir intencionalmente el ritmo de ejecución del trabajo, según el numeral 5.",
+  "palabras_clave": [
+   "artículo 60",
+   "Código Sustantivo del Trabajo",
+   "disminuir ritmo trabajo"
+  ],
+  "referencia_legal": "Código Sustantivo del Trabajo, artículo 60",
+  "pasajes_recuperados": [
+   "codigo-sustantivo-trabajo",
+   "sentencia_cc_c_636_16",
+   "sentencia_stl5815_2026",
+   "ley-106-1993",
+   "ley-42-1993",
+   "sentencia_cc_c_507_23"
+  ]
+ },
+ {
+  "id": 453,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El principal precedente jurisprudencial es la Sentencia C-467/16, que reconoce a los animales como seres sintientes dignos de protección. La Corte Constitucional declaró la exequibilidad de normas que categorizan a los animales como bienes muebles, sin negar su condición de seres sintientes.",
+  "palabras_clave": [
+   "Sentencia C-467/16",
+   "seres sintientes",
+   "protección animal"
+  ],
+  "referencia_legal": "Sentencia C-467/16, Corte Constitucional de Colombia (2016-08-31)",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_467_16",
+   "sentencia_cc_c_332_25",
+   "sentencia_cc_c_408_24",
+   "sentencia_cc_c_041_17",
+   "sentencia_cc_t_526_25",
+   "sentencia_cc_su_016_20"
+  ]
+ },
+ {
+  "id": 472,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Los requisitos para el control de integraciones empresariales se establecen en el artículo 9 de la Ley 1340 de 2009, que exige la notificación a la Superintendencia de Industria y Comercio cuando las empresas cumplan con condiciones de ingresos o activos específicos.",
+  "palabras_clave": [
+   "control de integraciones empresariales",
+   "notificación",
+   "Superintendencia de Industria y Comercio"
+  ],
+  "referencia_legal": "Ley 1340 de 2009, artículo 9",
+  "pasajes_recuperados": [
+   "ley-2010-2019",
+   "sentencia_cc_c_228_10",
+   "ley-1340-2009",
+   "ley-1340-2009",
+   "ley-142-1994",
+   "ley-1340-2009"
+  ]
+ },
+ {
+  "id": 487,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "A",
+  "justificacion": "La disolución de la sociedad conyugal se define como la declaración de que la sociedad conyugal ha terminado, según el artículo 1820 del Código Civil, que establece los casos en los que se disuelve la sociedad conyugal, como la disolución del matrimonio, la separación judicial de cuerpos, etc.",
+  "descarte_opciones": {
+   "B": "La liquidación de la sociedad conyugal es un requisito posterior a la disolución, no una definición de ésta.",
+   "C": "La disolución no es una forma más rápida para divorciarse, sino un mecanismo para terminar el régimen de sociedad conyugal.",
+   "D": "La liquidación es un proceso que sigue a la disolución, no es la disolución en sí misma."
+  },
+  "pasajes_recuperados": [
+   "codigo-civil",
+   "sentencia_sc2429_2024",
+   "sentencia_sc2429_2024",
+   "sentencia_sc2429_2024",
+   "ley-1564-2012",
+   "sentencia_sc1422_2025"
+  ]
+ },
+ {
+  "id": 490,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Los pasivos de la sociedad conyugal comprenden las obligaciones que consten en título con mérito ejecutivo, las compensaciones debidas a la masa social y los créditos de los acreedores, según el artículo 501 de la Ley 1564 de 2012.",
+  "palabras_clave": [
+   "sociedad conyugal",
+   "pasivos",
+   "obligaciones",
+   "compensaciones",
+   "acreedores"
+  ],
+  "referencia_legal": "Ley 1564 de 2012, artículo 501",
+  "pasajes_recuperados": [
+   "sentencia_sc1422_2025",
+   "ley-1564-2012",
+   "sentencia_sc1422_2025",
+   "sentencia_sc1422_2025",
+   "ley-1564-2012",
+   "sentencia_sc1422_2025"
+  ]
+ },
+ {
+  "id": 513,
+  "formato": "open_ended",
+  "abstencion": false,
+  "marco_normativo": "La Ley 2586 de 2026 establece que la autoridad aduanera debe verificar la trazabilidad y relación de causalidad de las mercancías introducidas legalmente, y que los comercializadores deben presentar declaraciones de importación. La Ley 1480 de 2011 define al consumidor como quien adquiere un producto para uso personal o doméstico, no ligado a su actividad económica.",
+  "analisis": "La empresa debe asegurar que el producto ingresado al país sea legalmente amparado mediante documentos como facturas de venta, y que se cumplan los requisitos de trazabilidad establecidos en la Ley 2586 de 2026. Si el consumidor final revende el producto, la empresa no puede prohibir esta acción si el producto fue adquirido para uso personal, ya que el consumidor no se considera parte de la cadena productiva. Sin embargo, si el producto se revende en el marco de una actividad económica profesional, podría considerarse una relación de consumo y la empresa podría tener derechos legales para limitar la reventa.",
+  "jurisprudencia": "Sentencia SC2556-2024: El distribuidor actúa en causa propia y no por cuenta ajena, asumiendo riesgos como pérdida de mercancías o incumplimiento de clientes. La Corte distingue entre distribución y agencia comercial, indicando que la reventa no obedece a la intención del empresario que suministra los bienes.",
+  "conclusion": "La empresa no puede prohibir la reventa por parte del consumidor final si el producto fue adquirido para uso personal, ya que no se considera parte de la cadena productiva. Sin embargo, si el producto se revende en el marco de una actividad económica, podría surgir una relación de consumo y la empresa podría tener derechos para limitar la reventa.",
+  "pasajes_recuperados": [
+   "ley-2586-2026",
+   "sentencia_sc2556_2024",
+   "sentencia_sc2954_2024",
+   "ley-1480-2011",
+   "sentencia_sc2556_2024",
+   "sentencia_sc2556_2024"
+  ]
+ },
+ {
+  "id": 528,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "D",
+  "justificacion": "Según el artículo 19 de la Ley 572 de 2000, los procesos con pretensiones patrimoniales superiores a noventa (90) salarios mínimos legales mensuales corresponden a mayor cuantía. La pregunta menciona un monto de 30.000.000 COP, que debe compararse con el valor de los salarios mínimos legales mensuales vigentes al momento de la presentación de la demanda.",
+  "descarte_opciones": {
+   "A": "La alta cuantía no está definida en la evidencia y no se menciona en las normas citadas.",
+   "B": "La menor cuantía corresponde a pretensiones entre 15 y 90 salarios mínimos, lo cual no aplica para 30.000.000 COP.",
+   "C": "La mínima cuantía corresponde a menos de 15 salarios mínimos, lo cual no aplica para 30.000.000 COP."
+  },
+  "pasajes_recuperados": [
+   "ley-572-2000",
+   "ley-1564-2012",
+   "ley-1437-2011",
+   "ley-2540-2025",
+   "ley-2080-2021",
+   "codigo-contencioso-administrativo"
+  ]
+ },
+ {
+  "id": 563,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Los autos de seguimiento proferidos por la Sala Especial de Seguimiento a la Sentencia T-760 de 2008 tienen jerarquía normativa interna dentro del sistema judicial colombiano, como parte del control de constitucionalidad y seguimiento de mandatos constitucionales.",
+  "palabras_clave": [
+   "Sala Especial de Seguimiento",
+   "Sentencia T-760/08",
+   "jerarquía normativa"
+  ],
+  "referencia_legal": "Sentencia T-760 de 2008, Sala Especial de Seguimiento",
+  "pasajes_recuperados": [
+   "sentencia_cc_a_287_21",
+   "sentencia_cc_a_122_19",
+   "sentencia_cc_a_2566_23",
+   "sentencia_cc_a_1680_22",
+   "sentencia_cc_a_077a_20",
+   "sentencia_cc_a_1191_21"
+  ]
+ },
+ {
+  "id": 589,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El litisconsorcio facultativo se define como una figura procesal en la que los litisconsortes actúan como partes separadas, con intereses distintos y actos independientes, según el artículo 60 de la Ley 1564 de 2012.",
+  "palabras_clave": [
+   "litisconsorcio facultativo",
+   "partes separadas",
+   "intereses distintos"
+  ],
+  "referencia_legal": "Ley 1564 de 2012, artículo 60",
+  "pasajes_recuperados": [
+   "ley-1564-2012",
+   "sentencia_sc200_2023",
+   "sentencia_sc200_2023",
+   "sentencia_sc200_2023",
+   "ley-1437-2011",
+   "sentencia_sc1644_2025"
+  ]
+ },
+ {
+  "id": 600,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "C",
+  "justificacion": "El artículo 241 del Código Penal, según la Ley 1142 de 2007, establece que el hurto calificado se consume cuando se apodera del objeto, lo extrae de la esfera personal de dominio y se dispone de la cosa al menos por un momento.",
+  "descarte_opciones": {
+   "A": "La opción A describe una situación de hurto simple, no calificado, y no menciona el apoderamiento ni la disposición de la cosa.",
+   "B": "La opción B se refiere a la venta de la cosa, lo cual no está relacionado con la consumación del hurto calificado según el artículo 241.",
+   "D": "La opción D menciona la ocultación o sustracción de la cosa, pero no aborda el apoderamiento y la disposición de la cosa, elementos clave en la consumación del hurto calificado según el artículo 241."
+  },
+  "pasajes_recuperados": [
+   "ley-1142-2007",
+   "ley-813-2003",
+   "ley-1142-2007",
+   "ley-1153-2007",
+   "ley-599-2000",
+   "ley-599-2000"
+  ]
+ },
+ {
+  "id": 617,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "B",
+  "justificacion": "La Sentencia T-965/11 de la Corte Constitucional de Colombia (2011-12-16) menciona que el fuero sindical para los fundadores del sindicato nace desde el día de la constitución hasta dos meses después de la inscripción en el registro sindical, sin exceder de seis meses. La Sentencia T-054/06 (2006-02-02) también menciona el fuero sindical de los trabajadores fundadores afiliados al sindicato. La Sentencia T-809/05 (2005-08-05) menciona el fuero sindical en el contexto de adherentes y fundadores. La Sentencia T-041/05 (2005-01-27) menciona el fuero sindical de los directivos. La Sentencia C-180/16 (2016-04-13) menciona que la norma legal establece una tipificación taxativa de las clases de sindicatos que pueden legalmente constituirse en Colombia, incluyendo clases como el fuero circunstancial, convencional, etc. Por lo tanto, las clases de fueros sindicales mencionadas en la evidencia son: fundadores, adherentes, directivos, comisión de reclamos, circunstancial y convencional.",
+  "descarte_opciones": {
+   "A": "La opción A menciona 'fuero convencional, circunstanciales, comisión de reclamos, directivos, fundadores y adherentes', pero la opción B es la que menciona exactamente las mismas clases de fueros sindicales mencionadas en la evidencia.",
+   "C": "La opción C menciona 'fuero de Comisión de Reclamos, adherentes, fundadores y asalariados', pero la evidencia no menciona el fuero de asalariados.",
+   "D": "La opción D menciona 'fuero de fundadores, cooperativos, convencional, comisión de juntas, directivos y adherentes', pero la evidencia no menciona el fuero de cooperativos ni de comisión de juntas."
+  },
+  "pasajes_recuperados": [
+   "sentencia_cc_c_180_16",
+   "sentencia_cc_t_965_11",
+   "sentencia_cc_t_054_06",
+   "sentencia_cc_t_733_11",
+   "sentencia_cc_t_809_05",
+   "sentencia_cc_t_041_05"
+  ]
+ },
+ {
+  "id": 647,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "C",
+  "justificacion": "La evidencia no menciona explícitamente la Ayuda como efecto personal del matrimonio. Las sentencias y leyes mencionadas hablan sobre derechos y obligaciones dentro de las relaciones filiales, como los deberes de asistencia, socorro, solidaridad, fidelidad y respeto recíproco entre los cónyuges, pero no se refieren específicamente a la Ayuda como un efecto personal del matrimonio.",
+  "descarte_opciones": {
+   "A": "La opción A menciona (a) y (b), pero no se especifica qué son estos puntos, y la evidencia no menciona la Ayuda como efecto personal del matrimonio.",
+   "B": "La opción B describe el apoyo intelectual, moral y afectivo en forma recíproca, lo cual está relacionado con los deberes de asistencia, socorro, solidaridad, fidelidad y respeto recíproco entre los cónyuges, pero no se refiere específicamente a la Ayuda como efecto personal del matrimonio.",
+   "D": "La opción D menciona un deber de asistencia, lo cual está relacionado con los deberes de asistencia mencionados en la evidencia, pero no se refiere específicamente a la Ayuda como efecto personal del matrimonio."
+  },
+  "pasajes_recuperados": [
+   "sentencia_sc1792_2024",
+   "sentencia_sc1792_2024",
+   "ley-1573-2012",
+   "sentencia_sc2430_2025",
+   "sentencia_sc3085_2024",
+   "sentencia_sl1730_2020"
+  ]
+ },
+ {
+  "id": 661,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El principio de legalidad en materia tributaria, según la Sentencia C-030/19, exige que las normas tributarias establezcan claramente los elementos del tributo, como base gravable, sujeto pasivo y tarifa, para garantizar certeza y reserva legal. La Corte declaró inconstitucional el artículo 121 de la Ley 488 de 1998 por su falta de parámetros específicos.",
+  "palabras_clave": [
+   "principio de legalidad",
+   "base gravable",
+   "certeza tributaria"
+  ],
+  "referencia_legal": "Sentencia C-030/19, artículo 121 de la Ley 488 de 1998",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_030_19",
+   "sentencia_cc_c_315_22",
+   "sentencia_cc_c_594_10",
+   "sentencia_cc_c_621_13",
+   "sentencia_cc_c_488_00",
+   "sentencia_cc_c_036_24"
+  ]
+ },
+ {
+  "id": 671,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "B",
+  "justificacion": "Las reglas de desempate se aplican en las diferentes modalidades de selección (licitación pública, concurso de méritos y/o selección abreviada) para la contratación de obras, según el Artículo 32 de la Ley 1632 de 2013.",
+  "descarte_opciones": {
+   "A": "El conflicto de residencia-fuente no está mencionado en la evidencia relacionada con las reglas de desempate.",
+   "C": "El conflicto residencia-residencia no se menciona en la evidencia sobre reglas de desempate.",
+   "D": "El conflicto fuente-fuente no se menciona en la evidencia sobre reglas de desempate."
+  },
+  "pasajes_recuperados": [
+   "ley-1632-2013",
+   "codigo-civil",
+   "decreto-624-1989",
+   "decreto-624-1989",
+   "decreto-624-1989",
+   "ley-1751-2015"
+  ]
+ },
+ {
+  "id": 674,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "No existe cláusula abusiva en el enunciado, ya que no se cumple con los requisitos definidos en el artículo 42 de la Ley 1480 de 2011, que establece que una cláusula abusiva debe producir un desequilibrio injustificado en perjuicio del consumidor.",
+  "palabras_clave": [
+   "cláusula abusiva",
+   "Ley 1480 de 2011",
+   "desequilibrio injustificado"
+  ],
+  "referencia_legal": "Ley 1480 de 2011, artículo 42",
+  "pasajes_recuperados": [
+   "ley-1480-2011",
+   "sentencia_sc3280_2024",
+   "sentencia_sc3281_2024",
+   "ley-1328-2009",
+   "sentencia_sc3280_2024",
+   "sentencia_sc2100_2024"
+  ]
+ },
+ {
+  "id": 679,
+  "formato": "open_ended",
+  "abstencion": false,
+  "marco_normativo": "La Ley 2599 de 2026 establece que el Ministerio de Salud y Protección Social, a través del Invima, priorizará la evaluación de tecnologías y medicamentos para el diagnóstico y tratamiento del cáncer, garantizando su acceso en el menor tiempo posible. Además, la Sentencia T-306/05 de 2005 establece que la falta de capacidad económica no puede ser un requisito para el acceso a medicamentos prescritos, garantizando el derecho a la salud y la continuidad del tratamiento.",
+  "analisis": "La Ley 2599 de 2026 exige que el Invima priorice la evaluación de medicamentos y tecnologías para el cáncer, con plazos definidos para su autorización, lo cual es relevante para el caso del interferón. La Sentencia T-306/05 reafirma que la capacidad económica no puede ser un obstáculo para el acceso a medicamentos necesarios, lo que implica que el desabastecimiento no justifica la suspensión del suministro. Estas normas y jurisprudencia indican que el acceso a medicamentos es un derecho fundamental, y el desabastecimiento no puede ser utilizado como excusa para su negación. La SIC puede acceder a los datos clínicos para justificar medidas regulatorias, siempre que se respeten los derechos fundamentales de los pacientes.",
+  "jurisprudencia": "Sentencia T-306/05: La falta de capacidad económica no puede ser un requisito para el acceso a medicamentos prescritos, garantizando el derecho a la salud y la continuidad del tratamiento. Sentencia T-603/10: El derecho a la salud y la seguridad social son fundamentales, y la EPS debe garantizar el acceso a tratamientos necesarios. Sentencia T-377/24: Se reitera la jurisprudencia sobre el derecho a la salud, con principios de accesibilidad, oportunidad y continuidad.",
+  "conclusion": "La SIC puede acceder a los datos clínicos para garantizar el acceso al interferón, siempre que se respeten los derechos fundamentales de los pacientes. La jurisprudencia y la normativa establecen que el desabastecimiento no justifica la negación del acceso a medicamentos necesarios, y que el derecho a la salud es un derecho fundamental que debe ser garantizado.",
+  "pasajes_recuperados": [
+   "sentencia_cc_t_603_10",
+   "sentencia_cc_t_416_23",
+   "sentencia_cc_t_377_24",
+   "sentencia_cc_t_046_25",
+   "ley-2599-2026",
+   "sentencia_cc_t_306_05"
+  ]
+ },
+ {
+  "id": 697,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La teoría del Grupo de Compañías no se menciona explícitamente en la evidencia proporcionada. La evidencia aborda temas como la teoría de los actos propios, el retraso desleal y la confianza legítima, pero no incluye referencias a la teoría del Grupo de Compañías ni a casos que la ilustren.",
+  "palabras_clave": [
+   "teoría de los actos propios",
+   "retraso desleal",
+   "confianza legítima"
+  ],
+  "referencia_legal": "Sentencia SC425-2024, SC456-2024",
+  "pasajes_recuperados": [
+   "sentencia_sc425_2024",
+   "sentencia_sc425_2024",
+   "sentencia_sc425_2024",
+   "sentencia_sc456_2024",
+   "sentencia_sc456_2024",
+   "sentencia_sc425_2024"
+  ]
+ },
+ {
+  "id": 748,
+  "formato": "multiple_choice",
+  "abstencion": false,
+  "respuesta_correcta": "A",
+  "justificacion": "La Sentencia T-294/14 de la Corte Constitucional de Colombia establece que no tener en cuenta en el acto administrativo lo presentado por los pueblos indígenas en la consulta previa puede configurar el vicio de falsa motivación.",
+  "descarte_opciones": {
+   "B": "La usurpación de funciones no se menciona en la evidencia como vicio en este contexto.",
+   "C": "La desviación de poder no se relaciona directamente con la falta de consideración de la consulta previa en la evidencia.",
+   "D": "La opción D no se menciona en la evidencia como vicio relacionado con la consulta previa."
+  },
+  "pasajes_recuperados": [
+   "sentencia_cc_t_294_14",
+   "sentencia_cc_su_217_17",
+   "sentencia_cc_t_063_19",
+   "sentencia_cc_t_012_25",
+   "sentencia_cc_su_123_18",
+   "sentencia_cc_t_764_15"
+  ]
+ },
+ {
+  "id": 857,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La función ejecutiva y judicial del Estado son distintas según la Constitución Política de Colombia, ARTÍCULO 113, que las establece como ramas separadas. La función judicial corresponde a los jueces y tribunales, mientras que la ejecutiva se ejerce mediante el Poder Ejecutivo, como se establece en la Ley 137 de 1994, ARTÍCULO 21.",
+  "palabras_clave": [
+   "función ejecutiva",
+   "función judicial",
+   "Constitución Política",
+   "Ley 137 de 1994"
+  ],
+  "referencia_legal": "Constitución Política de Colombia, ARTÍCULO 113; Ley 137 de 1994, ARTÍCULO 21",
+  "pasajes_recuperados": [
+   "constitucion",
+   "ley-137-1994",
+   "ley-137-1994",
+   "ley-270-1996",
+   "ley-270-1996",
+   "ley-4-1913"
+  ]
+ },
+ {
+  "id": 865,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El artículo 113 del Código Civil define el matrimonio como un contrato solemne por el cual un hombre y una mujer se unen con el fin de vivir juntos, de procrear y de auxiliarse mutuamente.",
+  "palabras_clave": [
+   "matrimonio",
+   "Código Civil",
+   "artículo 113"
+  ],
+  "referencia_legal": "Código Civil, artículo 113",
+  "pasajes_recuperados": [
+   "codigo-civil",
+   "sentencia_cc_c_358_16",
+   "sentencia_cc_c_577_11",
+   "sentencia_cc_c_886_10",
+   "sentencia_cc_c_123_20",
+   "sentencia_sc009_2024"
+  ]
+ },
+ {
+  "id": 879,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El demandante no puede solicitar la terminación del proceso de cobro coactivo, ya que la decisión sobre multas corresponde exclusivamente a la autoridad judicial, según la Sentencia STL5174-2026 y la Ley 1437 de 2011, artículo 100.",
+  "palabras_clave": [
+   "proceso de cobro coactivo",
+   "autoridad judicial",
+   "multas"
+  ],
+  "referencia_legal": "Sentencia STL5174-2026, Ley 1437 de 2011, artículo 100",
+  "pasajes_recuperados": [
+   "sentencia_stl5174_2026",
+   "ley-1437-2011",
+   "ley-1430-2010",
+   "ley-2010-2019",
+   "ley-6-1992",
+   "ley-599-2000"
+  ]
+ },
+ {
+  "id": 919,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La sentencia SU-455 de 2020 de la Corte Constitucional aborda el problema jurídico de la procedencia de la acción de tutela contra providencias judiciales en un proceso de responsabilidad civil extracontractual por daño ambiental, al analizar la violación de derechos fundamentales como el debido proceso y la tutela judicial efectiva.",
+  "palabras_clave": [
+   "acción de tutela",
+   "providencias judiciales",
+   "daño ambiental"
+  ],
+  "referencia_legal": "Sentencia SU-455/20, Corte Constitucional de Colombia",
+  "pasajes_recuperados": [
+   "sentencia_cc_su_455_20",
+   "sentencia_sc1422_2025",
+   "sentencia_cc_su_354_20",
+   "sentencia_cc_su_454_20",
+   "sentencia_cc_su_453_20",
+   "sentencia_cc_su_474_20"
+  ]
+ },
+ {
+  "id": 946,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La sentencia C-039 de 2025 de la Corte Constitucional aborda el problema jurídico de la inconstitucionalidad de normas que reconocen efectos jurídicos a matrimonios y uniones maritales de hecho con o entre personas menores de 18 años, violando el bloque de constitucionalidad y la edad mínima establecida.",
+  "palabras_clave": [
+   "matrimonios menores",
+   "bloque constitucional",
+   "edad mínima 18 años"
+  ],
+  "referencia_legal": "Sentencia C-039/25, Corte Constitucional de Colombia",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_039_25",
+   "sentencia_sc1422_2025",
+   "sentencia_sp247_2025",
+   "sentencia_sp025_2025",
+   "sentencia_sp1212_2025",
+   "sentencia_sp389_2025"
+  ]
+ },
+ {
+  "id": 960,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "En el derecho de la protección de la competencia, una posición dominante se refiere a la situación de una empresa que tiene un poder significativo en un mercado, según el Decreto 2153 de 1992, artículo 50.",
+  "palabras_clave": [
+   "posición dominante",
+   "protección de la competencia",
+   "Decreto 2153 de 1992"
+  ],
+  "referencia_legal": "Decreto 2153 de 1992, artículo 50",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_228_10",
+   "sentencia_sc205_2023",
+   "decreto-2153-1992",
+   "sentencia_sc205_2023",
+   "sentencia_sc205_2023",
+   "ley-142-1994"
+  ]
+ },
+ {
+  "id": 991,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La sentencia C-891 del 2012 de la Corte Constitucional se fundamentó en el artículo 338 de la Constitución Política, declarando la inexequibilidad del inciso cuarto del párrafo del artículo 8 de la Ley 1421 de 2010.",
+  "palabras_clave": [
+   "Corte Constitucional",
+   "artículo 338",
+   "Ley 1421 de 2010"
+  ],
+  "referencia_legal": "Corte Constitucional, Sentencia C-891 del 2012, artículo 338 de la Constitución Política",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_891_12",
+   "sentencia_cc_c_781_12",
+   "sentencia_cc_c_849_12",
+   "sentencia_cc_t_852_12",
+   "sentencia_cc_c_577_14",
+   "sentencia_cc_t_913_12"
+  ]
+ },
+ {
+  "id": 1005,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La afirmación es verdadera. El Congreso tiene la facultad de efectuar traslados o adiciones presupuestales mediante ley, según la Ley 504 de 1999, artículo 41 y la Ley 163 de 1994, artículo 14.",
+  "palabras_clave": [
+   "Congreso",
+   "traslados",
+   "adiciones presupuestales"
+  ],
+  "referencia_legal": "Ley 504 de 1999, artículo 41; Ley 163 de 1994, artículo 14",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_1017_03",
+   "ley-504-1999",
+   "ley-163-1994",
+   "ley-109-1994",
+   "ley-4-1992",
+   "ley-181-1995"
+  ]
+ },
+ {
+  "id": 1015,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Para que un aborto sea no punible, según la Sentencia C-355 de 2006, se requiere que se presenten las causales de: (i) peligro para la vida o salud de la mujer, (ii) grave malformación fetal, o (iii) embarazo resultado de conducta no consentida. Estas causales se establecen en la Sentencia C-355/06.",
+  "palabras_clave": [
+   "aborto no punible",
+   "causales",
+   "Sentencia C-355/06"
+  ],
+  "referencia_legal": "Sentencia C-355/06, Corte Constitucional de Colombia",
+  "pasajes_recuperados": [
+   "sentencia_cc_c_055_22",
+   "sentencia_cc_c_355_06",
+   "sentencia_sp480_2025",
+   "sentencia_cc_t_988_07",
+   "sentencia_cc_t_388_09",
+   "sentencia_cc_c_322_23"
+  ]
+ },
+ {
+  "id": 1065,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "La ministra renunciada puede ser sujeto activo de peculado si utiliza fondos públicos en contratos estatales, según el artículo 397 del Código Penal. La renuncia no invalida su condición de servidor público en ese periodo.",
+  "palabras_clave": [
+   "peculado",
+   "contratos estatales",
+   "servidor público"
+  ],
+  "referencia_legal": "Código Penal, artículo 397",
+  "pasajes_recuperados": [
+   "sentencia_sp321_2025",
+   "sentencia_sp064_2023",
+   "sentencia_sp064_2023",
+   "sentencia_sp064_2023",
+   "sentencia_sp338_2025",
+   "sentencia_sp321_2025"
+  ]
+ },
+ {
+  "id": 1073,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "Sí, existe una relación laboral. La Corte Suprema de Justicia en la sentencia SL1571-2025 determina que la subordinación, horario fijo y suministro de herramientas indican una relación laboral, conforme a la jurisprudencia que reconoce estos elementos como indicadores de subordinación.",
+  "palabras_clave": [
+   "relación laboral",
+   "subordinación",
+   "horario fijo"
+  ],
+  "referencia_legal": "Sentencia SL1571-2025, Corte Suprema de Justicia, Sala de Casación Laboral",
+  "pasajes_recuperados": [
+   "sentencia_sl1578_2025",
+   "sentencia_sl1520_2025",
+   "sentencia_sl1578_2025",
+   "sentencia_sl1578_2025",
+   "sentencia_sl1571_2025",
+   "sentencia_sl1571_2025"
+  ]
+ },
+ {
+  "id": 1089,
+  "formato": "semi_open",
+  "abstencion": false,
+  "respuesta": "El recurso de súplica procede contra el auto que rechaza la demanda, según el artículo 246 de la Ley 1437 de 2011, modificado por la Ley 2080 de 2021. Debe interponerse en escrito dentro de los tres días siguientes a la notificación del auto. El recurso es decidido por los demás integrantes de la sala, sección o subsección.",
+  "palabras_clave": [
+   "recurso de súplica",
+   "auto que rechaza la demanda",
+   "Ley 1437 de 2011"
+  ],
+  "referencia_legal": "Ley 1437 de 2011, artículo 246; Ley 2080 de 2021, artículo 66",
+  "pasajes_recuperados": [
+   "ley-1437-2011",
+   "ley-2080-2021",
+   "codigo-contencioso-administrativo",
+   "ley-1437-2011",
+   "ley-2080-2021",
+   "ley-1564-2012"
+  ]
+ }
+]

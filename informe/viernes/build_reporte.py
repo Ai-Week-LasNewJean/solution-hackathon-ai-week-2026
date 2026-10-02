@@ -9,8 +9,8 @@ def tbl(rows, head=None, widths=None):
     b = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows)
     return f"<table>{('<tr>'+h+'</tr>') if h else ''}{b}</table>"
 page = f"""<!doctype html><html><head><meta charset="utf-8"><style>
-@page {{ size: A4; margin: 1.2cm 1.5cm; }}
-body {{ font-family: 'Liberation Sans', Arial, sans-serif; font-size: 8.3pt; line-height: 1.22; }}
+@page {{ size: A4; margin: 1.0cm 1.3cm; }}
+body {{ font-family: 'Liberation Sans', Arial, sans-serif; font-size: 7.8pt; line-height: 1.18; }}
 h1 {{ font-size: 13pt; margin: 0 0 1pt 0; }} h2 {{ font-size: 9.6pt; margin: 6pt 0 2pt 0; border-bottom: 0.6pt solid #888; }}
 p {{ margin: 1pt 0; }} table {{ border-collapse: collapse; width: 100%; margin: 1pt 0; }}
 td, th {{ border: 0.5pt solid #999; padding: 1pt 3pt; vertical-align: top; text-align: left; }} th {{ background: #e8e8e8; }}
