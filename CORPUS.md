@@ -148,6 +148,9 @@ Puntaje sobre las 50 preguntas de muestra, medido con
 | 2026-10-01 |     34 379 |     99 067 |         13.33 |          7.35 |            5.93 |     26.61 | Corpus inicial, primera corrida de punta a punta, ningún umbral/prompt ajustado todavía.                     |
 | 2026-10-02 |     34 379 |     99 067 |         13.33 |          7.35 |            5.81 |     26.49 | `MAX_TOKENS_BY_FORMAT["multiple_choice"]` 320→700 (ítem 128 ya no trunca). Reorden de llaves del schema `multiple_choice` (SPEC.md 10.4 #5) probado y **revertido**: ver nota abajo. |
 | 2026-10-02 |     34 379 |     99 067 |         13.33 |         10.00 |            6.86 | **30.19** | Mismo corpus/índice/umbrales, **decoder Qwen3-8B-Q4_K_M en vez de Llama-3.1-8B-Instruct** (`--model-name qwen3-8b`, SPEC.md 10.5). Ver nota A/B abajo — no promovido a candidato activo todavía. |
+| 2026-10-02 (Turing) | 34 379 | 99 067 | 9.33 | 7.89 | 4.88 | 22.10 | **Cambio de máquina canónica: Turing (CUDA, RTX 4090)**, mismo Llama-3.1-8B, mismo corpus/umbrales. Menor que el 26.49 del Mac: divergencia CUDA vs Metal. |
+| 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 10.00 | 6.98 | **31.65** | Decoder Qwen3-8B activo (barrido de 6 decoders ≤8B, SPEC.md 11.2). |
+| 2026-10-02 (Turing) | 34 379 | 99 067 | 13.33 | 12.65 | 7.21 | **33.19** | Qwen3-8B + reranker `bge-reranker-v2-m3` top-6, umbrales de abstención 0.10/0.02 en escala sigmoide (SPEC.md 11.3). Config activa. determinism 0 divergencias; 7.64 s/ítem. |
 
 Lectura de la curva:
 

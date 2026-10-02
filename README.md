@@ -7,25 +7,16 @@ Sistema de respuesta a preguntas de derecho colombiano con un decoder abierto
 completa documentada en [`SPEC.md`](../ai-week-hackathon-2026/SPEC.md) del
 repositorio de la hackathon (no se versiona aqui).
 
-> **Estado (2026-10-02):** pipeline completo corriendo de punta a punta contra
-> el corpus real — 34 379 documentos / 99 067 fragmentos indexados, decoder
-> descargado, corrida completa de las 50 preguntas de muestra puntuada por el
-> evaluador oficial. Detalle de estado y próximos pasos en
-> [`SPEC.md` sección 10](../ai-week-hackathon-2026/SPEC.md#10-estado-actual-2026-10-01-y-próximos-pasos)
-> del repo de la hackathon.
->
-> `determinism_check.py` y `latency_check.py` **ya corrieron en el Mac y
-> ambos pasan**: 0 divergencias en 3 ítems re-ejecutados en procesos frescos
-> (`python -m src.validate.determinism_check` traía un bug — pasaba un
-> `str` donde `common.read_jsonl` espera un `Path`, nunca se había corrido
-> con éxito — corregido); latencia promedio 17.82 seg/ítem sobre las 50
-> muestras, extrapola a 4.91h para las 992 preguntas del sábado contra un
-> presupuesto de 6h (margen 1.09h). `leakage_check.py` sigue marcando
-> "hallazgos" contra `sample_50.jsonl` — confirmado a mano que son el patrón
-> esperado ya documentado en `SPEC.md` 10.3 (el corpus contiene la norma real
-> que sustenta `legal_basis`, no el banco de preguntas filtrado), no un
-> problema real. Pendiente: chequeo go/no-go Mac-vs-Turing (sin acceso a
-> Turing en esta sesión) y reconstructibilidad del índice desde cero.
+> **Estado (2026-10-02, tarde):** **Turing (GPU CUDA, RTX 4090) es ahora la máquina
+> canónica**; el Mac es solo auxiliar para pruebas de determinismo cruzado
+> (`SPEC.md` sección 11). Configuración activa: decoder **Qwen3-8B** (Q4_K_M) +
+> reranker `bge-reranker-v2-m3` + top-6 pasajes. Medido en Turing sobre las 50
+> preguntas de muestra: **33.19 / 50** puntos automáticos (RAGAS, 30 pts,
+> pendiente de `OPENROUTER_API_KEY`); `determinism_check.py` 0 divergencias;
+> `latency_check.py` 7.64 s/ítem → 2.10 h para las 992 preguntas (presupuesto
+> 6 h). Corpus: 34 379 documentos / 99 067 fragmentos, 100% trazables.
+> Detalle y comparación de decoders en
+> [`SPEC.md` sección 11](../ai-week-hackathon-2026/SPEC.md#11-turing-como-máquina-canónica-y-resultados-2026-10-02).
 
 ## Corpus e índice
 
@@ -56,11 +47,11 @@ ingesta (qué se descartó y por qué) en `CORPUS.md` secciones 1 y 3.
 | Componente              | Elección                                                                                                      | Motivo                                                                            |
 |-------------------------|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
 | Encoder                 | `intfloat/multilingual-e5-large`                                                                              | Mismo encoder que `scripts/evaluate.py` usa para RAGAS; un solo stack.            |
-| Decoder                 | Llama-3.1-8B-Instruct GGUF (Q4_K_M) vía `llama-cpp-python`                                                    | Un binario, Metal en Mac / CUDA en Turing; soporte GBNF maduro para JSON forzado. |
+| Decoder                 | **Qwen3-8B** GGUF (Q4_K_M) vía `llama-cpp-python` (candidatos alternos en `config.LLM_CANDIDATES`)             | Mejor de 6 decoders ≤8B medidos en Turing (31.65 vs 22.10 de Llama sin reranker). CUDA en Turing (canónico) / Metal en Mac (auxiliar); GBNF para JSON forzado. |
 | Segmentación            | Regex `ARTÍCULO\s+\d+` (códigos/leyes); ventana deslizante ~250 palabras con solapamiento (jurisprudencia)    | Ver `Ejemplo de entrega/CORPUS.md` de los organizadores.                          |
 | Recuperación            | Híbrida: BM25 (`bm25s`) top-30 ∪ denso (`faiss.IndexFlatIP`) top-30, fusión RRF (k=60)                        | No requiere calibrar escalas entre BM25 y coseno.                                 |
-| Reordenamiento          | `BAAI/bge-reranker-v2-m3`, opcional tras `USE_RERANKER=1`                                                     | Se activa solo si mide mejora contra `evaluate.py --split sample`.                |
-| Mecanismo de abstención | Umbral sobre el score de recuperación fusionado (`src/retrieve/sufficiency.py`), nunca autoevaluación del LLM | Evita una fuente extra de no-determinismo.                                        |
+| Reordenamiento          | `BAAI/bge-reranker-v2-m3`, **activo por defecto** (`USE_RERANKER=0` lo apaga)                                 | Midió mejora con Qwen3 (33.19 vs 31.65); umbrales de abstención recalibrados a su escala sigmoide. |
+| Mecanismo de abstención | Umbral sobre el score de recuperación (reranker: 0.10 / 0.02; RRF: 0.014 / 0.006) (`src/retrieve/sufficiency.py`), nunca autoevaluación del LLM | Evita una fuente extra de no-determinismo.                                        |
 
 Detalle completo de decisiones y justificación en `SPEC.md` (repo de la
 hackathon, no versionado aquí).
@@ -78,19 +69,19 @@ Variables de entorno relevantes (`src/config.py`):
 
 | Variable         | Para qué                                                      | Default                                    |
 |------------------|---------------------------------------------------------------|--------------------------------------------|
-| `LLM_MODEL_PATH` | ruta al `.gguf` del decoder                                   | `models/llama-3.1-8b-instruct-q4_k_m.gguf` |
-| `RAG_BACKEND`    | `mac`\|`turing`, sobreescribe la autodetección por plataforma | autodetectado                              |
-| `USE_RERANKER`   | `1` activa el reranker opcional                               | `0`                                        |
+| `LLM_MODEL_NAME` | candidato de `config.LLM_CANDIDATES`                          | `qwen3-8b`                                 |
+| `LLM_MODEL_PATH` | ruta al `.gguf` del decoder (override absoluto)               | —                                          |
+| `RAG_BACKEND`    | `turing` (canónico) \| `mac` (auxiliar), override de la autodetección | autodetectado                      |
+| `USE_RERANKER`   | `1` activa el reranker, `0` lo apaga                          | `1`                                        |
+| `FINAL_TOP_K` / `FUSED_TOP_K` | pasajes al prompt / candidatos antes del rerank  | `6` / `20`                                 |
 | `RAW_CORPUS_DIR` | carpeta compartida del equipo con el corpus crudo (OneDrive)  | ver `src/config.py`                        |
 
-Requisitos de hardware: Apple Silicon (Metal) o GPU CUDA para el decoder;
+Requisitos de hardware: GPU CUDA (Turing, canónica) para el decoder — Apple Silicon (Metal) solo como auxiliar;
 ~6 GB libres para el GGUF cuantizado; CPU alcanza para ingesta e indexación.
 
-Tiempo estimado sobre las 50 preguntas de muestra: ~22s/pregunta medido en un
-ítem individual en el Mac (presupuesto del sábado: ~21.8s/pregunta para 992
-preguntas en 6h) — la corrida completa de las 50 muestras tomó el lote
-completo sin problemas, pero falta la medición formal con
-`python -m src.validate.latency_check` (ver `## Limitaciones conocidas`).
+Tiempo sobre las 50 preguntas de muestra en Turing (RTX 4090, Qwen3-8B + reranker): 7.64 s/ítem
+(`python -m src.validate.latency_check`), ~2.1 h extrapolado a las 992 preguntas contra un
+presupuesto de 6 h.
 
 ## Corpus y agente: cómo se construyen
 
@@ -116,24 +107,24 @@ completo sin problemas, pero falta la medición formal con
 
 ## Resultados sobre las preguntas de muestra
 
-Primera corrida real contra el corpus e índice definitivos (2026-10-01), sin ajustar todavía ningún
-umbral ni prompt:
+Medido en Turing (GPU) con `python scripts/evaluate.py --submission out/<run>.jsonl --split sample`,
+configuración activa (Qwen3-8B + reranker, top-6):
 
 | Componente                                               |                                               Puntos | Posibles |
 |----------------------------------------------------------|-----------------------------------------------------:|---------:|
 | Exactitud en cerradas (10/15 correctas)                  |                                                13.33 |       20 |
-| Calidad de citación (índice 0.367, 0 citas sin respaldo) |                                                 7.35 |       20 |
-| Abstención calibrada                                     |                                                 5.93 |       10 |
+| Calidad de citación (índice 0.633)                       |                                                12.65 |       20 |
+| Abstención calibrada                                     |                                                 7.21 |       10 |
 | Corrección texto libre (RAGAS)                           | pendiente (`--ragas`, requiere `OPENROUTER_API_KEY`) |       30 |
-| **Total automático**                                     |                                            **26.61** |   **50** |
+| **Total automático**                                     |                                            **33.19** |   **50** |
 
-Diagnóstico de los 5 ítems de opción múltiple no acertados (dos causas distintas de generación, una
-de retrieval, una de cobertura del corpus, una de presupuesto de tokens) y la lista priorizada de
-próximos pasos están en
-[`SPEC.md` secciones 10.2–10.4](../ai-week-hackathon-2026/SPEC.md#10-estado-actual-2026-10-01-y-próximos-pasos).
+Evolución: 26.61 (Mac, Llama, 10-01) → 22.10 (Turing, Llama) → 31.65 (Qwen3) → **33.19** (Qwen3 +
+reranker). Comparación de 6 decoders ≤8B (Llama-3.1, Mistral-7B-v0.3, Qwen2.5-7B, Aya-Expanse-8B,
+Qwen3-8B): ver `SPEC.md` 11.2. Con solo 15 cerradas, ±1 pregunta = ±1.33 pts — tomar las diferencias
+pequeñas con cautela. Historial con fecha en `CORPUS.md`.
 
-Se actualiza corriendo `python scripts/evaluate.py --submission out/sample.jsonl --split sample`.
-Evolución con fecha en `CORPUS.md`.
+Validaciones en Turing: `determinism_check` 0 divergencias (5 ítems, procesos frescos);
+`latency_check` 7.64 s/ítem (2.10 h para 992, margen 3.90 h).
 
 ## Interfaz gráfica
 
@@ -150,42 +141,18 @@ python -m src.validate.run_all --full   # + determinismo y latencia (requiere LL
 
 ## Próximos pasos
 
-Lista completa y priorizada (bloqueantes de entrega primero, luego mejoras de precisión, cobertura
-de corpus, puntaje sin medir, e interfaz/entregables) en
-[`SPEC.md` sección 10.4](../ai-week-hackathon-2026/SPEC.md#10-estado-actual-2026-10-01-y-próximos-pasos).
-Los más urgentes ahora mismo:
+Lista completa en [`SPEC.md` sección 11.6](../ai-week-hackathon-2026/SPEC.md#11-turing-como-máquina-canónica-y-resultados-2026-10-02):
 
-1. Chequeo go/no-go Mac-vs-Turing (SPEC.md sección 2) — sigue sin probarse `llama-cpp-python` con
-   CUDA en Turing. Si el equipo no va a usar Turing para nada del pipeline final, vale la pena
-   decidirlo explícitamente.
-2. Reconstructibilidad del índice desde cero (sección 6, última fila): borrar `indice/`, reconstruir
-   con `build_bm25.py`/`build_faiss.py` desde `corpus/` + manifest, comparar hashes.
-3. Correr `evaluate.py --split sample --ragas` apenas haya `OPENROUTER_API_KEY`: 30 de los 50 puntos
-   automáticos siguen sin medirse.
+1. Medir RAGAS (`OPENROUTER_API_KEY`): 30 de los 50 puntos automáticos siguen sin medirse.
+2. Chequeo auxiliar de determinismo en el Mac (ya no bloqueante).
+3. Señal de vigencia (norma vigente vs. derogada) y Estatuto Orgánico del Sistema Financiero.
+4. Mejorar recuperación (recall@20 ≈ 0.79) y reintentar el razonamiento previo en `multiple_choice`.
+5. Informe técnico, video ≤5 min, interfaz probada de punta a punta.
 
-**Reordenar el esquema JSON de `multiple_choice`** (razonamiento antes de la respuesta final) se
-probó y **se revirtió** — midió 6/15 en cerradas contra el baseline de 10/15. Detalle y por qué en
-`CORPUS.md` sección 4; el límite de tokens de `multiple_choice` sí se subió (320→700, aislado del
-reorden) y queda vigente.
-
-**Decoder intercambiable (SPEC.md sección 10.5): implementado.** `config.LLM_CANDIDATES` registra
-los candidatos probados (`llama-3.1-8b-instruct`, activo; `qwen3-8b`); `get_llm(model_name)` cachea
-por ruta resuelta en vez de un singleton único, así que alternar entre candidatos ya descargados no
-recarga un GGUF de ~5GB de cero. `answer()`/`run_batch`/`src/main.py --model-name` y un selector en
-`interfaz/app.py` (bajo "Opciones de desarrollo") lo exponen para comparar en desarrollo/demo — la
-corrida que produce `submissions.jsonl` siempre usa un único candidato fijo
-(`config.LLM_MODEL_NAME`), nunca alterna por pregunta.
-
-Comparación A/B contra `evaluate.py --split sample` (mismo corpus/índice/umbrales, solo cambia el
-decoder): Qwen3-8B empata en cerradas (10/15) pero mejora citación (índice 0.5 vs 0.367) y
-calibración de abstención — total automático **30.19 vs 26.49**. Se promovió a candidato activo el
-mismo día y **se revirtió horas después**: una segunda medición de `latency_check.py` sobre el
-estado final mostró que el margen real es más delgado y más ruidoso de lo que la primera corrida
-sugería (0.25h, no 0.50h, contra el presupuesto de 6h para el sábado — la varianza entre dos
-corridas idénticas ya es mayor que el margen reportado la primera vez). Con ~2.5 días de desarrollo
-restantes no se aceptó ese riesgo; `llama-3.1-8b-instruct` sigue siendo el candidato activo (margen
-1.09h). Qwen3 queda disponible para seguir afinando sus `MAX_TOKENS_BY_FORMAT` antes de reconsiderar
-promoverlo — su ventaja de puntaje es real. Detalle completo en `CORPUS.md` sección 4.
+**Decoder intercambiable:** `config.LLM_CANDIDATES` registra `llama-3.1-8b-instruct`, `llama-3.1-8b-chat`,
+`qwen3-8b` (activo), `qwen2.5-7b`, `mistral-7b-v0.3` y `aya-expanse-8b` (CC-BY-NC, no apto para entrega
+sin confirmar licencia). `src/main.py --model-name <x>` o `LLM_MODEL_NAME=<x>` alternan para comparar;
+la corrida que produce `submissions.jsonl` usa siempre un único candidato fijo.
 
 ## Limitaciones conocidas
 
@@ -202,5 +169,8 @@ promoverlo — su ventaja de puntaje es real. Detalle completo en `CORPUS.md` se
    HTML/PDF crudas) siguen sin verificar contra una descarga real — no se necesitaron esta vez
    porque las fuentes usadas llegaron ya parseadas en JSON (ver `## Corpus e índice`), pero
    quedarían como riesgo abierto si el equipo necesita ingerir algo nuevo por esa vía.
-5. `determinism_check.py` y `latency_check.py` no han corrido contra el estado real del sistema (corpus + índice +
-   decoder) — ver `## Próximos pasos`.
+5. `determinism_check.py` y `latency_check.py` pasan en Turing (ver `SPEC.md` 11.5); falta el chequeo
+   auxiliar de determinismo cruzado en el Mac y la medición de RAGAS (30 pts).
+6. Las diferencias de puntaje entre configuraciones se miden sobre 50 ítems (15 cerradas): ±1 pregunta
+   cerrada = ±1.33 pts, así que hay ruido; validar cambios finos también con
+   `python -m src.validate.retrieval_eval`.
