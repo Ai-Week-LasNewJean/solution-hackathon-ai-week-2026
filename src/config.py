@@ -68,15 +68,16 @@ SEGMENT_OVERLAP_SENTENCES = 2
 
 # --- Recuperacion ----------------------------------------------------------
 
-K_BM25 = 30
-K_DENSE = 30
+K_BM25 = int(os.environ.get("K_BM25", 100))   # 30 -> 100: recall@6 con reranker 0.724 -> 0.764 (SPEC.md 11.7)
+K_DENSE = int(os.environ.get("K_DENSE", 100))
 RRF_K = 60
-FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 20))           # candidatos tras fusion, antes de (opcional) rerank
+FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 50))           # candidatos tras fusion, antes de (opcional) rerank
 FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
 
 USE_RERANKER = os.environ.get("USE_RERANKER", "1") == "1"  # default ON desde 2026-10-02 (SPEC.md 11.3)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MAX_LEN = 1024   # tokens query+pasaje; el default (8192) agota VRAM con pools grandes
 
 # Umbral de suficiencia: se ajusta empiricamente barriendo contra
 # scripts/evaluate.py --split sample (ver src/retrieve/sufficiency.py). El

@@ -14,7 +14,7 @@ from src.retrieve.hybrid import Passage
 def _model():
     from sentence_transformers import CrossEncoder
 
-    return CrossEncoder(config.RERANKER_MODEL)
+    return CrossEncoder(config.RERANKER_MODEL, max_length=config.RERANKER_MAX_LEN)
 
 
 def rerank(query: str, candidates: list[Passage], top_k: int = config.FINAL_TOP_K) -> list[Passage]:
@@ -24,7 +24,7 @@ def rerank(query: str, candidates: list[Passage], top_k: int = config.FINAL_TOP_
         return candidates[:top_k]
 
     pairs = [(query, c.texto) for c in candidates]
-    scores = _model().predict(pairs)
+    scores = _model().predict(pairs, batch_size=16, show_progress_bar=False)
     ranked = sorted(zip(candidates, scores), key=lambda cs: cs[1], reverse=True)
     return [Passage(doc_id=c.doc_id, texto=c.texto, inicio=c.inicio, fin=c.fin, score=float(s))
             for c, s in ranked[:top_k]]

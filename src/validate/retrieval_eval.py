@@ -25,6 +25,9 @@ def main() -> int:
     ap.add_argument("--rerank", action="store_true")
     ap.add_argument("--ks", type=int, nargs="+", default=[6, 10, 20])
     ap.add_argument("--fused", type=int, default=config.FUSED_TOP_K)
+    ap.add_argument("--kb", type=int, default=config.K_BM25)
+    ap.add_argument("--kd", type=int, default=config.K_DENSE)
+    ap.add_argument("--noopts", action="store_true", help="consulta solo con la pregunta (sin opciones)")
     args = ap.parse_args()
     config.USE_RERANKER = args.rerank
 
@@ -34,8 +37,8 @@ def main() -> int:
         ref = citations.bodies(citations.extract(it.get("legal_basis") or ""))
         if not ref:
             continue
-        q = query_expand.expand(_build_query(it))
-        cands = retrieve(q, top_k=args.fused)
+        q = query_expand.expand(it["pregunta"] if args.noopts else _build_query(it))
+        cands = retrieve(q, k_bm25=args.kb, k_dense=args.kd, top_k=args.fused)
         if args.rerank:
             cands = rerank.rerank(q, cands, top_k=max(args.ks))
         for k in args.ks:
