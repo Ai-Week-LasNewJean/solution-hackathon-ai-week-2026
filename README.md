@@ -182,21 +182,27 @@ la corrida que produce `submissions.jsonl` usa siempre un único candidato fijo.
 
 ## Limitaciones conocidas
 
-1. El Estatuto Orgánico del Sistema Financiero llegó con solo 26 artículos en el scraping (el real
-   tiene muchos más); si el tiempo alcanza, vale la pena re-scrapear esa fuente específica.
-2. Dos fuentes quedan casi completamente fuera del índice (reglamento CNE, directivas
-   presidenciales) porque `citations.py` —oficial, sin modificar— no reconoce esos tipos de norma
-   como citables; volumen bajo (15 fragmentos), probablemente no vale la pena salvo que
-   `seed_targets.json` los priorice.
-3. Sin señal de "norma vigente vs. derogada": cuando dos fragmentos sobre la misma materia citan
-   normas distintas (una vigente, una superada), la recuperación no distingue cuál preferir —
-   causó uno de los fallos diagnosticados en `SPEC.md` 10.2.
-4. Los selectores de `src/ingest/parse_html.py`/`build_corpus.py` (el flujo original para fuentes
-   HTML/PDF crudas) siguen sin verificar contra una descarga real — no se necesitaron esta vez
-   porque las fuentes usadas llegaron ya parseadas en JSON (ver `## Corpus e índice`), pero
-   quedarían como riesgo abierto si el equipo necesita ingerir algo nuevo por esa vía.
-5. `determinism_check.py` y `latency_check.py` pasan en Turing (ver `SPEC.md` 11.5); falta el chequeo
-   auxiliar de determinismo cruzado en el Mac y la medición de RAGAS (30 pts).
-6. Las diferencias de puntaje entre configuraciones se miden sobre 50 ítems (15 cerradas): ±1 pregunta
-   cerrada = ±1.33 pts, así que hay ruido; validar cambios finos también con
-   `python -m src.validate.retrieval_eval`.
+(Diagnóstico y experimentos completos: `SPEC.md` sección 13.)
+
+1. **Huecos de corpus puntuales:** el Estatuto Orgánico del Sistema Financiero (Decreto-Ley 663 de 1993)
+   tiene solo 26 artículos; las providencias de la Corte Constitucional están solo como relatoría (sin
+   texto íntegro); no hay doctrina. Esta máquina no tiene salida a secretariasenado.gov.co, así que
+   un re-scrape lo tendría que hacer otra persona; el beneficio estimado es de pocos puntos de citación.
+2. Reglamento CNE y directivas presidenciales casi fuera del índice (`citations.py` oficial no los
+   reconoce como citables); volumen bajo (15 fragmentos).
+3. **Vigencia:** no hay señal de norma vigente vs. derogada. Una penalización por logits a pasajes del
+   CPC/Decreto 1 de 1984 se probó y no cambió resultados (el ítem 528 falla por falta del salario mínimo
+   para convertir la cuantía, no por ranking); no se adoptó.
+4. **Cerradas (10/15 frente a 0.905 de la línea base):** probados razonamiento previo (`MC_REASONING`),
+   voto por permutación de opciones (`MC_VOTES`) y Qwen3-8B Q8_0; todos 10/15. Fallan siempre 128, 528
+   y 671 (huecos de corpus/conocimiento). Los flags quedan apagados.
+5. **Citación:** el modelo cita providencias pero a menudo omite la Constitución o el código del que sale
+   el artículo; el prompt `semi_open` v2 sube el puntaje de citación de 11.84 a 12.24 sin costo en la
+   respuesta. Una versión más agresiva (v1) subió citación pero bajó RAGAS, y se descartó.
+6. Los selectores de `src/ingest/parse_html.py`/`build_corpus.py` siguen sin verificar contra una descarga
+   real (no se necesitaron: las fuentes llegaron parseadas en JSON).
+7. `determinism_check.py` y `latency_check.py` pasaron en Turing con la config del viernes; hay que
+   repetirlos sobre el estado final antes de congelar. Falta el chequeo auxiliar en el Mac.
+8. **Ruido de medición:** 50 ítems (15 cerradas): ±1 pregunta cerrada = ±1.33 pts. Validar cambios finos
+   con `python -m src.validate.retrieval_eval` y `python -m src.validate.retrieval_misses`. El crédito de
+   RAGAS (OpenRouter) se reserva para el sábado: no correr `ragas_dev` salvo necesidad.

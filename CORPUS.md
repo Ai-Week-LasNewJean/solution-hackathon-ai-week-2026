@@ -152,6 +152,7 @@ Puntaje sobre las 50 preguntas de muestra, medido con
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 10.00 | 6.98 | **31.65** | Decoder Qwen3-8B activo (barrido de 6 decoders ≤8B, SPEC.md 11.2). |
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 13.33 | 12.65 | 7.21 | **33.19** | Qwen3-8B + reranker `bge-reranker-v2-m3` top-6, umbrales de abstención 0.10/0.02 en escala sigmoide (SPEC.md 11.3). Config activa. determinism 0 divergencias; 7.64 s/ítem. |
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 11.02 | 6.51 | 32.20 (+14.08 RAGAS = **46.28/80**) | Pool BM25/denso 100/100 → RRF 50 → reranker top-6; prompt conciso `semi_open` (RAGAS 0.418 → 0.469). Config activa; corrida reproducible 50/50 (SPEC.md 12). |
+| 2026-10-02 (Turing) | 34 380 | 105 949 | 13.33 | 12.24 | 6.98 | 32.55 (RAGAS sin re-medir; el viernes 46.33/80 con prompt v1 sin referencia ampliada) | Corpus reescrapeado + BM25 con stemming + prompt `semi_open` v2 (`referencia_legal` incluye normas de apoyo); proxy de `respuesta` 0.884. Ver SPEC.md 13. |
 
 Lectura de la curva:
 
