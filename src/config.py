@@ -122,6 +122,7 @@ LLM_CANDIDATES: dict[str, dict] = {
     # Candidatos anadidos el 2026-10-02 al pasar Turing a maquina canonica (la
     # latencia deja de ser el cuello de botella). Todos <=8B y abiertos.
     # Aya-Expanse es CC-BY-NC: verificar con los organizadores antes de usarlo en la entrega.
+    "qwen3-8b-q8": {"filename": "Qwen3-8B-Q8_0.gguf", "chat_template": "chatml"},
     "llama-3.1-8b-chat": {"filename": "llama-3.1-8b-instruct-q4_k_m.gguf", "chat_template": "llama3"},
     "qwen2.5-7b": {"filename": "Qwen2.5-7B-Instruct-Q4_K_M.gguf", "chat_template": "chatml"},
     "mistral-7b-v0.3": {"filename": "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf", "chat_template": "mistral"},
@@ -170,6 +171,10 @@ def llm_chat_template(name: str | None = None) -> str | None:
     name = name or LLM_MODEL_NAME
     return LLM_CANDIDATES.get(name, {}).get("chat_template")
 
+
+MC_VOTES = int(os.environ.get("MC_VOTES", 1))   # voto por permutacion de opciones en cerradas (SPEC.md 13)
+MC_REASONING = os.environ.get("MC_REASONING", "0") == "1"   # etapa de analisis previo en cerradas (SPEC.md 13)
+MC_REASONING_MAX_TOKENS = int(os.environ.get("MC_REASONING_MAX_TOKENS", 350))
 
 LLM_MODEL_PATH = llm_model_path()  # ruta resuelta del candidato activo (compat con el uso previo)
 LLM_N_CTX = 8192

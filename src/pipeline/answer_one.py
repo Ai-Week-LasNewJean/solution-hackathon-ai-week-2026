@@ -62,9 +62,15 @@ def _retrieve_ranked(query: str) -> list[Passage]:
     return rerank.rerank(expanded, candidates, top_k=config.FINAL_TOP_K)
 
 
-def _generate(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
+def _generate_once(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
     formato = item["formato"]
-    prompt = PROMPT_BUILDERS[formato](item, passages)
+    if formato == "multiple_choice" and config.MC_REASONING:
+        llm = get_llm(model_name)
+        reasoning = llm.generate(prompt_multiple_choice.build_reasoning(item, passages),
+                                 max_tokens=config.MC_REASONING_MAX_TOKENS, no_think=True)
+        prompt = prompt_multiple_choice.build(item, passages, reasoning=reasoning)
+    else:
+        prompt = PROMPT_BUILDERS[formato](item, passages)
     raw = get_llm(model_name).generate(
         prompt, max_tokens=config.MAX_TOKENS_BY_FORMAT[formato],
         grammar_path=GRAMMAR_PATHS[formato])
@@ -72,6 +78,54 @@ def _generate(item: dict, passages: list[Passage], model_name: str | None = None
     if formato == "semi_open":
         data["respuesta"] = formatter.enforce_word_limit(data["respuesta"], 150)
     return data
+
+
+def _option_orders(letters: list[str], k: int) -> list[list[str]]:
+    """Ordenes deterministas de las opciones para el voto: identidad, invertido y
+    rotaciones. orden[i] = letra ORIGINAL que se muestra en la posicion i."""
+    n = len(letters)
+    orders = [list(letters), list(reversed(letters))]
+    shift = 1
+    while len(orders) < k and shift < n:
+        orders.append(letters[shift:] + letters[:shift])
+        shift += 1
+    return orders[:k]
+
+
+def _generate(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
+    """Cerradas: voto por mayoria sobre config.MC_VOTES ordenes distintos de las
+    opciones (reduce el sesgo de posicion; cada corrida es greedy, asi que el voto
+    es determinista). Empate -> gana el orden original. El resto de campos sale
+    de la primera corrida que coincide con el voto, con las letras mapeadas de
+    vuelta al orden original."""
+    if item["formato"] != "multiple_choice" or config.MC_VOTES <= 1 or not item.get("opciones"):
+        return _generate_once(item, passages, model_name)
+    letters = list(item["opciones"].keys())
+    results: list[tuple[str, dict]] = []   # (letra original votada, data con llaves mapeadas)
+    for n_order, order in enumerate(_option_orders(letters, config.MC_VOTES)):
+        shown = {letters[i]: item["opciones"][o] for i, o in enumerate(order)}   # letra nueva -> texto
+        back = {letters[i]: o for i, o in enumerate(order)}                        # letra nueva -> original
+        try:
+            data = _generate_once({**item, "opciones": shown}, passages, model_name)
+        except Exception:  # noqa: BLE001 -- una permutacion rota no tumba la pregunta (la identidad si)
+            if n_order == 0:
+                raise
+            continue
+        voted = back.get(str(data.get("respuesta_correcta")), None)
+        if voted is None:
+            continue
+        data = dict(data)
+        data["respuesta_correcta"] = voted
+        if isinstance(data.get("descarte_opciones"), dict):
+            data["descarte_opciones"] = {back.get(k, k): v for k, v in data["descarte_opciones"].items()
+                                           if back.get(k, k) != voted}
+        results.append((voted, data))
+    counts: dict[str, int] = {}
+    for v, _ in results:
+        counts[v] = counts.get(v, 0) + 1
+    best = max(counts.values())
+    winner = next(v for v, _ in results if counts[v] == best)   # empate: primero en orden de corrida
+    return next(d for v, d in results if v == winner)
 
 
 def _answer_text_for_check(formato: str, data: dict) -> str:
