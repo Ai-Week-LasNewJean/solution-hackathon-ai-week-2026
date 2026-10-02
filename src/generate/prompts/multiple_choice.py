@@ -24,7 +24,25 @@ dias segun el articulo 12.", "C": "El articulo habla de dias habiles, no calenda
 """
 
 
-def build(item: dict, passages: list) -> str:
+def build_reasoning(item: dict, passages: list) -> str:
+    """Etapa 1 (opcional, config.MC_REASONING): analisis libre y breve de cada
+    opcion contra la evidencia, sin gramatica. Su salida se inserta en el
+    prompt de build() para que la letra final se genere DESPUES del
+    razonamiento sin alterar el orden de llaves del JSON forzado (ese
+    reorden regreso en 10.4 #5)."""
+    opciones = item.get("opciones") or {}
+    opciones_txt = "\n".join(f"{letra}) {texto}" for letra, texto in opciones.items())
+    return (
+        f"{SYSTEM_PREFIX}\n\n"
+        f"Pregunta: {item['pregunta']}\nOpciones:\n{opciones_txt}\n"
+        f"Evidencia:\n{render_passages(passages)}\n\n"
+        "Analiza brevemente (maximo 150 palabras): identifica la norma y el articulo de la "
+        "evidencia que resuelven la pregunta, y para cada opcion di si la evidencia la "
+        "respalda o la contradice. Termina con una linea 'Conclusion: <letra>'.\n\nAnalisis:\n"
+    )
+
+
+def build(item: dict, passages: list, reasoning: str | None = None) -> str:
     opciones = item.get("opciones") or {}
     opciones_txt = "\n".join(f"{letra}) {texto}" for letra, texto in opciones.items())
     return (
@@ -32,6 +50,7 @@ def build(item: dict, passages: list) -> str:
         f"Pregunta: {item['pregunta']}\n"
         f"Opciones:\n{opciones_txt}\n"
         f"Evidencia:\n{render_passages(passages)}\n\n"
+        + (f"Analisis previo:\n{reasoning.strip()}\n\n" if reasoning else "") +
         "Responde solo con el JSON pedido: respuesta_correcta (A|B|C|D), "
         "justificacion (cita la norma/articulo que sustenta la respuesta), "
         "descarte_opciones (por que cada opcion incorrecta no aplica).\n\n"

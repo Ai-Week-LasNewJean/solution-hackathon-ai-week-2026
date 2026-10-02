@@ -49,7 +49,8 @@ class LLM:
             # fuerza "{" como primer caracter de cualquier forma, asi que el
             # modo "thinking" de Qwen3 no puede filtrarse al output aunque no
             # se envie enable_thinking=False explicitamente.
-            return f"<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n"
+            tail = "<think>\n\n</think>\n\n" if getattr(self, "_no_think", False) else ""
+            return f"<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n{tail}"
         if self.chat_template == "llama3":
             return ("<|start_header_id|>user<|end_header_id|>\n\n"  # BOS lo antepone llama.cpp
                     f"{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n")
@@ -60,7 +61,9 @@ class LLM:
                     f"{prompt}<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>")
         return prompt
 
-    def generate(self, prompt: str, max_tokens: int, grammar_path: Path | None = None) -> str:
+    def generate(self, prompt: str, max_tokens: int, grammar_path: Path | None = None,
+                 stop: list[str] | None = None, no_think: bool = False) -> str:
+        self._no_think = no_think
         """Genera a temperatura 0 (greedy, determinista dado el binario y
         hardware). `grammar_path` es un archivo .gbnf de src/generate/grammars/;
         sin el, la salida no esta forzada a JSON (usar formatter.parse con
@@ -72,7 +75,7 @@ class LLM:
             grammar = LlamaGrammar.from_file(str(grammar_path))
         out = self._llama(
             self._wrap_prompt(prompt), max_tokens=max_tokens, temperature=config.LLM_TEMPERATURE,
-            grammar=grammar)
+            grammar=grammar, stop=stop)
         return out["choices"][0]["text"]
 
 
