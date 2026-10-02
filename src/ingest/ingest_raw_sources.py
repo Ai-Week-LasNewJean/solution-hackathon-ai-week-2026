@@ -128,13 +128,20 @@ TIPO_LABEL_NUMBERED = {"ley": "LEY", "decreto": "DECRETO", "acto_legislativo": "
 # alguna variante de citations.CODES (p.ej. "codigo civil"); codigo_civil.json
 # y codigo_comercio.json no traen "nombre" y el id ("codigo-civil", con
 # guiones) tampoco calza con esa regex -- de ahi el mapeo explicito.
+#
+# estatuto_organico_sistema_financiero es un caso aparte: ni "nombre" ni
+# "numero"/"anio" vienen poblados en la fuente (el scraper los perdio), pero
+# su identidad legal es publica y fija -- es el Decreto 663 de 1993 -- y
+# scripts/_retrieval_only_test.py (sample_50, item 128) confirmo que sin esa
+# forma canonica ("decreto 663 de 1993", que si calza con citations._NORM_RE)
+# casi todo el EOSF quedaba fuera del indice por no ser trazable.
 TIPO_LABEL_FIXED = {
     "constitucion": "Constitución Política de Colombia",
     "codigo_civil": "Código Civil",
     "codigo_comercio": "Código de Comercio",
     "codigo_sustantivo_trabajo": "Código Sustantivo del Trabajo",
     "codigo_contencioso_administrativo": "Código Contencioso Administrativo",
-    "estatuto_organico_sistema_financiero": "Estatuto Orgánico del Sistema Financiero",
+    "estatuto_organico_sistema_financiero": "DECRETO 663 DE 1993 (Estatuto Orgánico del Sistema Financiero)",
 }
 
 
