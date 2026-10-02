@@ -168,10 +168,15 @@ Lectura de la curva:
   lento (19.97 vs 17.82 seg/ítem), extrapola a 5.50h sobre las 992 preguntas del sábado contra un
   presupuesto de 6h — margen de **0.50h**, bastante más ajustado que el margen de Llama (1.09h). La
   muestra de 50 ítems tampoco captura variación sostenida (throttling térmico, carga del sistema)
-  durante una corrida real de ~5-6h. **No se promovió a candidato activo (`LLM_MODEL_NAME`) en esta
-  sesión** — es una decisión del equipo con una compensación real (mejor puntaje medido vs. colchón
-  de latencia más delgado para la ejecución en vivo del sábado), documentada aquí para decidirla
-  conscientemente, no server-side por defecto.
+  durante una corrida real de ~5-6h.
+  **Decisión del equipo (2026-10-02): promovido a candidato activo.** `config.LLM_MODEL_NAME`
+  ahora por defecto `qwen3-8b` — se acepta conscientemente el margen de latencia más ajustado (0.50h
+  en vez de 1.09h) a cambio de los +3.7 puntos automáticos medidos. **Pendiente antes de congelar el
+  viernes en la noche:** reconfirmar `latency_check.py` en el Mac exacto que se usará el sábado (la
+  única corrida medida hasta ahora fue de 50 ítems, no captura throttling sostenido en una corrida de
+  ~5-6h), y volver a correr `determinism_check.py` sin overrides de entorno justo antes de congelar,
+  sobre el estado final exacto. Revertir a `llama-3.1-8b-instruct` (`LLM_MODEL_NAME=llama-3.1-8b-instruct`
+  o editar el default en `config.py`) si el margen de latencia reconfirmado resulta insuficiente.
 
 - **Reorden de llaves de `multiple_choice` (SPEC.md 10.2 #1 / 10.4 #5), probado y revertido.**
   La hipótesis del diagnóstico original (comprometerse con `respuesta_correcta` antes de razonar

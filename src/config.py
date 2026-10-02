@@ -111,7 +111,18 @@ LLM_CANDIDATES: dict[str, dict] = {
     "qwen3-8b": {"filename": "Qwen3-8B-Q4_K_M.gguf", "chat_template": "chatml"},
 }
 
-LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "llama-3.1-8b-instruct")
+# Candidato activo: Qwen3-8B, promovido sobre Llama-3.1-8B-Instruct el
+# 2026-10-02 tras comparacion A/B contra evaluate.py --split sample (ver
+# CORPUS.md seccion 4) -- cerradas empatadas (10/15) pero mejor citacion
+# (indice 0.5 vs 0.367) y mejor calibracion de abstencion (6.86 vs 5.81 pts),
+# total automatico 30.19 vs 26.49. Determinismo verificado para ambos
+# (0 divergencias, determinism_check.py). Contrapartida aceptada
+# conscientemente: Qwen3 es mas lento (19.97 vs 17.82 seg/item), margen de
+# latencia para las 992 preguntas del sabado baja de 1.09h a 0.50h contra el
+# presupuesto de 6h -- reconfirmar latency_check.py en el Mac exacto antes
+# de congelar el viernes en la noche, la muestra de 50 no capta variacion
+# sostenida (throttling) de una corrida real de ~5-6h.
+LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "qwen3-8b")
 
 
 def llm_model_path(name: str | None = None) -> Path:
