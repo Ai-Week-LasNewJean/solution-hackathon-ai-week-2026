@@ -17,9 +17,12 @@ from src.index.bm25_types import BM25Index, tokenize
 __all__ = ["BM25Index", "tokenize", "build", "save", "load"]
 
 
-def build(chunks_path: Path) -> BM25Index:
+def build(chunks_path: Path, stem: bool | None = None) -> BM25Index:
+    from src import config
+
+    stem = config.BM25_STEM if stem is None else stem
     chunks = [json.loads(line) for line in chunks_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    corpus_tokens = [tokenize(c["texto"]) for c in chunks]
+    corpus_tokens = [tokenize(c["texto"], stem=stem) for c in chunks]
     doc_ids = [str(i) for i in range(len(chunks))]
 
     try:
@@ -27,11 +30,11 @@ def build(chunks_path: Path) -> BM25Index:
 
         model = bm25s.BM25()
         model.index(bm25s.tokenize([" ".join(t) for t in corpus_tokens], show_progress=False))
-        return BM25Index(engine="bm25s", model=model, doc_ids=doc_ids)
+        return BM25Index(engine="bm25s", model=model, doc_ids=doc_ids, stem=stem)
     except ImportError:
         from rank_bm25 import BM25Okapi
 
-        return BM25Index(engine="rank_bm25", model=BM25Okapi(corpus_tokens), doc_ids=doc_ids)
+        return BM25Index(engine="rank_bm25", model=BM25Okapi(corpus_tokens), doc_ids=doc_ids, stem=stem)
 
 
 def save(index: BM25Index, out_path: Path) -> None:

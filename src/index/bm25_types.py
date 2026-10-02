@@ -20,9 +20,10 @@ class BM25Index:
     engine: str            # "bm25s" | "rank_bm25"
     model: object
     doc_ids: list[str]     # posicion i -> id del fragmento en chunks.jsonl (str(indice))
+    stem: bool = False     # tokenizacion con stemming espanol (los pickles viejos no lo tienen -> False)
 
     def search(self, query: str, k: int) -> list[tuple[int, float]]:
-        tokens = tokenize(query)
+        tokens = tokenize(query, stem=self.stem)
         if self.engine == "bm25s":
             import bm25s
 
@@ -34,10 +35,27 @@ class BM25Index:
         return [(i, float(scores[i])) for i in ranked]
 
 
-def tokenize(text: str) -> list[str]:
+_STOPWORDS = frozenset("""de la el en y a los las del que por con para un una se su al lo como mas o
+pero sus le ya este si porque esta entre cuando muy sin sobre tambien me hasta hay donde quien desde todo
+nos durante todos uno les ni contra otros ese eso ante ellos e esto mi antes algunos que unos yo otro otras
+otra el tanto esa estos mucho quienes nada muchos cual poco ella estar estas algunas algo nosotros es son
+ser fue sera segun cual cuales""".split())
+_stemmer = None
+
+
+def tokenize(text: str, stem: bool = False) -> list[str]:
     import re
 
     import src  # noqa: F401  (registra scripts/ en sys.path)
     import citations
 
-    return re.findall(r"[a-z0-9]+", citations.norm(text))
+    toks = re.findall(r"[a-z0-9]+", citations.norm(text))
+    if not stem:
+        return toks
+    global _stemmer
+    if _stemmer is None:
+        import Stemmer
+
+        _stemmer = Stemmer.Stemmer("spanish")
+    toks = [t for t in toks if t not in _STOPWORDS]
+    return _stemmer.stemWords(toks)
