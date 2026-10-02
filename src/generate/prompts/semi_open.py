@@ -19,9 +19,8 @@ competente dentro de los diez dias siguientes al hecho.
 
 Respuesta JSON:
 {"respuesta": "El deber Y, previsto en el articulo 7 de la Ley 9999 de 2099, obliga a \
-quien ejerce la actividad Z a informar a la autoridad competente. Este deber debe \
-cumplirse dentro de los diez dias siguientes a la ocurrencia del hecho. Su \
-incumplimiento puede acarrear las sanciones previstas en la misma norma.", \
+quien ejerce la actividad Z a informar a la autoridad competente dentro de los diez \
+dias siguientes a la ocurrencia del hecho.", \
 "palabras_clave": ["deber Y", "actividad Z", "autoridad competente"], \
 "referencia_legal": "Ley 9999 de 2099, articulo 7"}
 """
@@ -32,8 +31,11 @@ def build(item: dict, passages: list) -> str:
         f"{SYSTEM_PREFIX}\n\n{_FEW_SHOT}\n"
         f"Pregunta: {item['pregunta']}\n"
         f"Evidencia:\n{render_passages(passages)}\n\n"
-        "Responde solo con el JSON pedido: respuesta (3 a 5 oraciones, maximo "
-        "150 palabras, completa y autocontenida por si sola), palabras_clave "
+        "Responde solo con el JSON pedido: respuesta (1 a 3 oraciones, maximo "
+        "80 palabras: empieza directamente por la respuesta a lo preguntado, "
+        "nombra la norma y el articulo que la sustentan y NO agregues datos, "
+        "jurisprudencia ni normas que la evidencia no respalde o que la "
+        "pregunta no pida), palabras_clave "
         "(lista breve), referencia_legal (norma/articulo citado).\n\n"
         "Respuesta JSON:\n"
     )
