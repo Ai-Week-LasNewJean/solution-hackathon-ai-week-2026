@@ -81,6 +81,34 @@ Tiempo sobre las 50 preguntas de muestra en Turing (RTX 4090, Qwen3-8B + reranke
 (`python -m src.validate.latency_check`), ~2.1 h extrapolado a las 992 preguntas contra un
 presupuesto de 6 h.
 
+### Configuración de CUDA en Turing
+
+Stack verificado (2026-10-02): RTX 4090, driver NVIDIA **580.178.04** (kernel y librerías de usuario
+del sistema), `torch 2.14.1+cu130`, `llama-cpp-python 0.3.36` con soporte CUDA.
+
+`LD_LIBRARY_PATH` debe contener **solo** las librerías CUDA 13 del venv (las que usa torch/llama-cpp):
+
+```bash
+export LD_LIBRARY_PATH=$PWD/.venv/lib/python3.12/site-packages/nvidia/cu13/lib
+```
+
+**No** poner en `LD_LIBRARY_PATH` una copia de usuario del driver (p. ej. `~/nvidia_580_173_02`).
+Esa carpeta se había añadido como solución temporal cuando el módulo del kernel era 580.173; tras
+actualizar el sistema a 580.178.04 y reiniciar, su `libnvidia-ml`/`libcuda` (580.173) quedaban por
+delante de las del sistema y producían `Failed to initialize NVML: Driver/library version mismatch`
+y `torch.cuda.is_available() == False`. El driver debe provenir siempre de `/usr/lib/x86_64-linux-gnu`
+y coincidir con el módulo del kernel (`cat /proc/driver/nvidia/version`).
+
+Verificación antes de correr (debe imprimir la 4090, `True` y `True`):
+
+```bash
+nvidia-smi --query-gpu=name,driver_version --format=csv
+.venv/bin/python -c "import torch, llama_cpp; print(torch.cuda.is_available(), llama_cpp.llama_supports_gpu_offload())"
+```
+
+Si vuelve a aparecer el mismo error: `echo $LD_LIBRARY_PATH` (buscar rutas de drivers ajenas);
+si el kernel y las librerías realmente difieren tras una actualización de paquetes, reiniciar.
+
 ## Corpus y agente: cómo se construyen
 
 1. **Corpus → índice vectorial** (`src/ingest/`, `src/index/`): el flujo *diseñado* para fuentes HTML/PDF crudas es
