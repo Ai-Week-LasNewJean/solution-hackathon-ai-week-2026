@@ -15,7 +15,10 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.pipeline.answer_one import answer  # noqa: E402
+from src.generate import citation_check  # noqa: E402
+from src.pipeline.answer_one import _answer_text_for_check, answer  # noqa: E402
+
+import citations  # noqa: E402  (registrado en sys.path por "import src" arriba)
 
 BRAND = {
     "teal": "#09ACC4",
@@ -198,6 +201,34 @@ if responder:
                           "marco_normativo", "analisis", "jurisprudencia", "conclusion"):
                 if campo in result:
                     st.markdown(f"**{campo}:** {result[campo]}")
+
+    if not result.get("abstencion"):
+        answer_text = _answer_text_for_check(result["formato"], result)
+        pasajes = result.get("pasajes_recuperados", [])
+        all_cites = citations.article_level(citations.extract(answer_text))
+        sin_respaldo = citation_check.unsupported_citations(answer_text, pasajes)
+
+        def _fmt_cita(c: tuple) -> str:
+            body, numero, anio, articulo = c
+            norma = body.replace("_", " ").title()
+            if numero:
+                norma += f" {numero}" + (f" de {anio}" if anio else "")
+            return f"{norma}, Art. {articulo}" if articulo else norma
+
+        if all_cites:
+            st.subheader("Citas detectadas en la respuesta")
+            badges = []
+            for c in sorted(all_cites, key=_fmt_cita):
+                respaldada = c not in sin_respaldo
+                color = BRAND["teal"] if respaldada else "#E03131"
+                etiqueta = "respaldada" if respaldada else "sin respaldo"
+                badges.append(
+                    f'<span style="display:inline-block;margin:0.2rem;padding:0.2rem 0.6rem;'
+                    f'border-radius:999px;background:{color}1A;color:{color};'
+                    f'border:1px solid {color};font-size:0.85rem;">'
+                    f'{_fmt_cita(c)} &middot; {etiqueta}</span>'
+                )
+            st.markdown("".join(badges), unsafe_allow_html=True)
 
     st.subheader(f"Pasajes recuperados ({len(result.get('pasajes_recuperados', []))})")
     for i, p in enumerate(result.get("pasajes_recuperados", []), start=1):

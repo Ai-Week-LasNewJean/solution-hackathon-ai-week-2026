@@ -100,7 +100,18 @@ LLM_SEED = 0               # fijo, exigido por determinism_check.py
 MAX_TOKENS_BY_FORMAT = {
     # semi_open: <=150 palabras; open_ended.analisis: 5-8 oraciones (schema).
     # Margenes generosos en tokens (no palabras) para dejar espacio a JSON/gramatica.
-    "multiple_choice": 320,
+    # multiple_choice subido de 320 a 700 (SPEC.md 10.2 #4, 10.4 #6): el item
+    # 128 enumera varios tipos de entidad en la justificacion y se trunco a
+    # mitad de generacion con 320 *y* con 480 (probado empiricamente); 650
+    # fue el primer valor que lo completo, 700 deja margen. NOTA: el reorden
+    # de llaves de 10.4 #5 (respuesta_correcta al final) se probo por
+    # separado y se revirtio -- bajo este mismo item_id resulto en una
+    # regresion neta (6/15 vs 10/15 en cerradas sobre sample_50, ver
+    # CORPUS.md seccion 4): reordenar las llaves del few-shot/gramatica
+    # cambia la secuencia de tokens del prompt lo suficiente para que la
+    # decodificacion greedy diverja en contenido, no solo en la posicion de
+    # la letra final. El budget de tokens es ortogonal a eso y se mantiene.
+    "multiple_choice": 700,
     "semi_open": 420,
     "open_ended": 900,
 }

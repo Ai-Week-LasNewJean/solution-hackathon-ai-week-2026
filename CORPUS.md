@@ -143,13 +143,36 @@ confirmar que `_extract_main_text()` no arrastra menú de navegación.
 Puntaje sobre las 50 preguntas de muestra, medido con
 `python scripts/evaluate.py --submission out/sample.jsonl --split sample`.
 
-| Fecha | Documentos | Fragmentos | Cerradas /20 | Citación /20 | Abstención /10 | Total /50 | Qué cambió     |
-|-------|-----------:|-----------:|-------------:|-------------:|---------------:|----------:|----------------|
-|       |            |            |              |              |                |           | Corpus inicial |
+| Fecha      | Documentos | Fragmentos | Cerradas /20 | Citación /20 | Abstención /10 | Total /50 | Qué cambió                                                                                                   |
+|------------|-----------:|-----------:|-------------:|-------------:|---------------:|----------:|---------------------------------------------------------------------------------------------------------------|
+| 2026-10-01 |     34 379 |     99 067 |         13.33 |          7.35 |            5.93 |     26.61 | Corpus inicial, primera corrida de punta a punta, ningún umbral/prompt ajustado todavía.                     |
+| 2026-10-02 |     34 379 |     99 067 |         13.33 |          7.35 |            5.81 |     26.49 | `MAX_TOKENS_BY_FORMAT["multiple_choice"]` 320→700 (ítem 128 ya no trunca). Reorden de llaves del schema `multiple_choice` (SPEC.md 10.4 #5) probado y **revertido**: ver nota abajo. |
 
 Lectura de la curva:
 
-<!-- Qué incorporaciones movieron el puntaje y cuáles no. -->
+- **Reorden de llaves de `multiple_choice` (SPEC.md 10.2 #1 / 10.4 #5), probado y revertido.**
+  La hipótesis del diagnóstico original (comprometerse con `respuesta_correcta` antes de razonar
+  causaba los fallos 290/308) era correcta para el ítem 308 — moverlo después de
+  `justificacion`/`descarte_opciones` en la gramática GBNF y el few-shot sí lo corrigió. Pero medido
+  contra `evaluate.py --split sample` el cambio completo dio **6/15 en cerradas, no 10/15 o más**: 5
+  ítems que antes acertaban (58, 60, 487, 647, 748) pasaron a fallar, con contenido generado
+  completamente distinto (otra ley, otro artículo) y no solo la letra reordenada. Con
+  `temperatura=0`/greedy, reescribir el orden de llaves en el few-shot y la gramática cambia la
+  secuencia de tokens del prompt lo suficiente para que la decodificación diverja desde el primer
+  token generado — no es un ajuste "seguro" aunque el razonamiento detrás sea válido. Se revirtió
+  `multiple_choice.gbnf` y `prompts/multiple_choice.py` a su forma original
+  (`respuesta_correcta` primero). El diagnóstico de 10.2 sigue siendo válido como explicación de la
+  causa — la mitigación concreta (reordenar llaves) no es la que funciona; si se retoma, probar algo
+  más quirúrgico (p.ej. un campo de razonamiento *separado* antes del JSON final, fuera de la
+  gramática forzada) y volver a medir antes de asumir que ayuda.
+- **Subir el límite de tokens de `multiple_choice` sí es una mejora neta, aislada de lo anterior.**
+  Probado solo (gramática/prompt originales + presupuesto subido): los 15 ítems de opción múltiple
+  dieron exactamente el mismo resultado que el baseline (10/15, mismas letras en los 14 que no son el
+  128) — el presupuesto de tokens es ortogonal al contenido generado. El ítem 128 seguía truncando
+  incluso en 480 tokens; se probó manualmente (320→FAIL, 480→FAIL, 650→OK, 800→OK) y se fijó en 700
+  con margen. Ya no lanza `FormatError`/aborta en excepción no controlada, aunque la respuesta en sí
+  sigue siendo incorrecta (A en vez de D) — un fallo de conocimiento/recuperación distinto, no de
+  formato.
 
 ## 5. Licencia
 
