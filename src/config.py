@@ -111,18 +111,23 @@ LLM_CANDIDATES: dict[str, dict] = {
     "qwen3-8b": {"filename": "Qwen3-8B-Q4_K_M.gguf", "chat_template": "chatml"},
 }
 
-# Candidato activo: Qwen3-8B, promovido sobre Llama-3.1-8B-Instruct el
-# 2026-10-02 tras comparacion A/B contra evaluate.py --split sample (ver
-# CORPUS.md seccion 4) -- cerradas empatadas (10/15) pero mejor citacion
-# (indice 0.5 vs 0.367) y mejor calibracion de abstencion (6.86 vs 5.81 pts),
-# total automatico 30.19 vs 26.49. Determinismo verificado para ambos
-# (0 divergencias, determinism_check.py). Contrapartida aceptada
-# conscientemente: Qwen3 es mas lento (19.97 vs 17.82 seg/item), margen de
-# latencia para las 992 preguntas del sabado baja de 1.09h a 0.50h contra el
-# presupuesto de 6h -- reconfirmar latency_check.py en el Mac exacto antes
-# de congelar el viernes en la noche, la muestra de 50 no capta variacion
-# sostenida (throttling) de una corrida real de ~5-6h.
-LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "qwen3-8b")
+# Candidato activo: llama-3.1-8b-instruct (NO qwen3-8b). Se promovio Qwen3 a
+# activo el 2026-10-02 tras un A/B contra evaluate.py --split sample que
+# mide claramente mejor (cerradas empatadas 10/15, pero citacion 0.5 vs
+# 0.367, abstencion 6.86 vs 5.81, total 30.19 vs 26.49, ver CORPUS.md
+# seccion 4) -- pero una segunda medicion de latency_check.py sobre el
+# estado final mostro que el margen real es mas delgado y mas ruidoso de lo
+# que la primera corrida sugeria: 0.25h (no 0.50h) contra el presupuesto de
+# 6h para las 992 preguntas del sabado, con un item truncado por limite de
+# tokens en esa misma corrida. Con ~2.5 dias de desarrollo restantes y sin
+# margen para resolver un desborde de presupuesto en vivo el sabado, se
+# revirtio a Llama-3.1-8B-Instruct (margen medido 1.09h) como el candidato
+# mas seguro por ahora. Qwen3 sigue disponible via LLM_MODEL_NAME=qwen3-8b /
+# --model-name qwen3-8b para seguir afinandolo (p.ej. ajustar sus propios
+# MAX_TOKENS_BY_FORMAT) antes de reconsiderar promoverlo otra vez -- NO
+# volver a promoverlo sin remedir latency_check.py en el Mac exacto que se
+# usara el sabado, idealmente sobre una corrida mas sostenida que 50 items.
+LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "llama-3.1-8b-instruct")
 
 
 def llm_model_path(name: str | None = None) -> Path:

@@ -168,22 +168,24 @@ probó y **se revirtió** — midió 6/15 en cerradas contra el baseline de 10/1
 `CORPUS.md` sección 4; el límite de tokens de `multiple_choice` sí se subió (320→700, aislado del
 reorden) y queda vigente.
 
-**Decoder intercambiable (SPEC.md sección 10.5): implementado, y Qwen3-8B ya es el candidato
-activo.** `config.LLM_CANDIDATES` registra los candidatos probados (`llama-3.1-8b-instruct`,
-`qwen3-8b`); `get_llm(model_name)` cachea por ruta resuelta en vez de un singleton único, así que
-alternar entre candidatos ya descargados no recarga un GGUF de ~5GB de cero. `answer()`/`run_batch`/
-`src/main.py --model-name` y un selector en `interfaz/app.py` (bajo "Opciones de desarrollo") lo
-exponen para comparar en desarrollo/demo — la corrida que produce `submissions.jsonl` siempre usa
-un único candidato fijo (`config.LLM_MODEL_NAME`), nunca alterna por pregunta.
+**Decoder intercambiable (SPEC.md sección 10.5): implementado.** `config.LLM_CANDIDATES` registra
+los candidatos probados (`llama-3.1-8b-instruct`, activo; `qwen3-8b`); `get_llm(model_name)` cachea
+por ruta resuelta en vez de un singleton único, así que alternar entre candidatos ya descargados no
+recarga un GGUF de ~5GB de cero. `answer()`/`run_batch`/`src/main.py --model-name` y un selector en
+`interfaz/app.py` (bajo "Opciones de desarrollo") lo exponen para comparar en desarrollo/demo — la
+corrida que produce `submissions.jsonl` siempre usa un único candidato fijo
+(`config.LLM_MODEL_NAME`), nunca alterna por pregunta.
 
 Comparación A/B contra `evaluate.py --split sample` (mismo corpus/índice/umbrales, solo cambia el
 decoder): Qwen3-8B empata en cerradas (10/15) pero mejora citación (índice 0.5 vs 0.367) y
-calibración de abstención — total automático **30.19 vs 26.49**. Ambos pasan `determinism_check.py`.
-Decisión de equipo (2026-10-02): **promovido a candidato activo** — contrapartida aceptada
-conscientemente: Qwen3 es más lento, el margen de latencia para el sábado baja de 1.09h a 0.50h
-contra el presupuesto de 6h. Detalle completo, y qué falta reconfirmar antes de congelar el viernes
-en la noche (`latency_check.py` sobre una corrida más sostenida, `determinism_check.py` sin
-overrides de entorno sobre el estado final), en `CORPUS.md` sección 4.
+calibración de abstención — total automático **30.19 vs 26.49**. Se promovió a candidato activo el
+mismo día y **se revirtió horas después**: una segunda medición de `latency_check.py` sobre el
+estado final mostró que el margen real es más delgado y más ruidoso de lo que la primera corrida
+sugería (0.25h, no 0.50h, contra el presupuesto de 6h para el sábado — la varianza entre dos
+corridas idénticas ya es mayor que el margen reportado la primera vez). Con ~2.5 días de desarrollo
+restantes no se aceptó ese riesgo; `llama-3.1-8b-instruct` sigue siendo el candidato activo (margen
+1.09h). Qwen3 queda disponible para seguir afinando sus `MAX_TOKENS_BY_FORMAT` antes de reconsiderar
+promoverlo — su ventaja de puntaje es real. Detalle completo en `CORPUS.md` sección 4.
 
 ## Limitaciones conocidas
 

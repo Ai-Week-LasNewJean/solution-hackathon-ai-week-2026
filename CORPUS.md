@@ -175,8 +175,21 @@ Lectura de la curva:
   viernes en la noche:** reconfirmar `latency_check.py` en el Mac exacto que se usará el sábado (la
   única corrida medida hasta ahora fue de 50 ítems, no captura throttling sostenido en una corrida de
   ~5-6h), y volver a correr `determinism_check.py` sin overrides de entorno justo antes de congelar,
-  sobre el estado final exacto. Revertir a `llama-3.1-8b-instruct` (`LLM_MODEL_NAME=llama-3.1-8b-instruct`
-  o editar el default en `config.py`) si el margen de latencia reconfirmado resulta insuficiente.
+  sobre el estado final exacto.
+
+  **Actualización el mismo día: revertido a `llama-3.1-8b-instruct`.** Al remedir `latency_check.py`
+  sobre el estado final (Qwen3 activo, sin overrides) el margen resultó más delgado y más ruidoso de
+  lo que sugería la primera corrida: **0.25h, no 0.50h** (20.87 vs 19.97 seg/ítem promedio entre dos
+  corridas idénticas en el mismo hardware — la varianza entre corridas ya es mayor que el margen
+  reportado la primera vez), con un ítem adicional truncado por límite de tokens en esa misma
+  corrida (`latency_check.py` no atrapaba excepciones por ítem a diferencia de `run_batch.py` —
+  bug corregido de paso). Con ~2.5 días de desarrollo restantes y sin margen para resolver un
+  desborde de presupuesto en vivo el sábado, se decidió **no** aceptar ese riesgo: `config.py` vuelve
+  a `llama-3.1-8b-instruct` como candidato activo (margen medido 1.09h). Qwen3 sigue disponible via
+  `LLM_MODEL_NAME=qwen3-8b` / `--model-name qwen3-8b` para seguir afinándolo (p.ej. ajustar sus
+  propios `MAX_TOKENS_BY_FORMAT`, que hoy son los mismos que Llama sin reajustar) antes de
+  reconsiderar promoverlo — su ventaja de puntaje (+3.7 automático) es real y vale la pena recuperar
+  si se puede comprar de vuelta el margen de latencia.
 
 - **Reorden de llaves de `multiple_choice` (SPEC.md 10.2 #1 / 10.4 #5), probado y revertido.**
   La hipótesis del diagnóstico original (comprometerse con `respuesta_correcta` antes de razonar
