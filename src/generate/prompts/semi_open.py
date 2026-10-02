@@ -36,6 +36,9 @@ def build(item: dict, passages: list) -> str:
         "nombra la norma y el articulo que la sustentan y NO agregues datos, "
         "jurisprudencia ni normas que la evidencia no respalde o que la "
         "pregunta no pida), palabras_clave "
-        "(lista breve), referencia_legal (norma/articulo citado).\n\n"
+        "(lista breve), referencia_legal (campo aparte de la respuesta, no tiene limite "
+        "de palabras: enumera TODAS las normas y providencias de la evidencia en "
+        "las que se apoya la respuesta, cada una con su articulo, incluida la "
+        "Constitucion o el codigo correspondiente si la evidencia lo trae).\n\n"
         "Respuesta JSON:\n"
     )
