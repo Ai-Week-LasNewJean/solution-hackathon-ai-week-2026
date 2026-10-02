@@ -30,3 +30,4 @@ scripts/.env
 *.gguf
 
 .DS_Store
+data/corpus_rescrape/

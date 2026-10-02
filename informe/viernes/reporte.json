@@ -78,7 +78,7 @@
   ]
  ],
  "riesgos": [
-  "<b>Máquina de la verificación en vivo.</b> CUDA y Metal pueden divergir con temperatura 0 (medido: Llama 22.1 en Turing vs 26.5 en Mac). Preferimos Turing (GPU RTX 4090; determinismo verificado allí, 0 divergencias); si la verificación debe hacerse en equipo propio, usaremos un MacBook Pro M4 con 48 GB y regeneraremos/verificaremos allí. <b>Consulta a los organizadores:</b> ¿es posible la verificación en vivo sobre Turing?",
+  "<b>Divergencia CUDA vs Metal.</b> Con temperatura 0 las salidas pueden diferir entre GPU y Mac (medido: Llama 22.1 en Turing vs 26.5 en Mac). Mitigación: la verificación en vivo se hará en Turing (confirmado), que es la máquina canónica con la que se genera <code>submissions.jsonl</code>; determinismo verificado allí (0 divergencias); el Mac queda solo como chequeo cruzado auxiliar.",
   "<b>Brecha frente a la línea base en cerradas</b> (0.73 vs 0.905; RAGAS ya 0.469 vs 0.451). Mitigación: mejor razonamiento en cerradas (decoder de mayor precisión, razonamiento previo), mejor recuperación en áreas débiles.",
   "<b>Huecos de cobertura</b> (administrativo, procesal; sin texto íntegro de sentencias; sin señal de norma vigente/derogada). Mitigación: ampliar fuentes si hay tiempo y priorizar vigencia.",
   "<b>Ruido de medición</b> (solo 50 ítems, presupuesto limitado de RAGAS). Mitigación: proxies gratuitos (recall, similitud) y RAGAS solo en finalistas.",
