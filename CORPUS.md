@@ -151,6 +151,7 @@ Puntaje sobre las 50 preguntas de muestra, medido con
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 9.33 | 7.89 | 4.88 | 22.10 | **Cambio de máquina canónica: Turing (CUDA, RTX 4090)**, mismo Llama-3.1-8B, mismo corpus/umbrales. Menor que el 26.49 del Mac: divergencia CUDA vs Metal. |
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 10.00 | 6.98 | **31.65** | Decoder Qwen3-8B activo (barrido de 6 decoders ≤8B, SPEC.md 11.2). |
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 13.33 | 12.65 | 7.21 | **33.19** | Qwen3-8B + reranker `bge-reranker-v2-m3` top-6, umbrales de abstención 0.10/0.02 en escala sigmoide (SPEC.md 11.3). Config activa. determinism 0 divergencias; 7.64 s/ítem. |
+| 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 11.02 | 6.51 | 32.20 (+14.08 RAGAS = **46.28/80**) | Pool BM25/denso 100/100 → RRF 50 → reranker top-6; prompt conciso `semi_open` (RAGAS 0.418 → 0.469). Config activa; corrida reproducible 50/50 (SPEC.md 12). |
 
 Lectura de la curva:
 

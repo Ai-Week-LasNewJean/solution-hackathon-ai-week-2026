@@ -7,16 +7,14 @@ Sistema de respuesta a preguntas de derecho colombiano con un decoder abierto
 completa documentada en [`SPEC.md`](../ai-week-hackathon-2026/SPEC.md) del
 repositorio de la hackathon (no se versiona aqui).
 
-> **Estado (2026-10-02, tarde):** **Turing (GPU CUDA, RTX 4090) es ahora la máquina
-> canónica**; el Mac es solo auxiliar para pruebas de determinismo cruzado
-> (`SPEC.md` sección 11). Configuración activa: decoder **Qwen3-8B** (Q4_K_M) +
-> reranker `bge-reranker-v2-m3` + top-6 pasajes. Medido en Turing sobre las 50
-> preguntas de muestra: **33.19 / 50** puntos automáticos (RAGAS, 30 pts,
-> pendiente de `OPENROUTER_API_KEY`); `determinism_check.py` 0 divergencias;
-> `latency_check.py` 7.64 s/ítem → 2.10 h para las 992 preguntas (presupuesto
-> 6 h). Corpus: 34 379 documentos / 99 067 fragmentos, 100% trazables.
-> Detalle y comparación de decoders en
-> [`SPEC.md` sección 11](../ai-week-hackathon-2026/SPEC.md#11-turing-como-máquina-canónica-y-resultados-2026-10-02).
+> **Estado (2026-10-02, tarde):** **Turing (GPU CUDA, RTX 4090) es la máquina
+> canónica**; el Mac es auxiliar (`SPEC.md` secciones 11–12). Configuración activa: **Qwen3-8B**
+> (Q4_K_M) + reranker `bge-reranker-v2-m3` + pool BM25/denso top-100 → RRF 50 → top-6 + prompt
+> conciso para `semi_open`. Medido en Turing sobre las 50 preguntas de muestra: **32.20/50**
+> automáticos sin RAGAS + **14.08/30** RAGAS (correctness 0.469, línea base 0.451) =
+> **46.28/80**; la corrida se reproduce idéntica (50/50 ítems) desde el código versionado.
+> `determinism_check` 0 divergencias; 7–8 s/ítem (≈2.1 h para 992). Corpus: 34 379 documentos /
+> 99 067 fragmentos, 100% trazables.
 
 ## Corpus e índice
 
@@ -112,14 +110,14 @@ configuración activa (Qwen3-8B + reranker, top-6):
 
 | Componente                                               |                                               Puntos | Posibles |
 |----------------------------------------------------------|-----------------------------------------------------:|---------:|
-| Exactitud en cerradas (10/15 correctas)                  |                                                13.33 |       20 |
-| Calidad de citación (índice 0.633)                       |                                                12.65 |       20 |
-| Abstención calibrada                                     |                                                 7.21 |       10 |
-| Corrección texto libre (RAGAS)                           | pendiente (`--ragas`, requiere `OPENROUTER_API_KEY`) |       30 |
-| **Total automático**                                     |                                            **33.19** |   **50** |
+| Exactitud en cerradas (11/15 correctas)                  |                                                14.67 |       20 |
+| Calidad de citación (índice 0.551)                       |                                                11.02 |       20 |
+| Abstención calibrada                                     |                                                 6.51 |       10 |
+| Corrección texto libre (RAGAS, correctness 0.469)        |                                                14.08 |       30 |
+| **Total automático (sin RAGAS / con RAGAS)**             |                                  **32.20 / 46.28** | **50 / 80** |
 
-Evolución: 26.61 (Mac, Llama, 10-01) → 22.10 (Turing, Llama) → 31.65 (Qwen3) → **33.19** (Qwen3 +
-reranker). Comparación de 6 decoders ≤8B (Llama-3.1, Mistral-7B-v0.3, Qwen2.5-7B, Aya-Expanse-8B,
+Evolución (sin RAGAS): 26.61 (Mac, Llama, 10-01) → 22.10 (Turing, Llama) → 31.65 (Qwen3) → 33.19 (Qwen3 +
+reranker) → 32.20 con pool ampliado y prompt conciso, que sube RAGAS 0.418 → 0.469 (total 45.73 → 46.28/80; `SPEC.md` 12). Comparación de 6 decoders ≤8B (Llama-3.1, Mistral-7B-v0.3, Qwen2.5-7B, Aya-Expanse-8B,
 Qwen3-8B): ver `SPEC.md` 11.2. Con solo 15 cerradas, ±1 pregunta = ±1.33 pts — tomar las diferencias
 pequeñas con cautela. Historial con fecha en `CORPUS.md`.
 
@@ -143,7 +141,7 @@ python -m src.validate.run_all --full   # + determinismo y latencia (requiere LL
 
 Lista completa en [`SPEC.md` sección 11.6](../ai-week-hackathon-2026/SPEC.md#11-turing-como-máquina-canónica-y-resultados-2026-10-02):
 
-1. Medir RAGAS (`OPENROUTER_API_KEY`): 30 de los 50 puntos automáticos siguen sin medirse.
+1. RAGAS tiene presupuesto limitado (20 USD): usar `src/validate/ragas_dev.py` solo en finalistas.
 2. Chequeo auxiliar de determinismo en el Mac (ya no bloqueante).
 3. Señal de vigencia (norma vigente vs. derogada) y Estatuto Orgánico del Sistema Financiero.
 4. Mejorar recuperación (recall@20 ≈ 0.79) y reintentar el razonamiento previo en `multiple_choice`.
