@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import unicodedata
 from pathlib import Path
@@ -140,7 +141,7 @@ TIPO_LABEL_FIXED = {
     "codigo_civil": "Código Civil",
     "codigo_comercio": "Código de Comercio",
     "codigo_sustantivo_trabajo": "Código Sustantivo del Trabajo",
-    "codigo_contencioso_administrativo": "Código Contencioso Administrativo",
+    "codigo_contencioso_administrativo": "DECRETO 1 DE 1984 (Código Contencioso Administrativo)",  # citations.py no reconoce "Código Contencioso Administrativo" solo
     "estatuto_organico_sistema_financiero": "DECRETO 663 DE 1993 (Estatuto Orgánico del Sistema Financiero)",
 }
 
@@ -159,9 +160,25 @@ def _senado_titulo(doc: dict, doc_id: str) -> str:
     return doc.get("nombre") or doc_id.replace("-", " ")
 
 
-def process_senado_file(path: Path) -> tuple[list[dict], list[dict]]:
+def _rescrape_dir() -> Path | None:
+    """RESCRAPE_DIR (opcional): JSON completos de rescrape_senado.py que
+    reemplazan, por `id`, a los documentos truncados de SENADO_DIR."""
+    d = os.environ.get("RESCRAPE_DIR")
+    return Path(d) if d and Path(d).is_dir() else None
+
+
+def _rescrape_ids(rdir: Path | None) -> set[str]:
+    ids: set[str] = set()
+    for p in sorted(rdir.glob("*.json")) if rdir else []:
+        ids.update(d.get("id") for d in _senado_docs(p) if d.get("id"))
+    return ids
+
+
+def process_senado_file(path: Path, skip_ids: set[str] = frozenset()) -> tuple[list[dict], list[dict]]:
     manifest_rows, chunk_rows = [], []
     for doc in _senado_docs(path):
+        if doc.get("id") in skip_ids:
+            continue  # reemplazado por la version completa de RESCRAPE_DIR
         doc_id = doc.get("id") or slugify(doc.get("nombre", path.stem))
         titulo = _senado_titulo(doc, doc_id)
         articulos = doc.get("articulos") or []
@@ -335,12 +352,19 @@ def main() -> int:
     all_manifest: list[dict] = []
     all_chunks: list[dict] = []
 
-    for fname in SENADO_FILES:
-        path = SENADO_DIR / fname
+    rdir = _rescrape_dir()
+    skip_ids = _rescrape_ids(rdir)
+    if rdir:
+        print(f"[rescrape] {rdir}: {len(skip_ids)} documentos reemplazan a los truncados")
+    # leyes.json/decretos.json contienen otros docs: se filtran por id, no por archivo
+    sources = [SENADO_DIR / f for f in SENADO_FILES] + (sorted(rdir.glob("*.json")) if rdir else [])
+    for path in sources:
+        fname = path.name
         if not path.exists():
             print(f"[senado] saltando {fname}: no existe")
             continue
-        rows, chunks = process_senado_file(path)
+        in_rescrape = rdir is not None and path.parent == rdir
+        rows, chunks = process_senado_file(path, set() if in_rescrape else skip_ids)
         print(f"[senado] {fname}: {len(rows)} documentos, {len(chunks)} fragmentos")
         all_manifest.extend(rows)
         all_chunks.extend(chunks)
