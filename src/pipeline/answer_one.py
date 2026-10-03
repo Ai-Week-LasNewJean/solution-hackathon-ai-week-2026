@@ -83,6 +83,8 @@ def _generate_once(item: dict, passages: list[Passage], model_name: str | None =
         prompt, max_tokens=config.MAX_TOKENS_BY_FORMAT[formato],
         grammar_path=GRAMMAR_PATHS[formato])
     data = formatter.parse(raw, formato)
+    if config.EXPAND_ABBREV:
+        data = formatter.expand_abbreviations(data)
     if formato == "semi_open":
         data["respuesta"] = formatter.enforce_word_limit(data["respuesta"], 150)
     return data

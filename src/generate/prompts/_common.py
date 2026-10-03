@@ -32,3 +32,16 @@ def render_passages(passages: list) -> str:
     for i, p in enumerate(passages, start=1):
         lines.append(f"[{i}] (doc_id={p.doc_id}) {p.texto[:cap]}")
     return "\n".join(lines)
+
+
+# Instruccion extra de citacion (config.PROMPT_CITAS): el evaluador compara la
+# norma (tipo + numero + ano, o el nombre del codigo) y no reconoce abreviaturas
+# como "C.G.P." -- se pide el nombre completo y todas las normas de la evidencia
+# que respaldan la respuesta.
+CITAS_EXTRA = (
+    " Cita cada norma con su nombre completo, sin abreviaturas (por ejemplo "
+    "'articulo 60 del Codigo General del Proceso', 'articulo 5 de la Ley 1480 de "
+    "2011', 'Sentencia C-355 de 2006'), y menciona TODAS las normas y sentencias "
+    "de la evidencia que respaldan la respuesta, con el numero y el ano exactos "
+    "con que aparecen en la evidencia."
+)

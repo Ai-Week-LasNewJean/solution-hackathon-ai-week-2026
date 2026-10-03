@@ -6,7 +6,8 @@ oraciones y maximo 150 palabras; no delegar el contenido a referencia_legal.
 """
 from __future__ import annotations
 
-from src.generate.prompts._common import SYSTEM_PREFIX, render_passages
+from src import config
+from src.generate.prompts._common import CITAS_EXTRA, SYSTEM_PREFIX, render_passages
 
 _FEW_SHOT = """\
 Ejemplo estructural (norma ficticia, solo para mostrar el formato):
@@ -38,6 +39,7 @@ def build(item: dict, passages: list) -> str:
         "pregunta no pida), palabras_clave "
         "(lista breve), referencia_legal (norma/articulo citado; si la evidencia "
         "trae otras normas que tambien sustentan la respuesta, como la "
-        "Constitucion o el codigo, agregalas aqui con su articulo).\n\n"
+        "Constitucion o el codigo, agregalas aqui con su articulo)."
+        + (CITAS_EXTRA if config.PROMPT_CITAS else "") + "\n\n"
         "Respuesta JSON:\n"
     )

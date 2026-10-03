@@ -1,7 +1,8 @@
 """Prompt para preguntas cerradas (formato multiple_choice)."""
 from __future__ import annotations
 
-from src.generate.prompts._common import SYSTEM_PREFIX, render_passages
+from src import config
+from src.generate.prompts._common import CITAS_EXTRA, SYSTEM_PREFIX, render_passages
 
 _FEW_SHOT = """\
 Ejemplo estructural (norma y articulo ficticios, solo para mostrar el formato):
@@ -53,6 +54,7 @@ def build(item: dict, passages: list, reasoning: str | None = None) -> str:
         + (f"Analisis previo:\n{reasoning.strip()}\n\n" if reasoning else "") +
         "Responde solo con el JSON pedido: respuesta_correcta (A|B|C|D), "
         "justificacion (cita la norma/articulo que sustenta la respuesta), "
-        "descarte_opciones (por que cada opcion incorrecta no aplica).\n\n"
+        "descarte_opciones (por que cada opcion incorrecta no aplica)."
+        + (CITAS_EXTRA if config.PROMPT_CITAS else "") + "\n\n"
         "Respuesta JSON:\n"
     )

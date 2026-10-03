@@ -86,6 +86,9 @@ MAX_PER_DOC = int(os.environ.get("MAX_PER_DOC", 0))            # tope de fragmen
 EVIDENCE_TOP_K = min(MAX_PASAJES_EVIDENCIA, int(os.environ.get("EVIDENCE_TOP_K", FINAL_TOP_K)))
 # completar el campo de referencias con las normas de los primeros k pasajes (0 = apagado)
 CITE_FROM_EVIDENCE = int(os.environ.get("CITE_FROM_EVIDENCE", 0))
+# expandir abreviaturas de codigos que el evaluador no reconoce (C.G.P., C.P.A.C.A., C.S.T, ...)
+EXPAND_ABBREV = os.environ.get("EXPAND_ABBREV", "1") == "1"
+PROMPT_CITAS = os.environ.get("PROMPT_CITAS", "0") == "1"   # pedir al modelo citas completas y exhaustivas (prompts/_common.CITAS_EXTRA)
 
 QUERY_TEMA = os.environ.get("QUERY_TEMA", "0") == "1"       # anteponer tema/area del item a la consulta si vienen (SPEC.md 15)
 BM25_STEM = os.environ.get("BM25_STEM", "1") == "1"   # stemming espanol + stopwords en BM25 (SPEC.md 13)
