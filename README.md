@@ -28,11 +28,13 @@ repositorio de la hackathon (no se versiona aqui).
 
 El comprimido contendrá `LICENSE`, `corpus_manifest.json`, `corpus/` con los
 documentos procesados e `indice/` con `index.faiss`, `bm25.pkl` y
-`chunks.jsonl`. **34 380 documentos / 106 237 fragmentos** (códigos
-reescrapeados + Estatuto Orgánico del Sistema Financiero completo, 342 artículos), 100% trazables a su
-norma de origen (`traceability_check.py`). Reconstrucción: `RESCRAPE_DIR=$PWD/data/corpus_rescrape
-python -m src.ingest.ingest_raw_sources`, luego `python -m src.index.build_bm25` y
-`python -m src.index.build_faiss` (~15 min en la 4090).
+`chunks.jsonl`. **34 387 documentos / 106 734 fragmentos** (códigos
+reescrapeados + Estatuto Orgánico del Sistema Financiero completo + 7 normas añadidas el sábado,
+ver `CORPUS.md` 4bis y `SPEC.md`), trazables a su norma de origen (`traceability_check.py`).
+Reconstrucción (índice entregado, F1): ver `SPEC.md` sección 4 — `RESCRAPE_DIR` con
+`data/corpus_rescrape/*.json` (sin `leyes_decretos_completos.json`) + `data/corpus_extra/*.json`
+(sin `resolucion-368-2014.json`), luego `python -m src.ingest.ingest_raw_sources`,
+`python -m src.index.build_bm25` y `python -m src.index.build_faiss` (~15 min en la 4090).
 
 Construido con `python -m src.ingest.ingest_raw_sources` a partir de
 `data/corpus/` (volcado del equipo: scraping de secretariasenado.gov.co +

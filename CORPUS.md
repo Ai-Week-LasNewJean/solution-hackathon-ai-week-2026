@@ -153,6 +153,7 @@ Puntaje sobre las 50 preguntas de muestra, medido con
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 13.33 | 12.65 | 7.21 | **33.19** | Qwen3-8B + reranker `bge-reranker-v2-m3` top-6, umbrales de abstención 0.10/0.02 en escala sigmoide (SPEC.md 11.3). Config activa. determinism 0 divergencias; 7.64 s/ítem. |
 | 2026-10-02 (Turing) | 34 379 | 99 067 | 14.67 | 11.02 | 6.51 | 32.20 (+14.08 RAGAS = **46.28/80**) | Pool BM25/denso 100/100 → RRF 50 → reranker top-6; prompt conciso `semi_open` (RAGAS 0.418 → 0.469). Config activa; corrida reproducible 50/50 (SPEC.md 12). |
 | 2026-10-02 (Turing) | 34 380 | 105 949 | 13.33 | 12.24 | 6.98 | 32.55 (RAGAS sin re-medir; el viernes 46.33/80 con prompt v1 sin referencia ampliada) | Corpus reescrapeado + BM25 con stemming + prompt `semi_open` v2 (`referencia_legal` incluye normas de apoyo); proxy de `respuesta` 0.884. Ver SPEC.md 13. |
+| 2026-10-03 (sábado) | 34 387 | 106 734 | 14.67 | 12.24 | 7.21 | **34.12** | Índice entregado (F1): congelado del viernes + 7 normas citadas por las 992 preguntas y ausentes del corpus (Decisión Andina 486 completa, Ley 2437 de 2024, Decretos 175 de 2025, 4302 de 2008, 1382 de 2000 y 333 de 2021, Acuerdo 01 de 2025 de la Corte Constitucional). En la muestra solo cambia el contexto de 1 ítem (misma respuesta). Probadas y descartadas el mismo día: completar 267 leyes truncadas (31.91) y la Resolución 368 de 2014 (inunda los pasajes de su bloque de preguntas). Detalle en `SPEC.md`. |
 
 Lectura de la curva:
 
@@ -219,6 +220,33 @@ Lectura de la curva:
   con margen. Ya no lanza `FormatError`/aborta en excepción no controlada, aunque la respuesta en sí
   sigue siendo incorrecta (A en vez de D) — un fallo de conocimiento/recuperación distinto, no de
   formato.
+
+## 4bis. Sábado 2026-10-03: normas añadidas al ver las 992 preguntas
+
+Con el banco de 992 preguntas publicado, se buscaron las **referencias normativas explícitas** de
+los enunciados que el corpus no cubría (nunca respuestas; el banco no se indexa). Se añadieron solo
+textos oficiales de esas normas, descargados de fuentes públicas el mismo día:
+
+| doc_id | Fuente | Fragmentos |
+|---|---|---:|
+| `decision-andina-486` | Secretaría General de la CAN (PDF oficial, `parse_decision486.py`) | 283 |
+| `ley-2437-2024` | secretariasenado.gov.co (`rescrape_senado.py`) | 21 |
+| `decreto-175-2025` | Función Pública, Gestor Normativo | 31 |
+| `decreto-4302-2008` | SIC (Diario Oficial 47.172) | 10 |
+| `decreto-1382-2000`, `decreto-333-2021` | Normograma de la Cancillería | 8 + 15 |
+| `acuerdo-cc-1-2025` | Normograma de la Cancillería | 129 |
+
+Script: `python -m src.ingest.fetch_extra_norms` → `data/corpus_extra/*.json`, que entra por
+`RESCRAPE_DIR` junto con los códigos reescrapeados del viernes. Los 106 237 fragmentos previos no
+cambian (mismo texto, mismo sha256 por documento).
+
+**Descartado:** la Resolución 368 de 2014 de MinAmbiente (23 preguntas la citan). Solo existe como
+PDF escaneado: se obtuvo por OCR (RapidOCR en CPU, segmentación de renglones por perfil de
+proyección y reparación de espaciado/tildes con el vocabulario del corpus;
+`src/ingest/ocr_rapid.py`). Pero como todas esas preguntas comparten el preámbulo "Habiendo hecho
+la lectura previa de la Resolución No. 368 de 2014…", la resolución ocupaba los 6 pasajes de los 23
+ítems y desplazaba a la doctrina que la pregunta jurídica necesita (en la muestra, el ítem 748
+pasaba de acierto a error). El JSON y el OCR quedan en `data/corpus_extra/` sin indexar.
 
 ## 5. Licencia
 
