@@ -77,7 +77,7 @@ MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
 
 BM25_STEM = os.environ.get("BM25_STEM", "1") == "1"   # stemming espanol + stopwords en BM25 (SPEC.md 13)
 USE_RERANKER = os.environ.get("USE_RERANKER", "1") == "1"  # default ON desde 2026-10-02 (SPEC.md 11.3)
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MODEL = os.environ.get("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")  # o una ruta local (ajuste fino, SPEC.md 15)
 RERANKER_MAX_LEN = 1024   # tokens query+pasaje; el default (8192) agota VRAM con pools grandes
 
 # Umbral de suficiencia: se ajusta empiricamente barriendo contra
