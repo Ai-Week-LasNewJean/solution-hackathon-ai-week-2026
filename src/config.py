@@ -81,6 +81,16 @@ RRF_K = 60
 FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 50))           # candidatos tras fusion, antes de (opcional) rerank
 FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
+# Agente de citacion (src/generate/cite_builder.py): agrega las normas de los primeros
+# k pasajes de evidencia a referencia_legal / justificacion. 0 = apagado (pipeline del viernes).
+CITE_BUILDER_K = int(os.environ.get("CITE_BUILDER_K", 4))   # barrido k=1..6 en sample_50: k=4 (SPEC 19)
+# Agente filtro (src/retrieve/filter_agent.py): el LLM elige entre los FILTER_SHOW mejores
+# candidatos del reranker hasta FILTER_KEEP pasajes. 0 = apagado (pipeline congelado).
+AGENT_FILTER = os.environ.get("AGENT_FILTER", "0") == "1"
+FILTER_SHOW = int(os.environ.get("FILTER_SHOW", 15))
+FILTER_KEEP = int(os.environ.get("FILTER_KEEP", 4))
+FILTER_CHARS = int(os.environ.get("FILTER_CHARS", 700))
+EVIDENCE_TOP_K = int(os.environ.get("EVIDENCE_TOP_K", 10))   # pasajes_recuperados en modo agente (respaldo de citas)
 
 QUERY_TEMA = os.environ.get("QUERY_TEMA", "0") == "1"       # anteponer tema/area del item a la consulta si vienen (SPEC.md 15)
 BM25_STEM = os.environ.get("BM25_STEM", "1") == "1"   # stemming espanol + stopwords en BM25 (SPEC.md 13)

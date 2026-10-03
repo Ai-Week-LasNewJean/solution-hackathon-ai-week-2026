@@ -20,12 +20,12 @@ from pathlib import Path
 import citations
 
 from src import config
-from src.generate import citation_check, formatter
+from src.generate import citation_check, cite_builder, formatter
 from src.generate.llm import get_llm
 from src.generate.prompts import multiple_choice as prompt_multiple_choice
 from src.generate.prompts import open_ended as prompt_open_ended
 from src.generate.prompts import semi_open as prompt_semi_open
-from src.retrieve import query_expand, rerank, sufficiency
+from src.retrieve import filter_agent, query_expand, rerank, sufficiency
 from src.retrieve.hybrid import Passage, retrieve
 
 PROMPT_BUILDERS = {
@@ -58,10 +58,18 @@ def _to_pasaje_dict(p: Passage) -> dict:
     return d
 
 
+def _keep_top() -> int:
+    """Cuantos candidatos deja el reranker: FINAL_TOP_K, o mas si el agente filtro
+    necesita elegir entre mas (y la evidencia entregada llega a EVIDENCE_TOP_K)."""
+    if config.AGENT_FILTER:
+        return max(config.FINAL_TOP_K, config.FILTER_SHOW, config.EVIDENCE_TOP_K)
+    return config.FINAL_TOP_K
+
+
 def _retrieve_ranked(query: str) -> list[Passage]:
     expanded = query_expand.expand(query)
     candidates = retrieve(expanded, top_k=config.FUSED_TOP_K)
-    return rerank.rerank(expanded, candidates, top_k=config.FINAL_TOP_K)
+    return rerank.rerank(expanded, candidates, top_k=_keep_top())
 
 
 def _generate_once(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
@@ -162,10 +170,21 @@ def answer(item: dict, model_name: str | None = None) -> dict:
         # unica recuperacion ampliada: mas candidatos antes de fusionar/recortar
         ranked = retrieve(query_expand.expand(query), k_bm25=config.K_BM25 * 2,
                            k_dense=config.K_DENSE * 2, top_k=config.FUSED_TOP_K)
-        ranked = rerank.rerank(query, ranked, top_k=config.FINAL_TOP_K)
+        ranked = rerank.rerank(query, ranked, top_k=_keep_top())
         decision = sufficiency.decide(ranked)
 
-    pasajes = [_to_pasaje_dict(p) for p in ranked]
+    chosen: list[int] = []
+    if config.AGENT_FILTER and decision != "abstain":
+        # cadena de agentes: el reranker deja FILTER_SHOW candidatos, el agente filtro
+        # elige los que sustentan la respuesta; elegidos primero, resto en orden del reranker
+        chosen = filter_agent.select(item, ranked, model_name)
+        ranked = filter_agent.reorder(ranked, chosen)
+        evidence = ranked[:config.EVIDENCE_TOP_K]
+        ranked = ranked[:config.FINAL_TOP_K]
+    else:
+        evidence = ranked
+
+    pasajes = [_to_pasaje_dict(p) for p in evidence]
 
     out: dict = {
         "id": item["id"], "formato": item["formato"],
@@ -188,6 +207,11 @@ def answer(item: dict, model_name: str | None = None) -> dict:
                 out["latencia_ms"] = int((time.monotonic() - t0) * 1000)
                 return out
         out.update(data)
+        if config.AGENT_FILTER:
+            # cita las normas de los pasajes elegidos por el agente (2 primeros si no eligio)
+            out = cite_builder.apply(out, k=len(chosen) or 2)
+        else:
+            out = cite_builder.apply(out)
 
     out["latencia_ms"] = int((time.monotonic() - t0) * 1000)
     return out

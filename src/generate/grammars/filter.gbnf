@@ -1,0 +1,4 @@
+# Agente filtro (src/retrieve/filter_agent.py): lista de numeros de pasaje. Una regla por linea.
+root ::= "{" ws "\"pasajes\"" ws ":" ws "[" ws num (ws "," ws num)* ws "]" ws "}"
+num ::= [1-9] | [1-9] [0-9]
+ws ::= [ \t\n]*

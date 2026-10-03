@@ -1176,3 +1176,35 @@ Contrastado con `indice/chunks.jsonl` (norma de origen del encabezado de cada fr
   corridas con errores por ítem. Nunca correr evaluaciones en GPU en paralelo con una corrida e2e.
 - **El índice de la entrega no cambió**; respaldo en `../backup_v3_pre_fullscrape/`. Detalle y cómo reanudar:
   `data/experiments/README.md` del repo de la solución.
+
+## 19. Cadena de agentes para la citación (2026-10-03, sábado)
+
+Consejo del CEO de Ariel: lo difícil es encontrar la cita correcta; con ella, la respuesta es trivial, y usan
+varios agentes que refinan la evidencia antes del modelo que responde.
+
+**Hallazgo en el evaluador.** `score_citations` compara a nivel de cuerpo normativo; una norma citada que está en
+los primeros 10 `pasajes_recuperados` pero no es la de referencia no penaliza (solo las citas sin respaldo, ×2).
+`referencia_legal` (semi_open) y `justificacion` (cerradas) no los ve el juez de RAGAS. El modelo omitía normas
+ya recuperadas (§13.2: 41 de 49 en el top-6, solo 29 citadas).
+
+**Agente de citación** (`src/generate/cite_builder.py`, `CITE_BUILDER_K`, determinista, sin LLM): añade
+"Fuentes en la evidencia: …" con las normas de los primeros k pasajes, solo si `citations.extract` vuelve a leer
+el nombre como el mismo cuerpo. Función pura de (salida, pasajes): `python -m src.generate.cite_builder in out k`
+sobre una corrida existente da lo mismo que re-ejecutar el pipeline.
+
+Barrido sobre `informe/viernes/entrega/entrega_sample.jsonl` (índice 106 237):
+
+| k | citación | abstención | auto /50 | normas por respuesta |
+|---|---:|---:|---:|---:|
+| 0 (viernes) | 11.84 | 6.74 | 31.91 | — |
+| 2 | 15.92 | 7.91 | 37.16 | 4.6 |
+| 3 | 15.92 | 7.91 | 37.16 | 6.1 |
+| **4 (default)** | **16.33** | **7.91** | **37.57** | 7.4 |
+| 6 | 16.73 | 7.91 | 37.97 | 9.7 |
+
+Tasa sin respaldo 0 en todos. Cada escalón de 0.41 es una norma de 49 (ruido); k=4 equilibra puntaje y relleno.
+
+**Agente filtro con LLM** (`src/retrieve/filter_agent.py`, `AGENT_FILTER=1`, apagado): Qwen3-8B elige entre los
+10–15 mejores del reranker. En `sample_50` (índice 99 067) sus elegidos traen recall de normas 0.70 vs 0.756 del
+top-3 del reranker; e2e 35.47 vs 37.03 (builder k=3 sin filtro), +0.8 s/ítem y un error de formato. Con un decoder
+de 8B el reranker ya cumple el papel del agente filtro. Evaluación: `python -m src.validate.agent_retrieval_eval`.
