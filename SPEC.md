@@ -5,7 +5,7 @@ Este documento registra lo que se hizo el sábado sobre las 992 preguntas ciegas
 (`Ai-Week-LasNewJean/main-repo`, secciones 0–18), que documenta la semana de desarrollo. Aquí van
 las decisiones del día, con sus números, para la bitácora de corpus y la verificación en vivo.
 
-> Estado: **en curso**. Se actualiza en cada hito (ver sección 9 para la línea de tiempo).
+> Estado: **en curso**. Se actualiza en cada hito (ver sección 10 para la línea de tiempo).
 
 ## 0. Restricciones que gobiernan todo lo de abajo
 
@@ -167,23 +167,67 @@ corrida base no alcanzó (se detuvo a propósito en el ítem 321, ver sección 9
 
 ## 6. Compuerta (go / no-go)
 
-_Pendiente_: `sample_50` e2e con F frente a 34.12 (congelado) y 33.49 (A). Criterio: no peor que
-~1 punto (ruido de 50 ítems: ±1 cerrada = 1.33 pts). Además, los ítems de huecos deben recuperar
-los documentos nuevos.
+| Índice | `sample_50` automáticos /50 (cerradas · citación · abstención) | Decisión |
+|---|---|---|
+| Congelado (viernes) | **34.12** (14.67 · 12.24 · 7.21) | referencia |
+| F = A + normas nuevas | 31.91 (13.33 · 11.84 · 6.74) | no-go |
+| F0 = congelado + normas nuevas (con Res. 368) | 32.55 (13.33 · 12.24 · 6.98); el ítem 748 pasa de bien a mal | no-go |
+| **F1** = congelado + normas nuevas (sin Res. 368) | **34.12** (14.67 · 12.24 · 7.21): solo cambia el contexto del ítem 352, misma respuesta | **go** |
 
-## 7. Entrega
+F1 no pierde nada en la muestra y añade cobertura para los ítems de la sección 3 (propiedad
+industrial, insolvencia, timbre, licencias obligatorias, reparto de tutela).
 
-_Pendiente_: archivo entregado, sha256, índice entregado (`indice/` ← F, respaldo del congelado en
-`../backup_v4_pre_final/` con `SHA256SUMS`) y `determinism_check.py` sobre 3 ítems.
+## 7. Hallazgo de determinismo y regeneración completa
 
-## 8. Lo que NO se hizo, y por qué
+Al validar la entrega empalmada, dos ítems abiertos (246, 591) traían `jurisprudencia: ""`, que
+`evaluate.validate` cuenta como fallo. Al regenerar el 246 con F1, **el texto salió distinto
+aunque sus pasajes y scores eran idénticos** a los de la corrida base. Causa: `llama-cpp-python`
+reutiliza el KV cache del prefijo común con la llamada **anterior** y solo evalúa la cola del
+prompt. Todos los prompts comparten un prefijo largo de instrucciones, así que el resultado en
+punto flotante (y con él el greedy) dependía de qué ítem se había generado antes. El
+`determinism_check.py` del viernes comparaba proceso nuevo contra proceso nuevo, así que no lo
+podía detectar. La verificación en vivo sí lo expone: el jurado re-ejecuta un ítem suelto (prompt
+evaluado desde cero) y lo compara con una línea generada en lote.
+
+Arreglos (commit `f938fb1`):
+- `LLM.generate` llama a `Llama.reset()` antes de cada generación (`config.LLM_RESET_CACHE`, por
+  defecto 1), así que cada generación evalúa el prompt completo, igual que un proceso nuevo.
+  Comprobado: el ítem 246 generado después del 245 en el mismo proceso es idéntico al generado en
+  un proceso nuevo.
+- `formatter.parse` rellena de forma determinista un campo requerido vacío con una frase fija
+  sin citas (no cambia nada si el campo viene lleno).
+
+Consecuencia: ninguna línea generada antes del arreglo es reproducible con garantía, así que **el
+empalme de la sección 5 se descarta** y se regeneran las 992 con F1 y el reset
+(`out/final_F1_reset.jsonl`, desde las 11:51). Las herramientas `retrieval_diff`/`splice` quedan
+en el repo: el razonamiento es válido solo cuando la generación no depende del historial, lo que
+ahora sí se cumple.
+
+## 8. Entrega
+
+- Índice entregado: `indice/` = F1 (`cmp` byte a byte contra `../exp_index/F1/indice`);
+  `corpus/` = congelado + 7 documentos nuevos (ningún sha256 previo cambia);
+  `corpus_manifest.json` de F1. Respaldo del congelado en `../backup_v4_pre_final/` con
+  `SHA256SUMS`.
+
+| Archivo | sha256 |
+|---|---|
+| `indice/index.faiss` | `7431b60e748851a8b6da7e2aeca7259af6a0226ed7264f8a0ee093e8f06c9605` |
+| `indice/chunks.jsonl` | `0a191229c3a641c6ff2fafb05c28aefe4c8f575f46471809b11c0421fc299d83` |
+| `indice/bm25.pkl` | `4bc99f123a382fc4af79538c8bf6b1d22856fee4ea025ec92acc86c0d4ed152f` |
+| `corpus_manifest.json` | `4efac2935ec9770ecc62b8d099253480c2c925068478e53a09488af8db07dda5` |
+
+- `submissions.jsonl`: _pendiente_ (al terminar la corrida, validación oficial y
+  `python -m src.validate.reproduce_submission` en un proceso nuevo con el `indice/` entregado).
+
+## 9. Lo que NO se hizo, y por qué
 
 - Decretos Únicos Reglamentarios completos (1072/2015, 1625/2016, 2555/2010…): decenas de miles de
   fragmentos para 1–2 menciones; ya se midió el viernes que diluir el índice cuesta recuperación.
 - Encabezados por artículo (`CHUNK_HEADINGS=1`, variante B): descartado el viernes (peor en todo).
 - RAGAS: no se corre (el crédito de OpenRouter se reserva para la evaluación oficial).
 
-## 9. Línea de tiempo
+## 10. Línea de tiempo
 
 | Hora | Hito |
 |---|---|
@@ -199,3 +243,8 @@ _Pendiente_: archivo entregado, sha256, índice entregado (`indice/` ← F, resp
 | 10:43 | Ítem 748 (bloque Res. 368) pasa de bien a mal; la resolución inunda los 6 pasajes en 23/23 ítems → se quita |
 | 10:46 | F1 (sin la Res. 368). Arranca la corrida F1 sobre los 671 ítems pendientes |
 | 10:53 | Diff F1 vs base en los 321 hechos: 302 idénticos, 19 a regenerar |
+| 11:46 | Corrida F1 (690 ítems) y compuerta F1 = 34.12 |
+| 11:48 | `evaluate.validate`: 2 abiertas con `jurisprudencia` vacía → relleno determinista |
+| 11:50 | Hallazgo: la generación dependía del ítem anterior (KV cache); arreglo con `reset()` verificado |
+| 11:51 | Regeneración completa de las 992 con F1 + reset |
+| 11:53 | `indice/`, `corpus/` y `corpus_manifest.json` pasan a F1 (respaldo en `../backup_v4_pre_final/`) |
