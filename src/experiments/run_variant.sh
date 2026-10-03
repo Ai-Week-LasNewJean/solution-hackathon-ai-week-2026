@@ -37,9 +37,21 @@ step bm25        $PY -m src.index.build_bm25
 step faiss       $PY -m src.index.build_faiss
 step eval_sample bash -c "set -o pipefail; $PY -m src.validate.retrieval_eval --rerank --ks 3 6 10 20 2>/dev/null | tee $V/eval_sample.txt"
 step eval_synth  bash -c "set -o pipefail; $PY -m src.validate.synth_retrieval_eval --rerank --n 600 2>/dev/null | tee $V/eval_synth.txt"
+e2e() {
+  # el decoder necesita ~7 GB libres: si otro proceso ocupa la GPU, llama.cpp no crea el
+  # contexto y run_batch convierte cada item en abstencion (puntaje falso). Esperar VRAM.
+  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 10000 )); do
+    echo "   esperando >=10 GB de VRAM libre..."; sleep 30
+  done
+  $PY -m src.main --split sample --out "$V/sample.jsonl" >"$V/e2e.log" 2>&1 || return 1
+  if grep -q Traceback "$V/e2e.log"; then
+    echo "   e2e con errores por item (ver $V/e2e.log): se descarta, sin marcador"
+    rm -f "$V/sample.jsonl"; return 1
+  fi
+  $PY scripts/evaluate.py --submission "$V/sample.jsonl" --split sample | tee "$V/e2e_eval.txt"
+}
 if [[ $E2E == e2e ]]; then
-  step e2e bash -c "set -o pipefail; $PY -m src.main --split sample --out $V/sample.jsonl >$V/e2e.log 2>&1 && \
-                    $PY scripts/evaluate.py --submission $V/sample.jsonl --split sample | tee $V/e2e_eval.txt"
+  step e2e e2e
 fi
 
 R=data/experiments/$NAME.txt

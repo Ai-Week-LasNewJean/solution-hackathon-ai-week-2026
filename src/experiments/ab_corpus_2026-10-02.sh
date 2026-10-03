@@ -32,9 +32,14 @@ bash src/experiments/run_variant.sh B 1 e2e
 # referencia e2e sobre el indice congelado (mismo codigo y prompt, indice/ de 106 237 fragmentos)
 B0=$X/base; mkdir -p "$B0"
 if [[ ! -f $B0/.done_e2e ]]; then
-  .venv/bin/python -m src.main --split sample --out "$B0/sample.jsonl" > "$B0/e2e.log" 2>&1 && \
-  .venv/bin/python scripts/evaluate.py --submission "$B0/sample.jsonl" --split sample > "$B0/e2e_eval.txt" && \
-  touch "$B0/.done_e2e"
+  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 10000 )); do sleep 30; done
+  if .venv/bin/python -m src.main --split sample --out "$B0/sample.jsonl" > "$B0/e2e.log" 2>&1 && \
+     ! grep -q Traceback "$B0/e2e.log"; then
+    .venv/bin/python scripts/evaluate.py --submission "$B0/sample.jsonl" --split sample > "$B0/e2e_eval.txt" && \
+    touch "$B0/.done_e2e"
+  else
+    echo "[base] e2e con errores (ver $B0/e2e.log), descartado"; rm -f "$B0/sample.jsonl"
+  fi
 fi
 if [[ -f $B0/.done_e2e ]]; then
   { echo "# Referencia: indice congelado indice/ ($(date '+%Y-%m-%d %H:%M'), commit $(git rev-parse --short HEAD))"
