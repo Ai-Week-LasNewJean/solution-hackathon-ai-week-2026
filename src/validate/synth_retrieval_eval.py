@@ -44,9 +44,14 @@ def main() -> int:
     by_text = {c["texto"]: (c["doc_id"], c.get("articulo")) for c in _chunks()}
     present = set(by_text.values())
 
-    qs = [q for q in read_jsonl(SYNTH_PATH) if q.get("query") and q["key"] in origin and origin[q["key"]] in present]
+    # muestreo ANTES de filtrar por el indice evaluado: mismo conjunto de preguntas en todas las variantes
+    qs = [q for q in read_jsonl(SYNTH_PATH) if q.get("query") and q["key"] in origin]
     step = max(1, len(qs) // args.n)
     qs = qs[::step][:args.n]
+    missing = sum(1 for q in qs if origin[q["key"]] not in present)
+    qs = [q for q in qs if origin[q["key"]] in present]
+    if missing:
+        print(f"({missing} preguntas sin su articulo de origen en este indice, omitidas)")
 
     hits = collections.defaultdict(list)
     for q in qs:
