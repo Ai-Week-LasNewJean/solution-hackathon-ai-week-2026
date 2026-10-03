@@ -56,3 +56,9 @@ package = false
 #   Turing (CUDA):  CMAKE_ARGS="-DGGML_CUDA=on"  FORCE_CMAKE=1 uv sync
 #
 # Sin esas variables, llama-cpp-python igual instala pero cae a CPU puro.
+#
+# EN LA SALA TURING ESA RECETA NO SIRVE (nvcc del sistema 11.5, sin sudo): usar
+# el wheel precompilado cu130 DESPUES de cualquier uv sync, y no volver a
+# sincronizar (SPEC.md seccion 16):
+#   uv pip install --python .venv/bin/python --no-deps --reinstall \
+#     "llama-cpp-python==0.3.36" --index-url https://abetlen.github.io/llama-cpp-python/whl/cu130

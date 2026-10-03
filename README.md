@@ -86,6 +86,9 @@ presupuesto de 6 h.
 
 ### Configuración de CUDA en Turing
 
+Guía completa para preparar una máquina de la sala sin sudo (uv, SSH, wheel CUDA 13 de llama-cpp,
+verificación y regresión): `SPEC.md` sección 16 (repo principal).
+
 Stack verificado (2026-10-02): RTX 4090, driver NVIDIA **580.178.04** (kernel y librerías de usuario
 del sistema), `torch 2.14.1+cu130`, `llama-cpp-python 0.3.36` con soporte CUDA.
 
