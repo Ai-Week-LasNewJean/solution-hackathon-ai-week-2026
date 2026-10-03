@@ -32,7 +32,7 @@ bash src/experiments/run_variant.sh B 1 e2e
 # referencia e2e sobre el indice congelado (mismo codigo y prompt, indice/ de 106 237 fragmentos)
 B0=$X/base; mkdir -p "$B0"
 if [[ ! -f $B0/.done_e2e ]]; then
-  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 10000 )); do sleep 30; done
+  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 16000 )); do sleep 30; done
   if .venv/bin/python -m src.main --split sample --out "$B0/sample.jsonl" > "$B0/e2e.log" 2>&1 && \
      ! grep -q Traceback "$B0/e2e.log"; then
     .venv/bin/python scripts/evaluate.py --submission "$B0/sample.jsonl" --split sample > "$B0/e2e_eval.txt" && \

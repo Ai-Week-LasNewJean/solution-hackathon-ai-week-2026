@@ -40,8 +40,8 @@ step eval_synth  bash -c "set -o pipefail; $PY -m src.validate.synth_retrieval_e
 e2e() {
   # el decoder necesita ~7 GB libres: si otro proceso ocupa la GPU, llama.cpp no crea el
   # contexto y run_batch convierte cada item en abstencion (puntaje falso). Esperar VRAM.
-  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 10000 )); do
-    echo "   esperando >=10 GB de VRAM libre..."; sleep 30
+  until (( $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) >= 16000 )); do
+    echo "   esperando >=16 GB de VRAM libre..."; sleep 30
   done
   $PY -m src.main --split sample --out "$V/sample.jsonl" >"$V/e2e.log" 2>&1 || return 1
   if grep -q Traceback "$V/e2e.log"; then
