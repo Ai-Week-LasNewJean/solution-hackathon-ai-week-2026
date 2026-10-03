@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 from src import config
@@ -26,6 +27,9 @@ def dump(split: str, out: Path) -> int:
 
     src_path = config.DATA / ("sample_50.jsonl" if split == "sample" else "test_992.jsonl")
     items = [json.loads(l) for l in src_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    if os.environ.get("RAG_IDS_FILE"):   # mismo filtro que run_batch
+        keep = {int(x) for x in Path(os.environ["RAG_IDS_FILE"]).read_text().split()}
+        items = [it for it in items if it["id"] in keep]
     done = set()
     if out.exists():
         done = {json.loads(l)["id"] for l in out.read_text(encoding="utf-8").splitlines() if l.strip()}
