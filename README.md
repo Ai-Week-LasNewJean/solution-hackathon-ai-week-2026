@@ -236,6 +236,22 @@ pequeñas con cautela. Historial con fecha en `CORPUS.md`.
 Validaciones en Turing: `determinism_check` 0 divergencias (5 ítems, procesos frescos);
 `latency_check` 7.64 s/ítem (2.10 h para 992, margen 3.90 h).
 
+## Verificación en vivo (entrega del 2026-10-03)
+
+`submissions.jsonl` se generó con el commit de `uwu` que limpia la caché KV de llama.cpp antes de cada
+llamada (`llm.py`), así que cada respuesta depende solo de su pregunta y se reproduce en un proceso fresco:
+
+```bash
+export LD_LIBRARY_PATH=$PWD/.venv/lib/python3.12/site-packages/nvidia/cu13/lib
+.venv/bin/python -m src.validate.determinism_check --items data/test_992.jsonl --ids <id1> <id2> <id3>
+```
+
+Verificado: 3/3 ítems (cerrada, semi-abierta, abierta) re-ejecutados en proceso fresco son idénticos
+byte a byte a `submissions.jsonl`. Las 992 se repartieron entre dos máquinas RTX 4090 con el mismo stack
+(`RUN_SHARD0.md`): 833 de la principal y 159 de la segunda. En 179 ítems generados por ambas, 161
+coincidieron byte a byte y 18 difirieron (aritmética de punto flotante distinta entre GPUs). Por eso **cada ítem se verifica en la máquina que lo generó**: la lista
+está en `procedencia.json` (`maquina_principal_ISCL406` / `maquina_2_shard0`).
+
 ## Interfaz gráfica
 
 ```bash
