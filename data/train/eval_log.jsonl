@@ -1,0 +1,8 @@
+{"model": "BAAI/bge-reranker-v2-m3", "recall@3": 0.805, "recall@6": 0.833, "recall@10": 0.878}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1000", "recall@3": 0.772, "recall@6": 0.85, "recall@10": 0.874}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1200", "recall@3": 0.772, "recall@6": 0.878, "recall@10": 0.886}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1400", "recall@3": 0.736, "recall@6": 0.841, "recall@10": 0.882}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1600", "recall@3": 0.707, "recall@6": 0.841, "recall@10": 0.882}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1800", "recall@3": 0.707, "recall@6": 0.817, "recall@10": 0.886}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/checkpoint-1872", "recall@3": 0.707, "recall@6": 0.817, "recall@10": 0.886}
+{"model": "/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/models/reranker-ft/final", "recall@3": 0.707, "recall@6": 0.817, "recall@10": 0.886}
