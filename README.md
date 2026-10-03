@@ -28,8 +28,11 @@ repositorio de la hackathon (no se versiona aqui).
 
 El comprimido contendrá `LICENSE`, `corpus_manifest.json`, `corpus/` con los
 documentos procesados e `indice/` con `index.faiss`, `bm25.pkl` y
-`chunks.jsonl`. **34 379 documentos / 99 067 fragmentos**, 100% trazables a su
-norma de origen (`traceability_check.py`).
+`chunks.jsonl`. **34 380 documentos / 106 237 fragmentos** (rama `adrian/rag-rescrape-eosf`: códigos
+reescrapeados + Estatuto Orgánico del Sistema Financiero completo, 342 artículos), 100% trazables a su
+norma de origen (`traceability_check.py`). Reconstrucción: `RESCRAPE_DIR=$PWD/data/corpus_rescrape
+python -m src.ingest.ingest_raw_sources`, luego `python -m src.index.build_bm25` y
+`python -m src.index.build_faiss` (~15 min en la 4090).
 
 Construido con `python -m src.ingest.ingest_raw_sources` a partir de
 `data/corpus/` (volcado del equipo: scraping de secretariasenado.gov.co +
@@ -106,8 +109,41 @@ nvidia-smi --query-gpu=name,driver_version --format=csv
 .venv/bin/python -c "import torch, llama_cpp; print(torch.cuda.is_available(), llama_cpp.llama_supports_gpu_offload())"
 ```
 
+**No correr `uv sync`, `uv add` ni `uv lock` en Turing.** `uv.lock` fija `llama-cpp-python==0.3.35`
+(build CPU), mientras que el venv usa 0.3.36 con CUDA instalado a mano; cualquier sincronización lo
+reemplaza en silencio por la versión CPU (pasó el 2026-10-02). Para agregar paquetes:
+`uv pip install --python .venv/bin/python --no-deps <paquete>`. Para restaurar el build CUDA:
+
+```bash
+uv pip install --python .venv/bin/python --no-deps --reinstall "llama-cpp-python==0.3.36" \
+  --index-url https://abetlen.github.io/llama-cpp-python/whl/cu130
+```
+
+Verificado: con ese wheel las 50 respuestas de muestra son idénticas a las de antes del incidente.
+
 Si vuelve a aparecer el mismo error: `echo $LD_LIBRARY_PATH` (buscar rutas de drivers ajenas);
 si el kernel y las librerías realmente difieren tras una actualización de paquetes, reiniciar.
+
+### Reranker ajustado (experimental, rama `adrian/rag-reranker-ft`)
+
+Ajuste fino de `BAAI/bge-reranker-v2-m3` con preguntas sintéticas que Qwen3-8B genera a partir del
+corpus (el banco de preguntas no se usa; `sample_50` queda como test). Cada etapa es reanudable, así
+que si se corta basta relanzar:
+
+```bash
+uv pip install --python .venv/bin/python --no-deps "accelerate>=1.1.0" psutil   # solo para entrenar
+bash src/train/run_all.sh 4000
+```
+
+| Etapa | Módulo | Checkpoint |
+|---|---|---|
+| 1. Preguntas sintéticas | `src.train.synth_queries` | `data/train/synth_queries.jsonl` (una línea por pregunta, versionado) |
+| 2. Negativos difíciles | `src.train.mine_negatives` | `data/train/pairs.jsonl` (versionado) |
+| 3. Entrenamiento | `src.train.train_reranker` | `models/reranker-ft/checkpoint-*` cada 200 pasos; reanuda solo |
+| 4. Evaluación | `src.train.eval_checkpoints` | `data/train/eval_log.jsonl` (recall en `sample_50` por checkpoint) |
+
+Usarlo: `RERANKER_MODEL=models/reranker-ft/final` (o un checkpoint). Si se adopta hay que recalibrar
+los umbrales de abstención y copiar el modelo a la máquina de la entrega. Resultados en `SPEC.md` 15.
 
 ## Corpus y agente: cómo se construyen
 
@@ -171,7 +207,7 @@ Lista completa en [`SPEC.md` sección 11.6](../ai-week-hackathon-2026/SPEC.md#11
 
 1. RAGAS tiene presupuesto limitado (20 USD): usar `src/validate/ragas_dev.py` solo en finalistas.
 2. Chequeo auxiliar de determinismo en el Mac (ya no bloqueante).
-3. Señal de vigencia (norma vigente vs. derogada) y Estatuto Orgánico del Sistema Financiero.
+3. Señal de vigencia (norma vigente vs. derogada).
 4. Mejorar recuperación (recall@20 ≈ 0.79) y reintentar el razonamiento previo en `multiple_choice`.
 5. Informe técnico, video ≤5 min, interfaz probada de punta a punta.
 
@@ -184,10 +220,10 @@ la corrida que produce `submissions.jsonl` usa siempre un único candidato fijo.
 
 (Diagnóstico y experimentos completos: `SPEC.md` sección 13.)
 
-1. **Huecos de corpus puntuales:** el Estatuto Orgánico del Sistema Financiero (Decreto-Ley 663 de 1993)
-   tiene solo 26 artículos; las providencias de la Corte Constitucional están solo como relatoría (sin
-   texto íntegro); no hay doctrina. Esta máquina no tiene salida a secretariasenado.gov.co, así que
-   un re-scrape lo tendría que hacer otra persona; el beneficio estimado es de pocos puntos de citación.
+1. **Huecos de corpus puntuales:** las providencias de la Corte Constitucional están solo como relatoría
+   (sin texto íntegro) y no hay doctrina. El Estatuto Orgánico del Sistema Financiero ya está completo
+   (342 artículos, rama `adrian/rag-rescrape-eosf`): recall@10 0.854 → 0.878, aunque el reranker base
+   todavía lo deja fuera del top-6 en el ítem 128 (motivo del reranker ajustado).
 2. Reglamento CNE y directivas presidenciales casi fuera del índice (`citations.py` oficial no los
    reconoce como citables); volumen bajo (15 fragmentos).
 3. **Vigencia:** no hay señal de norma vigente vs. derogada. Una penalización por logits a pasajes del
