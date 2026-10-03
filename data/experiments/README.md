@@ -28,6 +28,10 @@ Prerrequisitos de datos (no versionados, se regeneran con caché en `data/corpus
 .venv/bin/python -m src.ingest.parse_decision486              # decision_andina_486.json
 ```
 
+**Ojo:** las cifras de "preguntas sintéticas" dentro de `A.txt`/`B.txt` vienen de una versión de
+`synth_retrieval_eval.py` que muestreaba distinto conjunto de preguntas por índice (no comparables).
+Las comparables (mismo conjunto, corregido en el commit siguiente) quedan en `synth_fixed.txt`.
+
 ## Para adoptar una variante en la entrega
 
 Nada de esto cambia el índice congelado. Si una variante gana en e2e: regenerar `corpus/`,
