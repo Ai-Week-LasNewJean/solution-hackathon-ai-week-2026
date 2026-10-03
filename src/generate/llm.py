@@ -73,6 +73,10 @@ class LLM:
             from llama_cpp import LlamaGrammar
 
             grammar = LlamaGrammar.from_file(str(grammar_path))
+        # cache limpio por llamada: llama-cpp reutiliza el KV del prefijo comun con el prompt
+        # anterior y eso cambia la salida greedy segun que item se proceso antes (2026-10-03:
+        # solo 4/20 items del lote coincidian con una re-ejecucion en proceso fresco).
+        self._llama.reset()
         out = self._llama(
             self._wrap_prompt(prompt), max_tokens=max_tokens, temperature=config.LLM_TEMPERATURE,
             grammar=grammar, stop=stop)

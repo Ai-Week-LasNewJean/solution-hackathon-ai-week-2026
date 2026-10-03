@@ -85,6 +85,11 @@ def _generate_once(item: dict, passages: list[Passage], model_name: str | None =
         prompt, max_tokens=config.MAX_TOKENS_BY_FORMAT[formato],
         grammar_path=GRAMMAR_PATHS[formato])
     data = formatter.parse(raw, formato)
+    if formato == "open_ended" and not str(data.get("jurisprudencia") or "").strip():
+        # el schema exige el campo no vacio; el modelo lo deja vacio cuando la evidencia
+        # no trae providencias (3/992 el 2026-10-03). Texto fijo y determinista.
+        data["jurisprudencia"] = ("La evidencia recuperada no incluye jurisprudencia "
+                                  "especifica sobre este punto.")
     if formato == "semi_open":
         data["respuesta"] = formatter.enforce_word_limit(data["respuesta"], 150)
     return data

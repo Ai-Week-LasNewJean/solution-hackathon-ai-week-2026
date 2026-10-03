@@ -5,6 +5,7 @@ trabajo ya hecho en los 991 restantes.
 from __future__ import annotations
 
 import json
+import os
 import sys
 import traceback
 from pathlib import Path
@@ -34,6 +35,10 @@ def main(split: str, out_path: Path, resume: bool = True, model_name: str | None
     src_path = config.DATA / ("sample_50.jsonl" if split == "sample" else "test_992.jsonl")
     items = read_jsonl(src_path)
 
+    shard = os.environ.get("SHARD")   # "i/n": procesa solo los items con indice % n == i
+    if shard:
+        si, sn = map(int, shard.split("/"))
+        items = [it for k, it in enumerate(items) if k % sn == si]
     done_ids = _already_done(out_path) if resume else set()
     pending = [it for it in items if it["id"] not in done_ids]
     print(f"[run_batch] {len(items)} items, {len(done_ids)} ya resueltos, "
