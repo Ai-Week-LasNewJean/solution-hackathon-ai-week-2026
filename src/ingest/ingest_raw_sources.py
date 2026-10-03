@@ -143,6 +143,8 @@ TIPO_LABEL_FIXED = {
     "codigo_sustantivo_trabajo": "Código Sustantivo del Trabajo",
     "codigo_contencioso_administrativo": "DECRETO 1 DE 1984 (Código Contencioso Administrativo)",  # citations.py no reconoce "Código Contencioso Administrativo" solo
     "estatuto_organico_sistema_financiero": "DECRETO 663 DE 1993 (Estatuto Orgánico del Sistema Financiero)",
+    # parse_decision486.py (PDF oficial de la CAN); "decision andina 486" calza con citations.CODES
+    "decision_andina_486": "Decisión Andina 486 (Régimen Común sobre Propiedad Industrial)",
 }
 
 
@@ -174,6 +176,22 @@ def _rescrape_ids(rdir: Path | None) -> set[str]:
     return ids
 
 
+def _with_headings(art: dict, texto: str) -> str:
+    """Antepone al texto del articulo su epigrafe y su ubicacion, p.ej.
+    "TERMINACION DEL CONTRATO POR JUSTA CAUSA. [TITULO I. CONTRATO INDIVIDUAL DE
+    TRABAJO > CAPITULO VI. TERMINACION DEL CONTRATO DE TRABAJO] Son justas ...".
+    Va despues de la etiqueta del articulo, asi el inicio del fragmento sigue
+    siendo "<norma>. ARTICULO N" (trazabilidad y citations.extract intactos)."""
+    head = ""
+    nombre = (art.get("nombre") or "").strip().rstrip(".").strip()
+    if nombre and not texto.upper().startswith(nombre.upper()[:20]):
+        head = f"{nombre}. "
+    ubic = [u.strip().rstrip(".") for u in (art.get("ubicacion") or []) if u and u.strip()]
+    if ubic:
+        head += f"[{' > '.join(ubic)}] "
+    return head + texto
+
+
 def process_senado_file(path: Path, skip_ids: set[str] = frozenset()) -> tuple[list[dict], list[dict]]:
     manifest_rows, chunk_rows = [], []
     for doc in _senado_docs(path):
@@ -189,6 +207,8 @@ def process_senado_file(path: Path, skip_ids: set[str] = frozenset()) -> tuple[l
             if not texto:
                 continue  # articulo derogado/sin contenido en la fuente
             etiqueta = art.get("etiqueta") or f"ARTICULO {art.get('numero', '')}"
+            if config.CHUNK_HEADINGS:
+                texto = _with_headings(art, texto)
             chunk_specs.append({
                 "articulo": art.get("numero"),
                 "texto": clean_text(f"{titulo}. {etiqueta} {texto}"),

@@ -250,8 +250,7 @@ def estructura_stack(loc):
     return [loc[k] for k in sorted(loc)]
 
 
-def scrape(entity: str) -> dict:
-    slug, doc_id, tipo, numero, anio, nombre = ENTITIES[entity]
+def fetch_parts(slug: str) -> tuple[list[str], list[int]]:
     parts_html, parts = [], []
     p = 0
     while p < MAX_PARTS:
@@ -261,6 +260,12 @@ def scrape(entity: str) -> dict:
         parts_html.append(h)
         parts.append(p)
         p += 1
+    return parts_html, parts
+
+
+def scrape(entity: str) -> dict:
+    slug, doc_id, tipo, numero, anio, nombre = ENTITIES[entity]
+    parts_html, parts = fetch_parts(slug)
     if not parts_html:
         raise RuntimeError(f"{entity}: ninguna parte disponible ({slug})")
     articulos, estructura = build_articles(parts_html)
@@ -276,7 +281,89 @@ def scrape(entity: str) -> dict:
             "documentos": [doc]}
 
 
+# --- modo --completar: leyes/decretos truncados del volcado + normas del banco ausentes ----
+
+DUMP = Path(__file__).resolve().parents[2] / "data" / "corpus" / "Scrapping de secretariasenado.gov.co"
+COMPLETAR_OUT = "leyes_decretos_completos.json"
+_SLUG_RE = re.compile(r"^(ley|decreto|acto_legislativo)_(\d+)_(\d{4})$")
+
+# Normas de data/seed_targets.json (citadas por items del banco) que no vienen en el
+# volcado pero si estan en el sitio: slug -> (tipo, numero, anio).
+EXTRA = {
+    "ley_2437_2024": ("ley", "2437", "2024"),
+    "ley_2452_2025": ("ley", "2452", "2025"),  # Codigo Procesal del Trabajo y de la S.S.
+    "ley_1700_2013": ("ley", "1700", "2013"),
+    "ley_1692_2013": ("ley", "1692", "2013"),
+    "decreto_4334_2008": ("decreto", "4334", "2008"),
+    "decreto_4886_2011": ("decreto", "4886", "2011"),
+}
+
+
+def _dump_slugs() -> dict[str, str]:
+    """doc_id del volcado ("ley-80-1993") -> slug del sitio ("ley_0080_1993")."""
+    targets = json.loads((DUMP / "targets_manifest.json").read_text(encoding="utf-8"))
+    out = {}
+    for slug in targets:
+        m = _SLUG_RE.match(slug)
+        if m:
+            out[f"{m.group(1).replace('_', '-')}-{int(m.group(2))}-{m.group(3)}"] = slug
+    return out
+
+
+def completar() -> int:
+    """Re-scrapea completos los documentos `completo == False` del volcado (que no
+    esten ya en ENTITIES) y las normas de EXTRA; escribe un solo JSON multi-documento
+    en OUT/COMPLETAR_OUT. Cada documento conserva el id y los metadatos del volcado,
+    asi que la ingesta (RESCRAPE_DIR) reemplaza la version truncada. Si el re-scrape
+    trae menos articulos que el volcado (parseo fallido), se conserva el del volcado."""
+    slugs = _dump_slugs()
+    done_ids = {e[1] for e in ENTITIES.values()}
+    todo: list[tuple[str, dict]] = []
+    for f in ("leyes.json", "decretos.json", "actos_legislativos.json"):
+        for d in json.loads((DUMP / f).read_text(encoding="utf-8"))["documentos"]:
+            if d.get("completo") is False and d["id"] not in done_ids and d["id"] in slugs:
+                todo.append((slugs[d["id"]], d))
+    for slug, (tipo, numero, anio) in EXTRA.items():
+        todo.append((slug, {"id": f"{tipo}-{numero}-{anio}", "tipo": tipo, "numero": numero,
+                            "anio": int(anio), "nombre": f"{tipo.upper()} {numero} DE {anio}",
+                            "articulos": []}))
+    docs, kept_old, failed = [], 0, 0
+    for i, (slug, old) in enumerate(todo):
+        try:
+            parts_html, parts = fetch_parts(slug)
+            articulos, estructura = build_articles(parts_html) if parts_html else ([], [])
+        except Exception as ex:  # noqa: BLE001
+            print(f"  [{slug}] FALLO: {ex}", file=sys.stderr)
+            failed += 1
+            articulos, estructura, parts = [], [], []
+        n_old = len(old.get("articulos") or [])
+        if len(articulos) < n_old or not articulos:
+            kept_old += 1
+            if n_old:
+                docs.append(old)
+            continue
+        doc = {k: v for k, v in old.items() if k not in ("articulos", "estructura")}
+        doc.update({"estructura": estructura, "articulos": articulos, "completo": True,
+                    "partes_incluidas": parts, "fuente_url": f"{BASE}{slug}.html"})
+        docs.append(doc)
+        print(f"[{i + 1}/{len(todo)}] {doc['id']}: partes={len(parts)} articulos {n_old} -> {len(articulos)}",
+              flush=True)
+    data = {"meta": {"fuente": "Secretaría del Senado de la República de Colombia - Leyes desde 1992 "
+                               "(Avance Jurídico Casa Editorial); re-scrape completo multi-parte",
+                     "derechos": "Notas de vigencia, concordancias y demás valores agregados protegidos por "
+                                 "derechos de autor; uso no comercial.",
+                     "entidad": "completar", "total_documentos": len(docs)},
+            "documentos": docs}
+    (OUT / COMPLETAR_OUT).write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[completar] {len(docs)} documentos ({kept_old} sin mejora, version del volcado; {failed} fallos)")
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if argv[:1] == ["--completar"]:
+        OUT.mkdir(parents=True, exist_ok=True)
+        RAW.mkdir(parents=True, exist_ok=True)
+        return completar()
     ents = argv or list(ENTITIES)
     OUT.mkdir(parents=True, exist_ok=True)
     RAW.mkdir(parents=True, exist_ok=True)

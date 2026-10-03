@@ -18,9 +18,11 @@ DATA = ROOT / "data"
 SCRIPTS = ROOT / "scripts"
 SCHEMA = ROOT / "schema"
 
-CORPUS_DIR = ROOT / "corpus"                     # corpus/<doc_id>.txt, congelado antes de entregar
-CORPUS_MANIFEST = ROOT / "corpus_manifest.json"
-INDEX_DIR = ROOT / "indice"
+# Overrides opcionales (RAG_CORPUS_DIR, RAG_CORPUS_MANIFEST, RAG_INDEX_DIR) para
+# construir/evaluar indices experimentales sin tocar los congelados.
+CORPUS_DIR = Path(os.environ.get("RAG_CORPUS_DIR", ROOT / "corpus"))   # corpus/<doc_id>.txt, congelado antes de entregar
+CORPUS_MANIFEST = Path(os.environ.get("RAG_CORPUS_MANIFEST", ROOT / "corpus_manifest.json"))
+INDEX_DIR = Path(os.environ.get("RAG_INDEX_DIR", ROOT / "indice"))
 CHUNKS_PATH = INDEX_DIR / "chunks.jsonl"          # texto + doc_id + offsets + metadatos
 FAISS_INDEX_PATH = INDEX_DIR / "index.faiss"
 BM25_INDEX_PATH = INDEX_DIR / "bm25.pkl"
@@ -62,6 +64,11 @@ E5_QUERY_PREFIX = "query: "
 E5_PASSAGE_PREFIX = "passage: "
 
 # --- Segmentacion ---------------------------------------------------------
+
+# Encabezado contextual de cada articulo de norma: epigrafe ("TERMINACION DEL
+# CONTRATO POR JUSTA CAUSA") y ubicacion (Libro/Titulo/Capitulo) del scraping,
+# que antes se descartaban. Solo afecta la ingesta (ingest_raw_sources.py).
+CHUNK_HEADINGS = os.environ.get("CHUNK_HEADINGS", "0") == "1"
 
 SEGMENT_WINDOW_WORDS = 250
 SEGMENT_OVERLAP_SENTENCES = 2
