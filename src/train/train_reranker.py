@@ -48,6 +48,7 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-5)
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--save-steps", type=int, default=200)
+    ap.add_argument("--smoke", action="store_true", help="20 pasos en un directorio aparte (prueba)")
     args = ap.parse_args()
 
     import torch
@@ -57,6 +58,10 @@ def main() -> int:
     from sentence_transformers.cross_encoder.losses import BinaryCrossEntropyLoss
     from transformers.trainer_utils import get_last_checkpoint
 
+    global MODEL_DIR
+    if args.smoke:
+        MODEL_DIR = MODEL_DIR.with_name("reranker-ft-smoke")
+        shutil.rmtree(MODEL_DIR, ignore_errors=True)
     if args.fresh and MODEL_DIR.exists():
         shutil.rmtree(MODEL_DIR)
         # las rutas checkpoint-N se van a reutilizar: olvidar sus evaluaciones viejas
@@ -76,12 +81,15 @@ def main() -> int:
     loss = BinaryCrossEntropyLoss(model, pos_weight=pos_weight)
     evaluator = CrossEncoderRerankingEvaluator(samples=holdout, at_k=6, name="synth_holdout",
                                                batch_size=32)
-    targs = CrossEncoderTrainingArguments(
+    kw = dict(
         output_dir=str(MODEL_DIR), num_train_epochs=args.epochs, learning_rate=args.lr,
         per_device_train_batch_size=args.batch, warmup_ratio=0.1, bf16=True,
         eval_strategy="steps", eval_steps=args.save_steps, save_strategy="steps",
         save_steps=args.save_steps, save_total_limit=6, logging_steps=50, seed=13,
         report_to="none")
+    if args.smoke:
+        kw.update(max_steps=20, eval_steps=10, save_steps=10, logging_steps=5)
+    targs = CrossEncoderTrainingArguments(**kw)
     trainer = CrossEncoderTrainer(model=model, args=targs, train_dataset=train_ds, loss=loss,
                                   evaluator=evaluator)
     trainer.train(resume_from_checkpoint=last)
