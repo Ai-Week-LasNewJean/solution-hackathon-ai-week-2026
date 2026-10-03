@@ -1,4 +1,4 @@
-# Experimento A (2026-10-02 21:21, commit 32dc3cd)
+# Experimento A (2026-10-02 21:40, commit 1de7183)
 RESCRAPE_DIR=data/corpus_rescrape CHUNK_HEADINGS=0  fragmentos=121886
 sha256 chunks.jsonl: 7532e62c9a9244cd
 
@@ -16,5 +16,52 @@ directa      (n= 204)  @3 0.917  @6 0.951  @10 0.956
 norma        (n= 437)  @3 0.897  @6 0.941  @10 0.950
 providencia  (n= 163)  @3 0.853  @6 0.908  @10 0.933
 
-
-(La corrida e2e de las 21:18 fue invalida -- el decoder no cupo en VRAM y todo se abstuvo; se repite.)
+## evaluate.py --split sample
+{
+  "equipo": "sample",
+  "split": "sample",
+  "validacion": {
+    "errores": 0,
+    "detalle": []
+  },
+  "cerradas": {
+    "n": 15,
+    "aciertos": 11,
+    "accuracy": 0.7333333333333333,
+    "referencia": 0.905,
+    "puntos": 14.67
+  },
+  "citas": {
+    "items_evaluados": 41,
+    "n_ref": 49,
+    "n_citadas": 76,
+    "aciertos": 29,
+    "aciertos_respaldados": 29,
+    "aciertos_sin_respaldo": 0,
+    "incorrectas": 47,
+    "citas_sin_respaldo": 0,
+    "recall_citas_ponderado": 0.5918,
+    "tasa_sin_respaldo": 0.0,
+    "indice": 0.5918,
+    "puntos": 11.84
+  },
+  "abstencion": {
+    "items_evaluados": 43,
+    "abstuvo_bien": 0,
+    "abstuvo_de_mas": 0,
+    "respondio_bien": 30,
+    "respondio_mal": 13,
+    "calibracion": 0.6977,
+    "puntos": 6.98
+  },
+  "correccion_ragas": {
+    "estado": "pendiente (correr con --ragas)",
+    "puntos": null
+  },
+  "total_automatico": {
+    "obtenidos": 33.49,
+    "posibles": 50.0,
+    "de_100_del_ranking": 80.0,
+    "nota": "los 20 pts restantes son interfaz grafica, bitacora de corpus, video y reproducibilidad"
+  }
+}
