@@ -7,7 +7,12 @@ Sistema de respuesta a preguntas de derecho colombiano con un decoder abierto
 completa documentada en [`SPEC.md`](../ai-week-hackathon-2026/SPEC.md) del
 repositorio de la hackathon (no se versiona aqui).
 
-> **Estado (2026-10-02, tarde):** **Turing (GPU CUDA, RTX 4090) es la máquina
+> **Estado (2026-10-03, entrega):** misma recuperación y decoder que abajo + **agente de citación**
+> determinista (`src/generate/cite_builder.py`, `CITE_BUILDER_K=4`): **39.14/50** automáticos sin RAGAS en
+> `sample_50` (cerradas 14.67 · citación 16.33 · abstención 8.14), frente a 34.12 del mismo índice sin el
+> agente. Índice congelado de 106 237 fragmentos. Detalle en `SPEC.md` §19.
+>
+> **Estado anterior (2026-10-02, tarde):** **Turing (GPU CUDA, RTX 4090) es la máquina
 > canónica**; el Mac es auxiliar (`SPEC.md` secciones 11–12). Configuración activa: **Qwen3-8B**
 > (Q4_K_M) + reranker `bge-reranker-v2-m3` + pool BM25/denso top-100 → RRF 50 → top-6 + prompt
 > conciso para `semi_open`. Medido en Turing sobre las 50 preguntas de muestra: **32.20/50**
@@ -52,6 +57,7 @@ ingesta (qué se descartó y por qué) en `CORPUS.md` secciones 1 y 3.
 | Segmentación            | Regex `ARTÍCULO\s+\d+` (códigos/leyes); ventana deslizante ~250 palabras con solapamiento (jurisprudencia)    | Ver `Ejemplo de entrega/CORPUS.md` de los organizadores.                          |
 | Recuperación            | Híbrida: BM25 (`bm25s`) top-30 ∪ denso (`faiss.IndexFlatIP`) top-30, fusión RRF (k=60)                        | No requiere calibrar escalas entre BM25 y coseno.                                 |
 | Reordenamiento          | `BAAI/bge-reranker-v2-m3`, **activo por defecto** (`USE_RERANKER=0` lo apaga)                                 | Midió mejora con Qwen3 (33.19 vs 31.65); umbrales de abstención recalibrados a su escala sigmoide. |
+| Agente de citación      | `src/generate/cite_builder.py` (`CITE_BUILDER_K=4`), determinista, sin LLM: añade a `referencia_legal` / `justificacion` las normas de los 4 primeros pasajes de evidencia | Con la cita correcta recuperada, citarla no debe depender del decoder: el modelo omitía ~30% de las normas ya recuperadas. Citación 11.84 → 16.33 en `sample_50`, 0 citas sin respaldo. |
 | Mecanismo de abstención | Umbral sobre el score de recuperación (reranker: 0.10 / 0.02; RRF: 0.014 / 0.006) (`src/retrieve/sufficiency.py`), nunca autoevaluación del LLM | Evita una fuente extra de no-determinismo.                                        |
 
 Detalle completo de decisiones y justificación en `SPEC.md` (repo de la
@@ -178,12 +184,23 @@ Historial de las ramas anteriores (ya fusionadas) en `SPEC.md` sección 17.
    denso y disperso desde `indice/chunks.jsonl` en cualquiera de los dos
    casos — ese contrato (`chunks.jsonl` con al menos `doc_id`/`texto`) es lo
    que realmente los desacopla de cómo se llegó ahí.
-2. **Sistema agéntico** (`src/retrieve/`, `src/generate/`, `src/pipeline/`):
-   una pasada de recuperación híbrida + fusión RRF, decisión de suficiencia
-   determinista, y como máximo una llamada de generación con salida forzada
-   a JSON por gramática GBNF (`src/generate/grammars/`). `answer_one.py`
-   ensambla la respuesta final; `run_batch.py` corre el banco completo con
-   escritura incremental resiliente a fallos.
+2. **Sistema agéntico** (`src/retrieve/`, `src/generate/`, `src/pipeline/`): una cadena de etapas en la
+   que cada una refina la evidencia de la anterior, con la idea de que lo difícil es encontrar la cita
+   correcta y, una vez encontrada, responder es trivial:
+   1. **Recuperador**: BM25 (con stemming) top-100 ∪ denso top-100, fusión RRF → 50 candidatos.
+   2. **Reordenador**: cross-encoder `bge-reranker-v2-m3` → top-6 al prompt; su score decide de forma
+      determinista responder / reintentar / abstenerse (`sufficiency.py`).
+   3. **Redactor**: Qwen3-8B, una llamada con salida forzada a JSON por gramática GBNF
+      (`src/generate/grammars/`); `citation_check.py` descarta respuestas con citas inventadas.
+   4. **Agente de citación** (`cite_builder.py`): extrae con `citations.extract` las normas de los 4
+      primeros pasajes y las agrega como "Fuentes en la evidencia" en `referencia_legal` (abiertas
+      cortas) o `justificacion` (cerradas), campos que no lee el juez de RAGAS. Toda norma agregada
+      está en la evidencia entregada, así que queda respaldada por construcción.
+
+   Se probó además un **agente filtro con LLM** (`filter_agent.py`, `AGENT_FILTER=1`, apagado): Qwen3-8B
+   elige entre los 10–15 mejores del reranker. Midió peor que el reranker solo (recall de normas 0.70 vs
+   0.756; 35.47 vs 37.03 /50 de punta a punta), así que no está en la entrega. `answer_one.py` ensambla
+   la respuesta; `run_batch.py` corre el banco con escritura incremental resiliente a fallos.
 
 ## Resultados sobre las preguntas de muestra
 
@@ -197,6 +214,19 @@ configuración activa (Qwen3-8B + reranker, top-6):
 | Abstención calibrada                                     |                                                 6.51 |       10 |
 | Corrección texto libre (RAGAS, correctness 0.469)        |                                                14.08 |       30 |
 | **Total automático (sin RAGAS / con RAGAS)**             |                                  **32.20 / 46.28** | **50 / 80** |
+
+**Configuración de la entrega (2026-10-03, + agente de citación k=4, índice de 106 237 fragmentos):**
+
+| Componente | Sin agente de citación | Con agente (k=4) | Posibles |
+|---|---:|---:|---:|
+| Exactitud en cerradas (11/15) | 14.67 | 14.67 | 20 |
+| Calidad de citación | 12.24 | **16.33** | 20 |
+| Abstención calibrada | 7.21 | **8.14** | 10 |
+| **Total automático sin RAGAS** | 34.12 | **39.14** | **50** |
+
+El texto que ve el juez de RAGAS no cambia (el agente solo escribe en campos que el juez no lee).
+Barrido de k (normas de los k primeros pasajes) sobre la entrega del viernes: k=2 37.16, k=4 37.57,
+k=6 37.97 /50, con 4.6 / 7.4 / 9.7 normas por respuesta; k=4 equilibra puntaje y relleno (`SPEC.md` §19).
 
 Evolución (sin RAGAS): 26.61 (Mac, Llama, 10-01) → 22.10 (Turing, Llama) → 31.65 (Qwen3) → 33.19 (Qwen3 +
 reranker) → 32.20 con pool ampliado y prompt conciso, que sube RAGAS 0.418 → 0.469 (total 45.73 → 46.28/80; `SPEC.md` 12). Comparación de 6 decoders ≤8B (Llama-3.1, Mistral-7B-v0.3, Qwen2.5-7B, Aya-Expanse-8B,
@@ -251,8 +281,9 @@ la corrida que produce `submissions.jsonl` usa siempre un único candidato fijo.
    voto por permutación de opciones (`MC_VOTES`) y Qwen3-8B Q8_0; todos 10/15. Fallan siempre 128, 528
    y 671 (huecos de corpus/conocimiento). Los flags quedan apagados.
 5. **Citación:** el modelo cita providencias pero a menudo omite la Constitución o el código del que sale
-   el artículo; el prompt `semi_open` v2 sube el puntaje de citación de 11.84 a 12.24 sin costo en la
-   respuesta. Una versión más agresiva (v1) subió citación pero bajó RAGAS, y se descartó.
+   el artículo. El agente de citación lo compensa sin tocar la respuesta, pero solo puede citar lo que el
+   reranker deja en el top-4: si la norma correcta no se recuperó (recall@6 0.833), no se cita. En
+   `open_ended` no se aplica, porque sus cuatro campos van al juez de RAGAS.
 6. Los selectores de `src/ingest/parse_html.py`/`build_corpus.py` siguen sin verificar contra una descarga
    real (no se necesitaron: las fuentes llegaron parseadas en JSON).
 7. `determinism_check.py` y `latency_check.py` pasaron en Turing con la config del viernes; hay que
