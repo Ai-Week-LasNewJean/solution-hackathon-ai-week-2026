@@ -1,9 +1,8 @@
 # Informe técnico — Las NewJeans
 
 **Hackathon 2026 · Universidad de los Andes**
-**Integrantes:**
 
-Máximo 3 páginas al exportar a PDF. Se entrega como `informe/INFORME_TECNICO.pdf`.
+**Integrantes:** Adrian Velasquez · Laura Juliana Ferreira · Andres Botero
 
 ---
 

@@ -29,7 +29,7 @@ repositorio de la hackathon (no se versiona aqui).
 
 | Recurso                             | Enlace            | Tamaño                                                     | Licencia  |
 |-------------------------------------|-------------------|------------------------------------------------------------|-----------|
-| Corpus procesado e índice vectorial | `<URL pendiente>` | ~685MB (`corpus/` 228MB + `indice/` 406MB + manifest 22MB) | CC-BY-4.0 |
+| Corpus procesado e índice vectorial | [OneDrive Uniandes](https://uniandes-my.sharepoint.com/:f:/g/personal/a_velasquezs_uniandes_edu_co/IgBEe8_5uid1RbtGIdbRA7JyAeJdfYUr2-egrLBN1oo_3DY?e=yEwWoC) | ~685MB (`corpus/` 228MB + `indice/` 406MB + manifest 22MB) | CC-BY-4.0 |
 
 El comprimido contendrá `LICENSE`, `corpus_manifest.json`, `corpus/` con los
 documentos procesados e `indice/` con `index.faiss`, `bm25.pkl` y
