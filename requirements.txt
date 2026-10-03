@@ -19,6 +19,7 @@ sentence-transformers>=6.1
 faiss-cpu>=1.15
 bm25s>=0.3
 rank_bm25>=0.2
+PyStemmer>=3.1          # BM25 con stemming (BM25_STEM=1, guardado en indice/bm25.pkl)
 
 llama-cpp-python>=0.3.35
 jsonschema>=4.26
