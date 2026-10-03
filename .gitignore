@@ -31,3 +31,6 @@ scripts/.env
 
 .DS_Store
 data/corpus_rescrape/
+
+# Banco de preguntas del sabado: nunca se versiona ni se indexa (regla del reto)
+data/test_992.jsonl

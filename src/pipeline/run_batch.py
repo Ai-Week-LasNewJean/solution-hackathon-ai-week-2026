@@ -5,6 +5,7 @@ trabajo ya hecho en los 991 restantes.
 from __future__ import annotations
 
 import json
+import os
 import sys
 import traceback
 from pathlib import Path
@@ -33,6 +34,10 @@ def main(split: str, out_path: Path, resume: bool = True, model_name: str | None
     corrida final que produce submissions.jsonl."""
     src_path = config.DATA / ("sample_50.jsonl" if split == "sample" else "test_992.jsonl")
     items = read_jsonl(src_path)
+    ids_file = os.environ.get("RAG_IDS_FILE")   # subconjunto (p.ej. items cuyo contexto cambio, retrieval_diff.py)
+    if ids_file:
+        keep = {int(x) for x in Path(ids_file).read_text().split()}
+        items = [it for it in items if it["id"] in keep]
 
     done_ids = _already_done(out_path) if resume else set()
     pending = [it for it in items if it["id"] not in done_ids]

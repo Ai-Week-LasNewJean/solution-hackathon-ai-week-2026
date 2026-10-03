@@ -1,0 +1,194 @@
+{
+ "meta": {
+  "fuente": "Normograma de la Cancillería",
+  "entidad": "decreto-333-2021",
+  "url": "https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_0333_2021.htm",
+  "total_documentos": 1
+ },
+ "documentos": [
+  {
+   "id": "decreto-333-2021",
+   "tipo": "decreto",
+   "numero": "333",
+   "anio": 2021,
+   "nombre": "DECRETO 333 DE 2021",
+   "epigrafe": "Por el cual se modifican las reglas de reparto de la acción de tutela (Decreto 1069 de 2015)",
+   "anotaciones": {
+    "fuente": "Normograma de la Cancillería",
+    "url": "https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_0333_2021.htm"
+   },
+   "estructura": [],
+   "articulos": [
+    {
+     "id": "pre-1",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "Por el cual se modifican los artículos 2.2.3.1.2.1 , 2.2.3.1.2.4 y 2.2.3.1.2.5 del Decreto número 1069 de 2015, único Reglamentario del sector Justicia y del Derecho, referente a las reglas de reparto de la acción de tutela. EL PRESIDENTE DE LA REPÚBLICA DE COLOMBIA, en ejercicio de las facultades consagradas en el numeral 11 del artículo 189 de la Constitución Política, y CONSIDERANDO: Que el artículo 228 de la Constitución Política prevé que el funcionamiento de la administración de justicia será desconcentrado y autónomo. En concordancia con ello, el artículo 50 de la Ley 270 de 1996 consagra que “Con el objeto de desconcentrar el funcionamiento de la administración de justicia, y sin perjuicio de lo dispuesto en normas especiales, para efectos judiciales, el territorio de la nación se divide en distritos judiciales o distritos judiciales administrativos y estos en circuitos [...].” Que la Corte Constitucional en Sentencia C-833 del 11 de octubre de 2006 señaló que: “Una de las características sustanciales de un Estado unitario como el colombiano, sobre la base de la centralización política, es la unidad de las leyes y de la función judicial en todo el territorio del mismo, cuya creación y ejercicio, respectivamente, están a cargo de la Nación o poder central. Ello explica que el artículo 228 de la Constitución establezca que el funcionamiento"
+    },
+    {
+     "id": "pre-2",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "de la administración de justicia será desconcentrado, esto es, que la misma operará mediante la atribución de dicha función, mediante leyes y reglamentos, a órganos de orden nacional situados en diversos lugares del territorio del Estado, con un campo de acción circunscrito y en todo caso de menor amplitud que aquel”. Que el inciso primero del artículo 86 de la Constitución Política prevé que “Toda persona tendrá acción de tutela para reclamar ante los jueces, en todo momento y lugar, mediante un procedimiento preferente y sumario, por sí misma o por quien actúe a su nombre, la protección inmediata de sus derechos constitucionales fundamentales, cuando quiera que estos resulten vulnerados o amenazados por la acción o la omisión de cualquier autoridad pública”. Que mediante Decreto número 2591 de 1991 se reglamentó la acción de tutela, y el artículo 10 consagra que el Defensor del Pueblo y los personeros municipales están legitimados para ejercer la acción de tutela. De acuerdo con los artículos 46 y 47 ibídem, el Defensor del Pueblo puede “[...] interponer acción de tutela en nombre de cualquier persona que se lo solicite o que esté en situación de desamparo e indefensión.”, y será considerado parte en el proceso. Que los personeros municipales por delegación expresa del Defensor del Pueblo, pueden interponer acciones de tutela o representarlo en"
+    },
+    {
+     "id": "pre-3",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "las que interponga directamente. Que el artículo 37 del Decreto número 2591 de 1991 establece que “Son competentes para conocer de la acción de tutela, a prevención, los jueces o tribunales con jurisdicción en el lugar donde ocurriere la violación o la amenaza que motivaren la presentación de la solicitud”. Que la honorable Corte Constitucional, en Auto 044 del 28 de septiembre de 1995 interpretó que la expresión “a prevención” se refiere a “[...] que un juez conoce de una causa con exclusión de otros que eran igualmente competentes, por habérseles anticipado en el conocimiento de ella”. Que el artículo 1o del Decreto número 1382 del 2000, modificado por el Decreto 1983 de 2017 estableció las reglas de reparto de la acción de tutela. Estos Decretos fueron compilados en el artículo 2.2.3.1.2.1 del Decreto número 1069 de 2015, Único Reglamentario del Sector Justicia y del Derecho. Que el honorable Consejo de Estado en sentencia de fecha 18 de julio de 2002, decidió una demanda de nulidad por inconstitucionalidad contra el Decreto número 1382 de 2000 y argumentó que “[...] el Presidente de la República, mediante el Decreto número 1382 de 2000, ejerció la potestad reglamentaria respecto de una norma con fuerza de ley, es decir, dentro del ámbito de la competencia que le asigna el artículo 189-11 de la Constitución”."
+    },
+    {
+     "id": "pre-4",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "Que asimismo, el honorable Consejo de Estado en sentencia del 18 de julio de 2002 determinó que las reglas de reparto contenidas en el Decreto 1382 de 2000 son necesarias para “[...] lograr la desconcentración de la Administración de Justicia, imperativo constitucional y legal que se extiende a la acción de tutela y que resultaría imposible si llegaran a reunirse en un mismo órgano judicial innumerables solicitudes de amparo, como ocurriría, por ejemplo, en un tribunal superior, ante el empeño de los solicitantes por contar con una sentencia de segundo grado dictada por la Corte Suprema de Justicia. En ésta situación y en otras similares, se frustraría el principio de desconcentración de la Administración de Justicia a pretexto de una facultad ilimitada para escoger al Juez, que desde luego ni la Constitución ni las leyes establecen. En segundo término, porque el reglamento respeta la competencia «a prevención» al facultar a los solicitantes para ocurrir ante jueces o tribunales de cualquier especialidad. Así mismo, garantiza el derecho a reclamar la protección en todo lugar, porque ningún Juez podrá rechazar la solicitud aduciendo no ser competente, sino que tendrá que enviarla a quien lo sea”. Que en este sentido, el Alto Tribunal de lo Contencioso Administrativo adujo en la misma sentencia, que “[...] ni la Constitución ni la ley pueden interpretarse en"
+    },
+    {
+     "id": "pre-5",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "el sentido de disponer que la solicitud de tutela sea resuelta por el Despacho que elija el reclamante, sin atender en absoluto al principio de desconcentración proclamado en el artículo 228 de la Carta, ni a la «proporcionalidad de cargas de trabajo» que según el inciso segundo del artículo 50 de la Ley Estatutaria resulta imprescindible para la cumplida administración de justicia”. Que igualmente, la honorable Corte Constitucional mediante Auto 124 del 25 de marzo de 2009, providencia hito en asuntos de reparto y de competencia de la acción de tutela, enfatizó que “[...] las únicas normas que determinan la competencia en materia de tutela son el artículo 86 de la Constitución, que señala que esta se puede interponer ante cualquier juez, y el artículo 37 del Decreto número 2591 de 1991, que establece la competencia territorial y la de las acciones de tutela que se dirijan contra los medios de comunicación. Mientras que el Decreto reglamentario 1382 de 2000 contiene reglas de simple reparto”. Que en la precitada providencia, la honorable Sala Plena de la Corte Constitucional estableció las siguientes reglas jurisprudenciales: (i) un error en la aplicación o interpretación de las reglas de competencia contenidas en el artículo 37 del Decreto número 2591 de 1991 puede llevar al juez de tutela a declararse incompetente. La autoridad judicial debe,"
+    },
+    {
+     "id": "pre-6",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "en estos casos, remitir el expediente al juez que considere competente con la mayor celeridad posible, (ii) la equivocación en la aplicación o interpretación de las reglas de reparto contenidas en el Decreto 1382 de 2000 no autoriza al juez de tutela a declararse incompetente y, mucho menos, a declarar la nulidad de lo actuado por falta de competencia. El juez de tutela debe, en estos casos, tramitar la acción o decidir la impugnación, según el caso, (iii) los únicos conflictos de competencia que existen en materia de tutela son los que se presentan por la aplicación o interpretación del artículo 37 del Decreto número 2591 de 1991. Estos conflictos serán decididos, en principio, por el superior jerárquico común de las autoridades judiciales involucradas o, en su ausencia, por la Corte Constitucional, (iv) ninguna discusión por la aplicación o interpretación del Decreto número 1382 de 2000 genera conflicto de competencia, ni siquiera aparente. Que la referida providencia señaló que, en el caso de que dos autoridades judiciales promuevan un conflicto de competencia por este motivo, el expediente será remitido a aquella a quien se repartió en primer lugar con el fin de que la acción de tutela sea decidida inmediatamente. Lo anterior, sin perjuicio de que la Corte Constitucional o el superior funcional al que sea enviado el supuesto conflicto"
+    },
+    {
+     "id": "pre-7",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "de competencia, proceda a devolver el asunto, conforme a las reglas de reparto del Decreto número 1382 de 2000, en aquellos supuestos en que se presente una distribución caprichosa de la acción de tutela fruto de una manipulación grosera de las reglas de reparto contenidas en el mencionado acto administrativo. Que asuntos como: (i) las actuaciones del Presidente de la República, incluyendo las relacionadas con la seguridad nacional, (ii) las actuaciones administrativas, políticas, programas y/o estrategias del Gobierno nacional, autoridades, organismos, consejos o entidades públicas relacionadas con la erradicación de cultivos ilícitos, (iii) las acciones de tutela presentadas por funcionarios o empleados que pertenezcan o pertenecieron a la rama judicial (iv) las decisiones tomadas por la Superintendencia Nacional de Salud relacionadas con medidas cautelares y de toma de posesión e intervención forzosa administrativa para administrar o liquidar, de cesación provisional, o de revocatoria total o parcial de habilitación o autorización de funcionamiento, con fundamento en los artículos 124 y 125 de la Ley 1438 de 2011, deben ser debatidos por órganos judiciales que refuercen la desconcentración de la administración de justicia, preserven la jerarquía funcional, y garanticen la unificación jurisprudencial y el interés general. Que de conformidad con lo previsto en los artículos 188 y 189 de la Constitución Política, el Presidente de la República simboliza la unidad nacional, y,"
+    },
+    {
+     "id": "pre-8",
+     "numero": null,
+     "etiqueta": "CONSIDERANDOS",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "en tal condición, actúa “como Jefe de Estado, Jefe de Gobierno y Suprema Autoridad Administrativa”, cumpliendo las funciones previstas en tales mandatos. Que en atención a las funciones que le corresponde cumplir como Jefe de Estado, Jefe de Gobierno y Suprema Autoridad Administrativa (C.P. art. 189 ), y dadas las implicaciones que ellas tienen a nivel interno –para la sociedad y el país– y también en el orden internacional, se justifica que las decisiones que adopte, en caso de que las mismas sean objeto de la acción de tutela, solo sean revisadas por los máximos tribunales. Que lo anterior no solo busca proteger la seguridad jurídica, sino garantizar la satisfacción del interés general mediante el control judicial de las decisiones que se adoptan en representación y en beneficio de la colectividad, protegiendo los intereses de los accionantes y accionados. Que en mérito de lo expuesto, DECRETA"
+    },
+    {
+     "id": "art-1",
+     "numero": "1",
+     "etiqueta": "ARTÍCULO 1.",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "MODIFICACIÓN DEL ARTÍCULO 2.2.3.1.2.1 DEL DECRETO NÚMERO 1069 DE 2015. Modifíquese el artículo 2.2.3.1.2.1 del Decreto 1069 de 2015, el cual quedará así: “Artículo 2.2.3.1.2.1 . Reparto de la acción de tutela. Para los efectos previstos en el artículo 37 del Decreto número 2591 de 1991, conocerán de la acción de tutela, a prevención, los jueces con jurisdicción donde ocurriere la violación o la amenaza que motivare la presentación de la solicitud o donde se produjeren sus efectos, conforme a las siguientes reglas: 1. Las acciones de tutela que se interpongan contra cualquier autoridad, organismo o entidad pública del orden departamental, distrital o municipal y contra particulares serán repartidas, para su conocimiento en primera instancia, a los Jueces Municipales. 2. Las acciones de tutela que se interpongan contra cualquier autoridad, organismo o entidad pública del orden nacional serán repartidas, para su conocimiento en primera instancia, a los Jueces del Circuito o con igual categoría. 3. Las acciones de tutela dirigidas contra las actuaciones del Contralor General de la República, del Procurador General de la Nación, del Fiscal General de la Nación, del Registrador Nacional del Estado Civil, del Defensor del Pueblo, del Auditor General de la República, del Contador General de la Nación, del Consejo Nacional Electoral, así como, las decisiones tomadas por la Superintendencia Nacional de Salud relacionadas con medidas cautelares y de toma de posesión e intervención forzosa administrativa para administrar o liquidar, de cesación provisional, o de revocatoria total o parcial de habilitación o autorización de funcionamiento, con fundamento en los artículos 124 y 125 de la Ley 1438 de 2011, serán repartidas, a los Tribunales Superiores de Distrito Judicial o a los Tribunales Administrativos. 4. Las acciones de tutela dirigidas contra las actuaciones de los Fiscales y Procuradores serán repartidas, para su conocimiento en primera instancia,"
+    },
+    {
+     "id": "art-1-2",
+     "numero": "1",
+     "etiqueta": "ARTÍCULO 1 (cont.)",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "al respectivo superior funcional de la autoridad judicial ante quien intervienen. Para el caso de los Fiscales que intervienen ante Tribunales o Altas Cortes, conocerán en primera instancia y a prevención, los Tribunales Superiores de Distrito Judicial. Para el caso de los Procuradores que intervienen ante Tribunales o Altas Cortes, conocerán en primera instancia y a prevención, los Tribunales Administrativos. 5. Las acciones de tutela dirigidas contra los Jueces o Tribunales serán repartidas, para su conocimiento en primera instancia, al respectivo superior funcional de la autoridad jurisdiccional accionada. 6. Las acciones de tutela dirigidas contra los Consejos Seccionales de la Judicatura y las Comisiones Seccionales de Disciplina Judicial serán repartidas, para su conocimiento en primera instancia, a los Tribunales Superiores de Distrito Judicial. 7. Las acciones de tutela dirigidas contra la Corte Suprema de Justicia y el Consejo de Estado serán repartidas, para su conocimiento en primera instancia, a la misma Corporación y se resolverá por la Sala de Decisión, Sección o Subsección que corresponda de conformidad con el reglamento al que se refiere el artículo 2.2.3.1.2.4 del presente decreto. 8. Las acciones de tutela dirigidas contra el Consejo Superior de la Judicatura y la Comisión Nacional de Disciplina Judicial serán repartidas para su conocimiento en primera instancia, a la Corte Suprema de Justicia o al Consejo de Estado, y se resolverá por la Sala de Decisión, Sección o Subsección que corresponda de conformidad con el reglamento al que se refiere el artículo 2.2.3.1.2.4 del presente decreto. Cuando se trate de acciones de tutela presentadas por funcionarios o empleados judiciales, que pertenezcan o pertenecieron a la jurisdicción ordinaria, el conocimiento corresponderá a la jurisdicción de lo contencioso administrativo, y cuando se trate de acciones de tutela presentadas por funcionarios o empleados judiciales, que pertenezcan o pertenecieron a la jurisdicción de"
+    },
+    {
+     "id": "art-1-3",
+     "numero": "1",
+     "etiqueta": "ARTÍCULO 1 (cont.)",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "lo contencioso administrativo, el conocimiento corresponderá a la jurisdicción ordinaria. En los demás casos de tutelas promovidas por funcionarios o empleados judiciales, las acciones de tutela serán conocidas por la Corte Suprema de Justicia o el Consejo de Estado. 9. Las acciones de tutela dirigidas contra los Tribunales de Arbitraje serán repartidas, para su conocimiento en primera instancia, a la autoridad judicial que conoce del recurso de anulación. 10. Las acciones de tutela dirigidas contra autoridades administrativas en ejercicio de funciones jurisdiccionales, conforme al artículo 116 de la Constitución Política, serán repartidas, para su conocimiento en primera instancia, a los Tribunales Superiores de Distrito Judicial. 11. Cuando la acción de tutela se promueva contra más de una autoridad y estas sean de diferente nivel, el reparto se hará al juez de mayor jerarquía, de conformidad con las reglas establecidas en el presente artículo. 12. Las acciones de tutela dirigidas contra las actuaciones del Presidente de la República, incluyendo las relacionadas con seguridad nacional, así como, las actuaciones administrativas, políticas, programas y/o estrategias del Gobierno nacional, autoridades, organismos, consejos o entidades públicas relacionadas con la erradicación de cultivos ilícitos, serán repartidas para su conocimiento en primera instancia, al Consejo de Estado. PARÁGRAFO 1o. Si conforme a los hechos descritos en la solicitud de tutela el juez no es el competente según lo dispuesto en el artículo 37 del Decreto número 2591 de 1991, este deberá enviarla al juez que lo sea a más tardar al día siguiente de su recibo, previa comunicación a los interesados. PARÁGRAFO 2o. Las anteriores reglas de reparto no podrán ser invocadas por ningún juez para rechazar la competencia o plantear conflictos negativos de competencia. PARÁGRAFO 3o. Las reglas de repartos previstas en este artículo no restringen el acceso a la administración de justicia. Las personas pueden"
+    },
+    {
+     "id": "art-1-4",
+     "numero": "1",
+     "etiqueta": "ARTÍCULO 1 (cont.)",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "interponer la acción de tutela ante cualquier juzgado, el cual tendrá la obligación de remitir el caso a la corporación judicial que corresponda. También se podrá solicitar la asistencia del Defensor del Pueblo o de los personeros municipales para interponer la acción de tutela. El Defensor del Pueblo o los personeros municipales, en el marco de sus competencias, deberán presentar la acción de tutela a la corporación judicial que corresponda el caso, de conformidad con las reglas de reparto previstas en el presente decreto."
+    },
+    {
+     "id": "art-2",
+     "numero": "2",
+     "etiqueta": "ARTÍCULO 2.",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "MODIFICACIÓN DEL ARTÍCULO 2.2.3.1.2.4 DEL DECRETO NÚMERO 1069 DE 2015. Modifíquese el artículo 2.2.3.1.2.4 . del Decreto número 1069 de 2015, el cual quedará así: “Artículo 2.2.3.1.2.4 . Los reglamentos internos de la Corte Suprema de Justicia y del Consejo de Estado podrán determinar que los asuntos relacionados con el conocimiento de la impugnación de fallos de acción de tutela sean resueltos por salas de decisión, secciones o subsecciones conformadas para tal fin. Así mismo determinará la conformación de salas de decisión, secciones o subsecciones para el conocimiento de las acciones de tutela que se ejerzan contra actuaciones de la propia corporación, a las que se refiere el numeral 7 del artículo 2.2.3.1.2.1 del presente decreto. PARÁGRAFO 1o. Estos reglamentos internos deberán prever los asuntos relacionados en los numerales 8 y 12 del artículo 2.2.3.1.2.1 del Decreto número 1069 de 2015”."
+    },
+    {
+     "id": "art-3",
+     "numero": "3",
+     "etiqueta": "ARTÍCULO 3.",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "MODIFICACIÓN DEL ARTÍCULO 2.2.3.1.2.5 DEL DECRETO NÚMERO 1069 DE 2015. Modifíquese el artículo 2.2.3.1.2.5 del Decreto 1069 de 2015, el cual quedará así: “Artículo 2.2.3.1.2.5 . Transitoriedad. Las reglas contenidas en el presente decreto solo se aplicarán a las solicitudes de tutela que se presenten con posterioridad al 6 de abril de 2021. Las solicitudes de tutela presentadas con anterioridad a esta fecha serán resueltas por el juez a quien hubieren sido repartidas, así como la impugnación de sus fallos”."
+    },
+    {
+     "id": "art-4",
+     "numero": "4",
+     "etiqueta": "ARTÍCULO 4.",
+     "nombre": "",
+     "tipo": "permanente",
+     "ubicacion": [],
+     "referencias": [],
+     "anotaciones": {},
+     "texto": "VIGENCIA. El presente decreto rige a partir de su publicación y modifica los artículos 2.2.3.1.2.1 , 2.2.3.1.2.4 y 2.2.3.1.2.5 del Decreto número 1069 de 2015. Publíquese y cúmplase. Dado en Bogotá D.C., a 6 de abril de 2021. IVÁN DUQUE MÁRQUEZ El Ministro de Justicia y del Derecho, Wilson Ruiz Orejuela Disposiciones analizadas por Avance Jurídico Casa Editorial S.A.S.© \"Normograma del Ministerio de Relaciones Exteriores\" ISSN [2256-1633 (En linea)] Última actualización: 30 de septiembre de 2024 - (Diario Oficial No. 52.869 - 4 de septiembre de 2024) Las notas de vigencia, concordancias, notas del editor, forma de presentación y disposición de la compilación están protegidas por las normas sobre derecho de autor. En relación con estos valores jurídicos agregados, se encuentra prohibido por la normativa vigente su aprovechamiento en publicaciones similares y con fines comerciales, incluidas -pero no únicamente- la copia, adaptación, transformación, reproducción, utilización y divulgación masiva, así como todo otro uso prohibido expresamente por la normativa sobre derechos de autor, que sea contrario a la normativa sobre promoción de la competencia o que requiera autorización expresa y escrita de los autores y/o de los titulares de los derechos de autor. En caso de duda o solicitud de autorización puede comunicarse al teléfono 617-0729 en Bogotá, extensión 101. El ingreso a la página supone la aceptación sobre las normas de uso de la información aquí contenida."
+    }
+   ],
+   "completo": true,
+   "partes_incluidas": [
+    0
+   ]
+  }
+ ]
+}

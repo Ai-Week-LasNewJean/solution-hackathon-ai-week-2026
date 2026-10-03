@@ -141,6 +141,25 @@ def _answer_text_for_check(formato: str, data: dict) -> str:
                      for k in ("marco_normativo", "analisis", "jurisprudencia", "conclusion"))
 
 
+def final_retrieval(item: dict) -> tuple[list[Passage], str]:
+    """Recuperacion completa de answer() hasta la decision (incluida la unica
+    recuperacion ampliada de "retry"). Lo que ve el decoder depende solo de
+    (item, pasajes finales): src/validate/retrieval_diff.py la reutiliza para
+    saber que items cambian de contexto al cambiar de indice."""
+    query = _build_query(item)
+
+    ranked = _retrieve_ranked(query)
+    decision = sufficiency.decide(ranked)
+
+    if decision == "retry":
+        # unica recuperacion ampliada: mas candidatos antes de fusionar/recortar
+        ranked = retrieve(query_expand.expand(query), k_bm25=config.K_BM25 * 2,
+                           k_dense=config.K_DENSE * 2, top_k=config.FUSED_TOP_K)
+        ranked = rerank.rerank(query, ranked, top_k=config.FINAL_TOP_K)
+        decision = sufficiency.decide(ranked)
+    return ranked, decision
+
+
 def answer(item: dict, model_name: str | None = None) -> dict:
     """item: una fila de sample_50.jsonl / test_992.jsonl (trae al menos id,
     formato, pregunta, y opciones si es multiple_choice).
@@ -153,17 +172,7 @@ def answer(item: dict, model_name: str | None = None) -> dict:
     Devuelve un dict listo para escribirse como linea de submissions.jsonl,
     validado por schema/submission.schema.json."""
     t0 = time.monotonic()
-    query = _build_query(item)
-
-    ranked = _retrieve_ranked(query)
-    decision = sufficiency.decide(ranked)
-
-    if decision == "retry":
-        # unica recuperacion ampliada: mas candidatos antes de fusionar/recortar
-        ranked = retrieve(query_expand.expand(query), k_bm25=config.K_BM25 * 2,
-                           k_dense=config.K_DENSE * 2, top_k=config.FUSED_TOP_K)
-        ranked = rerank.rerank(query, ranked, top_k=config.FINAL_TOP_K)
-        decision = sufficiency.decide(ranked)
+    ranked, decision = final_retrieval(item)
 
     pasajes = [_to_pasaje_dict(p) for p in ranked]
 
