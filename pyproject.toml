@@ -1,0 +1,64 @@
+[project]
+name = "solution-hackathon-ai-week-2026"
+version = "0.1.0"
+description = "Sistema RAG de derecho colombiano -- AI Week Hackathon 2026 (equipo Las NewJeans)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "requests==2.32.5",
+    "beautifulsoup4==4.14.3",
+    "lxml==6.1.3",
+    "pymupdf==1.28.2",
+    "pdfplumber==0.11.10",
+    "pytesseract==0.3.13",
+    "pdf2image==1.17.0",
+    "sentence-transformers==6.1.0",
+    "faiss-cpu==1.15.1",
+    "bm25s==0.3.11",
+    "rank-bm25==0.2.2",
+    "llama-cpp-python==0.3.35",
+    "jsonschema==4.26.0",
+    "streamlit==1.64.0",
+    "python-dotenv==1.2.3",
+]
+
+# Versiones fijas a lo instalado en la venv "venvml" global (Python 3.12.14)
+# al momento de escribir este scaffolding -- correr `uv lock` despues de
+# tocar esta lista y commitear el uv.lock resultante para que "uv sync"
+# reproduzca exactamente lo mismo en cualquier maquina del equipo.
+
+[project.optional-dependencies]
+# scripts/evaluate.py --ragas (scripts/requirements-evaluador.txt, sin
+# modificar). No se necesita para generar submissions.jsonl, solo para
+# puntuar con el juez de texto libre: `uv sync --extra evaluador`.
+evaluador = [
+    "ragas>=0.4.3,<0.5",
+    "datasets>=2.20",
+    "langchain-openai>=0.2",
+    "langchain-huggingface>=0.1",
+    "sentence-transformers>=3.0",
+    "langchain-community<0.4",
+]
+dev = [
+    "ruff>=0.12",
+]
+
+[tool.uv]
+# Proyecto "aplicacion", no libreria: src/ se ejecuta en el sitio
+# (python src/main.py / python -m src.main, ver src/main.py), nunca se
+# empaqueta ni se importa como dependencia de otro proyecto.
+package = false
+
+# --- Nota de compilacion: llama-cpp-python y el backend GPU ----------------
+# El backend (Metal en Mac, CUDA en Turing) se elige por variable de entorno
+# al construir, no por pyproject.toml (SPEC.md seccion 2/3):
+#
+#   Mac (Metal):    CMAKE_ARGS="-DGGML_METAL=on" FORCE_CMAKE=1 uv sync
+#   Turing (CUDA):  CMAKE_ARGS="-DGGML_CUDA=on"  FORCE_CMAKE=1 uv sync
+#
+# Sin esas variables, llama-cpp-python igual instala pero cae a CPU puro.
+#
+# EN LA SALA TURING ESA RECETA NO SIRVE (nvcc del sistema 11.5, sin sudo): usar
+# el wheel precompilado cu130 DESPUES de cualquier uv sync, y no volver a
+# sincronizar (SPEC.md seccion 16):
+#   uv pip install --python .venv/bin/python --no-deps --reinstall \
+#     "llama-cpp-python==0.3.36" --index-url https://abetlen.github.io/llama-cpp-python/whl/cu130

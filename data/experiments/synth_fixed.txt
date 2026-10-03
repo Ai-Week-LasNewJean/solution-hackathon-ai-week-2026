@@ -1,0 +1,30 @@
+# Acierto@k, preguntas sinteticas, MISMO conjunto de 600 para las tres variantes (reranker), 2026-10-02 21:38
+
+## base
+n=600  rerank=True  index=/home/sis.virtual.uniandes.edu.co/a.velasquezs/ai-week/solution-hackathon-ai-week-2026/indice
+all          (n= 600)  @3 0.915  @6 0.945  @10 0.955
+caso         (n= 210)  @3 0.910  @6 0.938  @10 0.957
+con_norma    (n= 201)  @3 0.930  @6 0.970  @10 0.975
+directa      (n= 189)  @3 0.905  @6 0.926  @10 0.931
+norma        (n= 439)  @3 0.927  @6 0.952  @10 0.964
+providencia  (n= 161)  @3 0.882  @6 0.925  @10 0.932
+
+## A
+(5 preguntas sin su articulo de origen en este indice, omitidas)
+n=595  rerank=True  index=../exp_index/A/indice
+all          (n= 595)  @3 0.901  @6 0.931  @10 0.938
+caso         (n= 208)  @3 0.870  @6 0.909  @10 0.923
+con_norma    (n= 201)  @3 0.930  @6 0.970  @10 0.975
+directa      (n= 186)  @3 0.903  @6 0.914  @10 0.914
+norma        (n= 434)  @3 0.908  @6 0.933  @10 0.940
+providencia  (n= 161)  @3 0.882  @6 0.925  @10 0.932
+
+## B
+(5 preguntas sin su articulo de origen en este indice, omitidas)
+n=595  rerank=True  index=../exp_index/B/indice
+all          (n= 595)  @3 0.894  @6 0.931  @10 0.939
+caso         (n= 208)  @3 0.856  @6 0.909  @10 0.923
+con_norma    (n= 201)  @3 0.930  @6 0.965  @10 0.970
+directa      (n= 186)  @3 0.898  @6 0.919  @10 0.925
+norma        (n= 434)  @3 0.901  @6 0.933  @10 0.942
+providencia  (n= 161)  @3 0.876  @6 0.925  @10 0.932

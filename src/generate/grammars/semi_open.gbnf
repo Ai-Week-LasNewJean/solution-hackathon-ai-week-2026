@@ -1,0 +1,15 @@
+# Gramatica GBNF para el formato semi_open. "respuesta" debe quedar entre 3 y
+# 5 oraciones / <=150 palabras por el propio prompt (src/generate/prompts) --
+# la gramatica solo garantiza la forma JSON, el largo se recorta
+# deterministicamente en formatter.py si hace falta.
+#
+# NOTA: una regla por linea -- ver el comentario en multiple_choice.gbnf
+# sobre por que un cuerpo de regla multilinea revienta la generacion real
+# aunque LlamaGrammar.from_file() lo valide sin quejarse.
+root ::= "{" ws "\"respuesta\"" ws ":" ws string ws "," ws "\"palabras_clave\"" ws ":" ws lista ws "," ws "\"referencia_legal\"" ws ":" ws string ws "}"
+lista ::= "[" ws "]" | "[" ws string (ws "," ws string)* ws "]"
+string ::= "\"" char* "\""
+char ::= [^"\\] | "\\" escapado
+escapado ::= ["\\/bfnrt] | "u" hex hex hex hex
+hex ::= [0-9a-fA-F]
+ws ::= [ \t\n]*

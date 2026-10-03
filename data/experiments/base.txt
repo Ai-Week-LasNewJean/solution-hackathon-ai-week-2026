@@ -1,0 +1,51 @@
+# Referencia: indice congelado indice/ (2026-10-02 21:51, commit a0b3f45)
+
+## evaluate.py --split sample
+{
+  "equipo": "sample",
+  "split": "sample",
+  "validacion": {
+    "errores": 0,
+    "detalle": []
+  },
+  "cerradas": {
+    "n": 15,
+    "aciertos": 11,
+    "accuracy": 0.7333333333333333,
+    "referencia": 0.905,
+    "puntos": 14.67
+  },
+  "citas": {
+    "items_evaluados": 41,
+    "n_ref": 49,
+    "n_citadas": 81,
+    "aciertos": 30,
+    "aciertos_respaldados": 30,
+    "aciertos_sin_respaldo": 0,
+    "incorrectas": 51,
+    "citas_sin_respaldo": 0,
+    "recall_citas_ponderado": 0.6122,
+    "tasa_sin_respaldo": 0.0,
+    "indice": 0.6122,
+    "puntos": 12.24
+  },
+  "abstencion": {
+    "items_evaluados": 43,
+    "abstuvo_bien": 0,
+    "abstuvo_de_mas": 0,
+    "respondio_bien": 31,
+    "respondio_mal": 12,
+    "calibracion": 0.7209,
+    "puntos": 7.21
+  },
+  "correccion_ragas": {
+    "estado": "pendiente (correr con --ragas)",
+    "puntos": null
+  },
+  "total_automatico": {
+    "obtenidos": 34.12,
+    "posibles": 50.0,
+    "de_100_del_ranking": 80.0,
+    "nota": "los 20 pts restantes son interfaz grafica, bitacora de corpus, video y reproducibilidad"
+  }
+}

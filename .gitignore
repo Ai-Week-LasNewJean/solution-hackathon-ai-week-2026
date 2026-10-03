@@ -1,0 +1,33 @@
+# IDE
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Corpus crudo, corpus procesado e indice: no caben ni deben versionarse en
+# el repo (SPEC.md seccion 4 / entregables/sabado/README.md) -- se depositan
+# en la nube y se enlazan desde el README. corpus_manifest.json SI se
+# versiona (es metadata pequena, no el corpus). El repo solo versiona el
+# codigo que reconstruye corpus/ e indice/.
+raw/
+corpus/
+indice/
+models/
+out/
+
+# Corpus crudo descargado por el equipo (data/corpus/, ~700MB) y su zip de
+# entrega/intercambio: mismo criterio que arriba, no se versiona.
+data/corpus/
+data/corpus.zip
+data/*.zip
+
+# Claves y artefactos locales
+scripts/.env
+*.gguf
+
+.DS_Store
+data/corpus_rescrape/

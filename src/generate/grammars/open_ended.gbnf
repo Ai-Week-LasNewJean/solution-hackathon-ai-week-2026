@@ -1,0 +1,12 @@
+# Gramatica GBNF para el formato open_ended. "analisis" debe quedar en 5-8
+# oraciones por el prompt -- la gramatica solo garantiza la forma JSON.
+#
+# NOTA: una regla por linea -- ver el comentario en multiple_choice.gbnf
+# sobre por que un cuerpo de regla multilinea revienta la generacion real
+# aunque LlamaGrammar.from_file() lo valide sin quejarse.
+root ::= "{" ws "\"marco_normativo\"" ws ":" ws string ws "," ws "\"analisis\"" ws ":" ws string ws "," ws "\"jurisprudencia\"" ws ":" ws string ws "," ws "\"conclusion\"" ws ":" ws string ws "}"
+string ::= "\"" char* "\""
+char ::= [^"\\] | "\\" escapado
+escapado ::= ["\\/bfnrt] | "u" hex hex hex hex
+hex ::= [0-9a-fA-F]
+ws ::= [ \t\n]*

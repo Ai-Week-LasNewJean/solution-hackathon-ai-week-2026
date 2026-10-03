@@ -1,0 +1,27 @@
+# Dependencias del pipeline (ingesta, indice, recuperacion, generacion,
+# interfaz, validaciones). RAGAS vive aparte en scripts/requirements-evaluador.txt
+# (no se necesita para generar submissions.jsonl, solo para puntuar con --ragas).
+#
+# llama-cpp-python se compila contra Metal en Mac y CUDA en Turing (SPEC.md
+# seccion 2/3) -- ver README.md "Reproduccion" para el flag de compilacion
+# por plataforma; aqui se fija solo la version.
+
+requests>=2.32
+beautifulsoup4>=4.14
+lxml>=6.1
+
+PyMuPDF>=1.28
+pdfplumber>=0.11
+pytesseract>=0.3
+pdf2image>=1.17
+
+sentence-transformers>=6.1
+faiss-cpu>=1.15
+bm25s>=0.3
+rank_bm25>=0.2
+PyStemmer>=3.1          # BM25 con stemming (BM25_STEM=1, guardado en indice/bm25.pkl)
+
+llama-cpp-python>=0.3.35
+jsonschema>=4.26
+
+streamlit>=1.64
