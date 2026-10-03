@@ -73,6 +73,13 @@ class LLM:
             from llama_cpp import LlamaGrammar
 
             grammar = LlamaGrammar.from_file(str(grammar_path))
+        if config.LLM_RESET_CACHE:
+            # llama-cpp-python reutiliza el KV cache del prefijo comun con la llamada
+            # ANTERIOR y solo evalua la cola: el resultado en punto flotante (y por
+            # tanto el greedy) dependia del item previo de la corrida. Con reset cada
+            # generacion evalua el prompt completo, igual que un proceso nuevo (lo que
+            # hace la verificacion en vivo). Ver SPEC.md de la solucion, seccion 7.
+            self._llama.reset()
         out = self._llama(
             self._wrap_prompt(prompt), max_tokens=max_tokens, temperature=config.LLM_TEMPERATURE,
             grammar=grammar, stop=stop)

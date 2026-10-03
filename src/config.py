@@ -189,6 +189,7 @@ LLM_MODEL_PATH = llm_model_path()  # ruta resuelta del candidato activo (compat 
 LLM_N_CTX = 8192
 LLM_N_GPU_LAYERS = -1      # todas las capas en GPU/Metal; 0 fuerza CPU
 LLM_TEMPERATURE = 0.0
+LLM_RESET_CACHE = os.environ.get("LLM_RESET_CACHE", "1") == "1"   # cada generacion independiente del item previo
 LLM_SEED = 0               # fijo, exigido por determinism_check.py
 
 MAX_TOKENS_BY_FORMAT = {
