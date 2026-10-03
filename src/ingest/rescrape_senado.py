@@ -71,6 +71,10 @@ ENTITIES = {
     "ley_906_2004": ("ley_0906_2004", "ley-906-2004", "ley", "906", "2004", "CODIGO DE PROCEDIMIENTO PENAL"),
     "ley_1098_2006": ("ley_1098_2006", "ley-1098-2006", "ley", "1098", "2006", "CODIGO DE LA INFANCIA Y LA ADOLESCENCIA"),
     "ley_1480_2011": ("ley_1480_2011", "ley-1480-2011", "ley", "1480", "2011", "ESTATUTO DEL CONSUMIDOR"),
+    "estatuto_organico_sistema_financiero": ("estatuto_organico_sistema_financiero",
+                                             "estatuto-organico-sistema-financiero",
+                                             "estatuto_organico_sistema_financiero", None, None,
+                                             "ESTATUTO ORGANICO DEL SISTEMA FINANCIERO"),
     "ley_472_1998": ("ley_0472_1998", "ley-472-1998", "ley", "472", "1998", "ACCIONES POPULARES Y DE GRUPO"),
 }
 
