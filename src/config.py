@@ -75,6 +75,7 @@ FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 50))           # candidatos tras
 FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
 
+QUERY_TEMA = os.environ.get("QUERY_TEMA", "0") == "1"       # anteponer tema/area del item a la consulta si vienen (SPEC.md 15)
 BM25_STEM = os.environ.get("BM25_STEM", "1") == "1"   # stemming espanol + stopwords en BM25 (SPEC.md 13)
 USE_RERANKER = os.environ.get("USE_RERANKER", "1") == "1"  # default ON desde 2026-10-02 (SPEC.md 11.3)
 RERANKER_MODEL = os.environ.get("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")  # o una ruta local (ajuste fino, SPEC.md 15)
