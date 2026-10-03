@@ -42,6 +42,8 @@ GRAMMAR_PATHS = {
 
 def _build_query(item: dict) -> str:
     q = item["pregunta"]
+    if config.QUERY_TEMA and item.get("tema"):
+        q = f"{item['tema'].strip()}. {q}"
     if item.get("formato") == "multiple_choice" and item.get("opciones"):
         q += " " + " ".join(item["opciones"].values())
     return q
