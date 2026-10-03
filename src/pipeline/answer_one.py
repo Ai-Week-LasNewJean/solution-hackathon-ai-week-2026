@@ -154,6 +154,20 @@ def _answer_text_for_check(formato: str, data: dict) -> str:
                      for k in ("marco_normativo", "analisis", "jurisprudencia", "conclusion"))
 
 
+_EMPTY_FIELDS = {
+    "multiple_choice": {"respuesta_correcta": None, "justificacion": "", "descarte_opciones": {}},
+    "semi_open": {"respuesta": "", "palabras_clave": [], "referencia_legal": ""},
+    "open_ended": {"marco_normativo": "", "analisis": "", "jurisprudencia": "", "conclusion": ""},
+}
+
+
+def _with_empty_fields(out: dict) -> dict:
+    """El schema exige las llaves del formato aun con abstencion: se entregan vacias."""
+    if out.get("abstencion"):
+        out = {**out, **{k: v for k, v in _EMPTY_FIELDS[out["formato"]].items() if k not in out}}
+    return out
+
+
 def answer(item: dict, model_name: str | None = None) -> dict:
     """item: una fila de sample_50.jsonl / test_992.jsonl (trae al menos id,
     formato, pregunta, y opciones si es multiple_choice).
@@ -209,6 +223,7 @@ def answer(item: dict, model_name: str | None = None) -> dict:
             if todas_las_citadas and sin_respaldo_bodies >= todas_las_citadas:
                 out["abstencion"] = True
                 out["pasajes_recuperados"] = []
+                out = _with_empty_fields(out)
                 out["latencia_ms"] = int((time.monotonic() - t0) * 1000)
                 return out
         out.update(data)
@@ -218,5 +233,6 @@ def answer(item: dict, model_name: str | None = None) -> dict:
         else:
             out = cite_builder.apply(out)
 
+    out = _with_empty_fields(out)
     out["latencia_ms"] = int((time.monotonic() - t0) * 1000)
     return out
