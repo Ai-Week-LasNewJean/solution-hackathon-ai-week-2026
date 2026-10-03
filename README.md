@@ -28,7 +28,7 @@ repositorio de la hackathon (no se versiona aqui).
 
 El comprimido contendrá `LICENSE`, `corpus_manifest.json`, `corpus/` con los
 documentos procesados e `indice/` con `index.faiss`, `bm25.pkl` y
-`chunks.jsonl`. **34 380 documentos / 106 237 fragmentos** (rama `adrian/rag-rescrape-eosf`: códigos
+`chunks.jsonl`. **34 380 documentos / 106 237 fragmentos** (códigos
 reescrapeados + Estatuto Orgánico del Sistema Financiero completo, 342 artículos), 100% trazables a su
 norma de origen (`traceability_check.py`). Reconstrucción: `RESCRAPE_DIR=$PWD/data/corpus_rescrape
 python -m src.ingest.ingest_raw_sources`, luego `python -m src.index.build_bm25` y
@@ -127,7 +127,7 @@ Verificado: con ese wheel las 50 respuestas de muestra son idénticas a las de a
 Si vuelve a aparecer el mismo error: `echo $LD_LIBRARY_PATH` (buscar rutas de drivers ajenas);
 si el kernel y las librerías realmente difieren tras una actualización de paquetes, reiniciar.
 
-### Reranker ajustado (experimental, rama `adrian/rag-reranker-ft`)
+### Reranker ajustado (experimental, no adoptado)
 
 Ajuste fino de `BAAI/bge-reranker-v2-m3` con preguntas sintéticas que Qwen3-8B genera a partir del
 corpus (el banco de preguntas no se usa; `sample_50` queda como test). Cada etapa es reanudable, así
@@ -145,8 +145,23 @@ bash src/train/run_all.sh 4000
 | 3. Entrenamiento | `src.train.train_reranker` | `models/reranker-ft/checkpoint-*` cada 200 pasos; reanuda solo |
 | 4. Evaluación | `src.train.eval_checkpoints` | `data/train/eval_log.jsonl` (recall en `sample_50` por checkpoint) |
 
-Usarlo: `RERANKER_MODEL=models/reranker-ft/final` (o un checkpoint). Si se adopta hay que recalibrar
-los umbrales de abstención y copiar el modelo a la máquina de la entrega. Resultados en `SPEC.md` 15.
+Resultado (2026-10-02, 4 000 preguntas, 1 872 pasos): el mejor checkpoint (paso 1200) sube recall@6 en
+`sample_50` de 0.833 a 0.878, pero recall@3 baja de 0.805 a 0.772, y el modelo final queda peor que el
+base (0.707 / 0.817). Elegir el checkpoint con `sample_50` sería seleccionar sobre el test, así que **no se
+adopta**: la entrega usa `BAAI/bge-reranker-v2-m3` sin ajustar. Para probar un checkpoint:
+`RERANKER_MODEL=models/reranker-ft/checkpoint-1200` (habría que recalibrar los umbrales de abstención).
+Detalle en `SPEC.md` 15.4.
+
+## Ramas
+
+Solo dos ramas en este repo (más `main`, rama por defecto de GitHub con el README inicial):
+
+| Rama | Contenido |
+|---|---|
+| `adrian/main-rag` | Todo el trabajo: pipeline, experimentos (flags apagados), corpus/Estatuto Orgánico, reranker ajustado, documentación. Es la rama de la entrega. |
+| `adrian/friday-email` | Commit exacto (`1cb7a89`) de los números enviados en el correo del viernes 17:00 (46.33/80) y sus respuestas `informe/viernes/entrega/entrega_sample.jsonl`. |
+
+Historial de las ramas anteriores (ya fusionadas) en `SPEC.md` sección 17.
 
 ## Corpus y agente: cómo se construyen
 
@@ -225,7 +240,7 @@ la corrida que produce `submissions.jsonl` usa siempre un único candidato fijo.
 
 1. **Huecos de corpus puntuales:** las providencias de la Corte Constitucional están solo como relatoría
    (sin texto íntegro) y no hay doctrina. El Estatuto Orgánico del Sistema Financiero ya está completo
-   (342 artículos, rama `adrian/rag-rescrape-eosf`): recall@10 0.854 → 0.878, aunque el reranker base
+   (342 artículos): recall@10 0.854 → 0.878, aunque el reranker base
    todavía lo deja fuera del top-6 en el ítem 128 (motivo del reranker ajustado).
 2. Reglamento CNE y directivas presidenciales casi fuera del índice (`citations.py` oficial no los
    reconoce como citables); volumen bajo (15 fragmentos).
