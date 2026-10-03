@@ -61,7 +61,12 @@ def _to_pasaje_dict(p: Passage) -> dict:
 def _retrieve_ranked(query: str) -> list[Passage]:
     expanded = query_expand.expand(query)
     candidates = retrieve(expanded, top_k=config.FUSED_TOP_K)
-    return rerank.rerank(expanded, candidates, top_k=config.FINAL_TOP_K)
+    return rerank.rerank(expanded, candidates, top_k=_evidence_k())
+
+
+def _evidence_k() -> int:
+    """Pasajes a conservar: los del prompt y, si se piden mas, los de evidencia."""
+    return max(config.FINAL_TOP_K, config.EVIDENCE_TOP_K)
 
 
 def _generate_once(item: dict, passages: list[Passage], model_name: str | None = None) -> dict:
@@ -69,7 +74,8 @@ def _generate_once(item: dict, passages: list[Passage], model_name: str | None =
     if formato == "multiple_choice" and config.MC_REASONING:
         llm = get_llm(model_name)
         reasoning = llm.generate(prompt_multiple_choice.build_reasoning(item, passages),
-                                 max_tokens=config.MC_REASONING_MAX_TOKENS, no_think=True)
+                                 max_tokens=config.MC_REASONING_MAX_TOKENS, no_think=not config.MC_THINK)
+        reasoning = reasoning.replace("<think>", "").replace("</think>", "")
         prompt = prompt_multiple_choice.build(item, passages, reasoning=reasoning)
     else:
         prompt = PROMPT_BUILDERS[formato](item, passages)
@@ -162,7 +168,7 @@ def answer(item: dict, model_name: str | None = None) -> dict:
         # unica recuperacion ampliada: mas candidatos antes de fusionar/recortar
         ranked = retrieve(query_expand.expand(query), k_bm25=config.K_BM25 * 2,
                            k_dense=config.K_DENSE * 2, top_k=config.FUSED_TOP_K)
-        ranked = rerank.rerank(query, ranked, top_k=config.FINAL_TOP_K)
+        ranked = rerank.rerank(query, ranked, top_k=_evidence_k())
         decision = sufficiency.decide(ranked)
 
     pasajes = [_to_pasaje_dict(p) for p in ranked]
@@ -174,7 +180,7 @@ def answer(item: dict, model_name: str | None = None) -> dict:
     }
 
     if decision != "abstain":
-        data = _generate(item, ranked, model_name)
+        data = _generate(item, ranked[:config.FINAL_TOP_K], model_name)
         answer_text = _answer_text_for_check(item["formato"], data)
         sin_respaldo = citation_check.unsupported_citations(answer_text, pasajes)
         if sin_respaldo:
@@ -187,6 +193,8 @@ def answer(item: dict, model_name: str | None = None) -> dict:
                 out["pasajes_recuperados"] = []
                 out["latencia_ms"] = int((time.monotonic() - t0) * 1000)
                 return out
+        data = citation_check.add_evidence_citations(
+            item["formato"], data, answer_text, pasajes, config.CITE_FROM_EVIDENCE)
         out.update(data)
 
     out["latencia_ms"] = int((time.monotonic() - t0) * 1000)

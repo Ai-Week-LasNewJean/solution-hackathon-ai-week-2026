@@ -81,6 +81,11 @@ RRF_K = 60
 FUSED_TOP_K = int(os.environ.get("FUSED_TOP_K", 50))           # candidatos tras fusion, antes de (opcional) rerank
 FINAL_TOP_K = int(os.environ.get("FINAL_TOP_K", 6))            # pasajes que llegan al prompt de generacion
 MAX_PASAJES_EVIDENCIA = 10  # debe igualar evaluate.MAX_PASAJES_EVIDENCIA
+MAX_PER_DOC = int(os.environ.get("MAX_PER_DOC", 0))            # tope de fragmentos por doc_id en el top final (0 = sin tope)
+# pasajes que se entregan en pasajes_recuperados (respaldo de citas); el prompt sigue usando FINAL_TOP_K
+EVIDENCE_TOP_K = min(MAX_PASAJES_EVIDENCIA, int(os.environ.get("EVIDENCE_TOP_K", FINAL_TOP_K)))
+# completar el campo de referencias con las normas de los primeros k pasajes (0 = apagado)
+CITE_FROM_EVIDENCE = int(os.environ.get("CITE_FROM_EVIDENCE", 0))
 
 QUERY_TEMA = os.environ.get("QUERY_TEMA", "0") == "1"       # anteponer tema/area del item a la consulta si vienen (SPEC.md 15)
 BM25_STEM = os.environ.get("BM25_STEM", "1") == "1"   # stemming espanol + stopwords en BM25 (SPEC.md 13)
@@ -184,6 +189,7 @@ def llm_chat_template(name: str | None = None) -> str | None:
 MC_VOTES = int(os.environ.get("MC_VOTES", 1))   # voto por permutacion de opciones en cerradas (SPEC.md 13)
 MC_REASONING = os.environ.get("MC_REASONING", "0") == "1"   # etapa de analisis previo en cerradas (SPEC.md 13)
 MC_REASONING_MAX_TOKENS = int(os.environ.get("MC_REASONING_MAX_TOKENS", 350))
+MC_THINK = os.environ.get("MC_THINK", "0") == "1"   # analisis previo con el modo pensamiento de Qwen3 (subir MC_REASONING_MAX_TOKENS)
 
 LLM_MODEL_PATH = llm_model_path()  # ruta resuelta del candidato activo (compat con el uso previo)
 LLM_N_CTX = 8192
